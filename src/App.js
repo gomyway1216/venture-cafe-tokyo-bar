@@ -4,6 +4,7 @@ import AuthContext from './context/auth-context'
 import MainNavigation from './components/Navigation/MainNavigation'
 import AttendeesPage from './pages/Attendees'
 import AuthPage from './pages/Auth'
+import './App.css'
 
 class App extends React.Component {
   constructor(props) {
@@ -35,10 +36,14 @@ class App extends React.Component {
             }}
           >
             <MainNavigation />
-            <main>
+            <main className="main-content">
               <Switch>
-                {this.state.token && <Redirect from="/" to="/attendees" />}
-                {this.state.token && <Redirect from="/auth" to="/attendees" />}
+                {this.state.token && (
+                  <Redirect from="/" to="/attendees" exact />
+                )}
+                {this.state.token && (
+                  <Redirect from="/auth" to="/attendees" exact />
+                )}
                 {!this.state.token && (
                   <Route path="/auth" component={AuthPage} />
                 )}
