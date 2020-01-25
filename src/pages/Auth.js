@@ -97,6 +97,11 @@ class AuthPage extends React.Component {
     })
   }
 
+  // componentDidMount() {
+  //   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+  //   console.log(loginInfo)
+  // }
+
   render() {
     return (
       <form className="auth-form" onSubmit={this.submitHandler}>
