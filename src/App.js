@@ -50,6 +50,8 @@ class App extends React.Component {
                 {this.state.token && (
                   <Route path="/attendees" component={AttendeesPage} />
                 )}
+                {/* delete this after and uncomment the above */}
+                {/* <Route path="/attendees" component={AttendeesPage} /> */}
                 {!this.state.token && <Redirect to="/auth" exact />}
               </Switch>
             </main>

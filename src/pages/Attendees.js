@@ -1,9 +1,15 @@
 import React, { useState, Component } from 'react'
 import { TextField, Button } from '@material-ui/core/'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, fade, StylesProvider } from '@material-ui/core/styles'
 import AuthContext from '../context/auth-context'
 import Spinner from '../components/Spinner/Spinner'
 import AttendeeList from '../components/Attendees/AttendeeList'
+import InputBase from '@material-ui/core/InputBase'
+import SearchIcon from '@material-ui/icons/Search'
+// import './attendees.module.css'
+import Paper from '@material-ui/core/Paper'
+import IconButton from '@material-ui/core/IconButton'
+import styles from './attendees.module.css'
 
 const useStyles = theme => ({
   root: {
@@ -11,6 +17,25 @@ const useStyles = theme => ({
       margin: theme.spacing(1),
       width: 200,
     },
+  },
+
+  searchField: {
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
+    width: 400,
+    margin: 'auto',
+  },
+  input: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  iconButton: {
+    padding: 10,
+  },
+  divider: {
+    height: 28,
+    margin: 4,
   },
 })
 
@@ -21,6 +46,8 @@ class Attendees extends Component {
       name: '',
       isLoading: false,
       attendees: [],
+      filteredAttendees: [],
+      filterValue: '',
     }
   }
 
@@ -37,11 +64,6 @@ class Attendees extends Component {
     const name = this.state.name
     const drinkCounter = 0
     const date = new Date().toISOString()
-
-    console.log('userId', userId)
-    console.log('name', name)
-    console.log('drinkCounter', drinkCounter)
-    console.log('date', date)
 
     if (name.trim() !== '') {
       const requestBody = {
@@ -122,7 +144,11 @@ class Attendees extends Component {
       .then(resData => {
         const attendees = resData.data.attendees
         if (this.isActive) {
-          this.setState({ attendees: attendees, isLoading: false })
+          this.setState({
+            attendees: attendees,
+            filteredAttendees: attendees,
+            isLoading: false,
+          })
         }
       })
       .catch(err => {
@@ -138,23 +164,6 @@ class Attendees extends Component {
     // Maybe I can show a smaller one next to plus button to indicates the loading states
     // hit the graphQL endpoint
 
-    // attendees
-    // array[array.findIndex(x => x.name == 'string 1')]
-    // let arr = [
-    //     { name:"string 1", value:"this", other: "that" },
-    //     { name:"string 2", value:"this", other: "that" }
-    // ];
-
-    // let obj = arr.find((o, i) => {
-    //     if (o.name === 'string 1') {
-    //         arr[i] = { name: 'new string', value: 'this', other: 'that' };
-    //         return true; // stop searching
-    //     }
-    // });
-
-    // console.log(arr);
-    // console.log('target', event.target)
-    console.log('minus is clicked')
     this.changeDrinkCount(event.currentTarget.id, -1)
   }
 
@@ -163,7 +172,6 @@ class Attendees extends Component {
   }
 
   changeDrinkCount = (userId, difference) => {
-    console.log('this is userId', userId)
     // this.setState({ isLoading: true })
     const updatingAttendee = this.state.attendees.find(
       attendee => attendee.userId === userId
@@ -215,16 +223,50 @@ class Attendees extends Component {
               return true
             }
           })
-          console.log('updatedAttendees', updatedAttendees)
-          return { attendees: updatedAttendees }
+          return {
+            attendees: updatedAttendees,
+          }
         })
-        console.log('updated attendees', this.state.attendees)
+        this.filterList()
         // this.setState({ isLoading: false })
       })
       .catch(err => {
         console.log(err)
         // this.setState({ isLoading: false })
       })
+  }
+
+  filterList = () => {
+    // console.log('filter value', this.state.filterValue)
+    let currentList = []
+    // variable that holds the filtered list before putting into state
+    let newList = []
+
+    // if the search bar is not empty
+    if (this.state.filterValue !== '') {
+      currentList = this.state.attendees
+
+      newList = currentList.filter(item => {
+        const name = item.name.toLowerCase()
+        const filter = this.state.filterValue.toLowerCase()
+        return name.includes(filter)
+      })
+    } else {
+      newList = this.state.attendees
+    }
+    this.setState({
+      filteredAttendees: newList,
+    })
+  }
+
+  handleSearchBarChange = event => {
+    // since setState is async, we need to use callback to call the function.
+    this.setState({ filterValue: event.target.value }, () => {
+      this.filterList()
+    })
+    // console.log('filter event', event.target.value)
+    // console.log('filter value', this.state.filterValue)
+    // variable that holds the original list
   }
 
   componentDidMount() {
@@ -237,12 +279,28 @@ class Attendees extends Component {
 
   render() {
     const { classes } = this.props
-    console.log('attendees', this.state.attendees)
+    // this.filterList()
     return (
-      <div>
-        <div>
-          <form className={classes.root} noValidate autoComplete="off">
-            <div>Hello</div>
+      <div className={styles.attendeesContainer}>
+        <Paper component="form" className={classes.searchField}>
+          <InputBase
+            className={classes.input}
+            placeholder="Search Names"
+            inputProps={{ 'aria-label': 'search names' }}
+            onChange={this.handleSearchBarChange}
+            value={this.state.filterValue}
+          />
+          <IconButton
+            type="submit"
+            className={classes.iconButton}
+            aria-label="search"
+          >
+            <SearchIcon />
+          </IconButton>
+        </Paper>
+        {/* it is for adding new users. */}
+        {/* <div>
+          <form noValidate autoComplete="off">
             <TextField
               required
               id="standard-required"
@@ -254,17 +312,24 @@ class Attendees extends Component {
           <Button variant="contained" color="primary" onClick={this.onRegister}>
             Register
           </Button>
-        </div>
+        </div> */}
 
-        <div>
+        <div className={styles.attendeeList}>
           {this.state.isLoading || !this.state.attendees ? (
             <Spinner />
           ) : (
-            <AttendeeList
-              attendees={this.state.attendees}
-              increaseCount={this.increaseCount}
-              decreaseCount={this.decreaseCount}
-            />
+            <div>
+              <div className={styles.description}>
+                <div className={styles.descriptionTitle}>Name</div>
+                <div className={styles.descriptionTitle}>Count</div>
+                <div className={styles.descriptionTitle}>Change</div>
+              </div>
+              <AttendeeList
+                attendees={this.state.filteredAttendees}
+                increaseCount={this.increaseCount}
+                decreaseCount={this.decreaseCount}
+              />
+            </div>
           )}
         </div>
       </div>

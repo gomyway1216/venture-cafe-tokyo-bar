@@ -1,0 +1,13 @@
+.attendeesContainer {
+  margin: auto;
+}
+
+.description {
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.descriptionTitle {
+  margin: auto;
+}
