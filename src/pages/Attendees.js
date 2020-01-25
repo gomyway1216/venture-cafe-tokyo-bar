@@ -22,7 +22,6 @@ class Attendees extends Component {
       isLoading: false,
       attendees: [],
     }
-    console.log('hello from Attendees')
   }
 
   isActive = true
@@ -134,6 +133,100 @@ class Attendees extends Component {
       })
   }
 
+  decreaseCount = event => {
+    //  isLoading: if I use this, the loading ring shows up, and it might not be good.
+    // Maybe I can show a smaller one next to plus button to indicates the loading states
+    // hit the graphQL endpoint
+
+    // attendees
+    // array[array.findIndex(x => x.name == 'string 1')]
+    // let arr = [
+    //     { name:"string 1", value:"this", other: "that" },
+    //     { name:"string 2", value:"this", other: "that" }
+    // ];
+
+    // let obj = arr.find((o, i) => {
+    //     if (o.name === 'string 1') {
+    //         arr[i] = { name: 'new string', value: 'this', other: 'that' };
+    //         return true; // stop searching
+    //     }
+    // });
+
+    // console.log(arr);
+    // console.log('target', event.target)
+    console.log('minus is clicked')
+    this.changeDrinkCount(event.currentTarget.id, -1)
+  }
+
+  increaseCount = event => {
+    this.changeDrinkCount(event.currentTarget.id, 1)
+  }
+
+  changeDrinkCount = (userId, difference) => {
+    console.log('this is userId', userId)
+    // this.setState({ isLoading: true })
+    const updatingAttendee = this.state.attendees.find(
+      attendee => attendee.userId === userId
+    )
+    const newCount = updatingAttendee.drinkCounter + difference
+
+    const requestBody = {
+      query: `
+          mutation UpdateDrinkCounter($userId: String!, $drinkCounter: Int!) {
+            updateDrinkCounter(drinkCounterUpdateInput: {userId: $userId, drinkCounter: $drinkCounter}) {
+              userId
+              name
+              drinkCounter
+            }
+          }
+        `,
+      variables: {
+        userId: userId,
+        drinkCounter: newCount,
+      },
+    }
+
+    const token = this.context.token
+
+    fetch(`${process.env.REACT_APP_URL}graphql`, {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!')
+        }
+        return res.json()
+      })
+      .then(resData => {
+        this.setState(prevState => {
+          let updatedAttendees = [...prevState.attendees]
+          updatedAttendees.find((o, i) => {
+            if (o.userId === userId) {
+              updatedAttendees[i] = {
+                userId: userId,
+                name: resData.data.updateDrinkCounter.name,
+                drinkCounter: resData.data.updateDrinkCounter.drinkCounter,
+              }
+              return true
+            }
+          })
+          console.log('updatedAttendees', updatedAttendees)
+          return { attendees: updatedAttendees }
+        })
+        console.log('updated attendees', this.state.attendees)
+        // this.setState({ isLoading: false })
+      })
+      .catch(err => {
+        console.log(err)
+        // this.setState({ isLoading: false })
+      })
+  }
+
   componentDidMount() {
     this.fetchAttendees()
   }
@@ -164,10 +257,14 @@ class Attendees extends Component {
         </div>
 
         <div>
-          {this.state.isLoading ? (
+          {this.state.isLoading || !this.state.attendees ? (
             <Spinner />
           ) : (
-            <AttendeeList attendees={this.state.attendees} />
+            <AttendeeList
+              attendees={this.state.attendees}
+              increaseCount={this.increaseCount}
+              decreaseCount={this.decreaseCount}
+            />
           )}
         </div>
       </div>

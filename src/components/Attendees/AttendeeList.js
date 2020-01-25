@@ -7,8 +7,11 @@ const AttendeeList = props => {
     return (
       <AttendeeItem
         key={attendee.userId}
+        userId={attendee.userId}
         name={attendee.name}
         drinkCounter={attendee.drinkCounter}
+        increaseCount={props.increaseCount}
+        decreaseCount={props.decreaseCount}
       />
     )
   })
