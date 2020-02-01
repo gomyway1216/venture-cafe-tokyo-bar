@@ -10,6 +10,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import styles from './attendees.module.css'
+import QrReader from 'react-qr-reader'
 
 const useStyles = theme => ({
   root: {
@@ -48,6 +49,7 @@ class Attendees extends Component {
       attendees: [],
       filteredAttendees: [],
       filterValue: '',
+      scanData: '',
     }
   }
 
@@ -55,8 +57,88 @@ class Attendees extends Component {
 
   static contextType = AuthContext
 
+  handleScan = data => {
+    if (data) {
+      this.setState({ scanData: data })
+      // check if the current user exist in the frontend, otherwise do api call
+      if (!this.state.attendee.find(element => element.id === data)) {
+        this.onSignIn()
+      }
+
+      this.setState({ filterValue: data }, () => {
+        this.filterList()
+      })
+    }
+  }
+
+  // handleSearchBarChange = event => {
+  //   // since setState is async, we need to use callback to call the function.
+  //   this.setState({ filterValue: event.target.value }, () => {
+  //     this.filterList()
+  //   })
+  //   // console.log('filter event', event.target.value)
+  //   // console.log('filter value', this.state.filterValue)
+  //   // variable that holds the original list
+  // }
+
   onNameChange = event => {
     this.setState({ name: event.target.value })
+  }
+
+  onSignIn = () => {
+    const id = this.state.scanData
+    const date = new Date().toISOString()
+    const token = this.context.token
+
+    const requestBody = {
+      query: `
+          mutation SignInAttendee($_id: String!, $date: String!){
+            signInAttendee(SignInAttendeeInput: {_id: $_id, date: $date}) {
+              _id
+              firstName
+              lastName
+              drinks {
+                _id
+                name
+              }
+            }
+          }
+        `,
+      variables: {
+        _id: id,
+        date: date,
+      },
+    }
+
+    fetch(`${process.env.REACT_APP_URL}graphql`, {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!')
+        }
+        return res.json()
+      })
+      .then(resData => {
+        this.setState(prevState => {
+          const updatedAttendees = [...prevState.attendees]
+          updatedAttendees.push({
+            id: resData.data.signInAttendee._id,
+            firstName: resData.data.signInAttendee.firstName,
+            lastName: resData.data.signInAttendee.lastName,
+            drinks: resData.data.signInAttendee.drinks,
+          })
+          return { attendees: updatedAttendees }
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   onRegister = () => {
@@ -64,6 +146,7 @@ class Attendees extends Component {
     const name = this.state.name
     const drinkCounter = 0
     const date = new Date().toISOString()
+    const token = this.context.token
 
     if (name.trim() !== '') {
       const requestBody = {
@@ -89,6 +172,7 @@ class Attendees extends Component {
         body: JSON.stringify(requestBody),
         headers: {
           'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
         },
       })
         .then(res => {
@@ -112,6 +196,58 @@ class Attendees extends Component {
           console.log(err)
         })
     }
+  }
+
+  // convert this method to fetch from the sign in user table
+  fetchSignedInAttendees = () => {
+    this.setState({ isLoading: true })
+    const requestBody = {
+      query: `
+        query {
+          currentAttendees {
+            _id
+            firstName
+            lastName
+            drinks {
+              _id
+              name
+            }
+          }
+        }
+      `,
+    }
+
+    const token = this.context.token
+    fetch(`${process.env.REACT_APP_URL}graphql`, {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!')
+        }
+        return res.json()
+      })
+      .then(resData => {
+        const attendees = resData.data.attendees
+        if (this.isActive) {
+          this.setState({
+            attendees: attendees,
+            filteredAttendees: attendees,
+            isLoading: false,
+          })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        if (this.isActive) {
+          this.setState({ isLoading: false })
+        }
+      })
   }
 
   fetchAttendees() {
@@ -247,9 +383,14 @@ class Attendees extends Component {
       currentList = this.state.attendees
 
       newList = currentList.filter(item => {
-        const name = item.name.toLowerCase()
-        const filter = this.state.filterValue.toLowerCase()
-        return name.includes(filter)
+        const firstName = item.firstName.toLowerCase()
+        const lastName = item.lastName.toLowerCase()
+        const filter = this.state.filterValue
+        return (
+          item.id.includes(filter) ||
+          firstName.includes(filter.toLowerCase()) ||
+          lastName.includes(filter.toLowerCase())
+        )
       })
     } else {
       newList = this.state.attendees
@@ -270,7 +411,7 @@ class Attendees extends Component {
   }
 
   componentDidMount() {
-    this.fetchAttendees()
+    this.fetchSignedInAttendees()
   }
 
   componentWillUnmount() {
@@ -282,6 +423,14 @@ class Attendees extends Component {
     // this.filterList()
     return (
       <div className={styles.attendeesContainer}>
+        <QrReader
+          delay={300}
+          // onError={handleError}
+          onScan={this.handleScan}
+          style={{ width: '50%' }}
+          className={styles.qRReaderComponent}
+        />
+        <p>{this.state.scanData}</p>
         <Paper component="form" className={classes.searchField}>
           <InputBase
             className={classes.input}
