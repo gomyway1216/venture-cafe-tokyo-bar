@@ -11,6 +11,11 @@ import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import styles from './attendees.module.css'
 import QrReader from 'react-qr-reader'
+import {
+  onSignIn,
+  changeDrinkCount,
+  fetchSignedInAttendees,
+} from '../api/Attendee'
 
 const useStyles = theme => ({
   root: {
@@ -51,6 +56,7 @@ class Attendees extends Component {
       filterValue: '',
       scanData: '',
     }
+    // console.log('attendees in constructor', this.state.attendees)
   }
 
   isActive = true
@@ -61,8 +67,9 @@ class Attendees extends Component {
     if (data) {
       this.setState({ scanData: data })
       // check if the current user exist in the frontend, otherwise do api call
-      if (!this.state.attendee.find(element => element.id === data)) {
-        this.onSignIn()
+      console.log('this is attendee', this.state.attendees)
+      if (!this.state.attendees.find(element => element.id === data)) {
+        onSignIn(data, this.context.token, this.updateAttendees)
       }
 
       this.setState({ filterValue: data }, () => {
@@ -85,214 +92,17 @@ class Attendees extends Component {
     this.setState({ name: event.target.value })
   }
 
-  onSignIn = () => {
-    const id = this.state.scanData
-    const date = new Date().toISOString()
-    const token = this.context.token
-
-    const requestBody = {
-      query: `
-          mutation SignInAttendee($_id: String!, $date: String!){
-            signInAttendee(SignInAttendeeInput: {_id: $_id, date: $date}) {
-              _id
-              firstName
-              lastName
-              drinks {
-                _id
-                name
-              }
-            }
-          }
-        `,
-      variables: {
-        _id: id,
-        date: date,
-      },
-    }
-
-    fetch(`${process.env.REACT_APP_URL}graphql`, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!')
-        }
-        return res.json()
+  updateAttendees = data => {
+    this.setState(prevState => {
+      const updatedAttendees = [...prevState.attendees]
+      updatedAttendees.push({
+        id: data.id,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        drinks: data.drinks,
       })
-      .then(resData => {
-        this.setState(prevState => {
-          const updatedAttendees = [...prevState.attendees]
-          updatedAttendees.push({
-            id: resData.data.signInAttendee._id,
-            firstName: resData.data.signInAttendee.firstName,
-            lastName: resData.data.signInAttendee.lastName,
-            drinks: resData.data.signInAttendee.drinks,
-          })
-          return { attendees: updatedAttendees }
-        })
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-
-  onRegister = () => {
-    const userId = this.state.name.concat(' id')
-    const name = this.state.name
-    const drinkCounter = 0
-    const date = new Date().toISOString()
-    const token = this.context.token
-
-    if (name.trim() !== '') {
-      const requestBody = {
-        query: `
-          mutation CheckInAttendee($userId: String!, $name: String!, $drinkCounter: Int!, $date: String!){
-            checkInAttendee(attendeeInput: {userId: $userId, name: $name, drinkCounter: $drinkCounter, date: $date}) {
-              userId
-              name
-              drinkCounter
-            }
-          }
-        `,
-        variables: {
-          userId: userId,
-          name: name,
-          drinkCounter: drinkCounter,
-          date: date,
-        },
-      }
-
-      fetch(`${process.env.REACT_APP_URL}graphql`, {
-        method: 'POST',
-        body: JSON.stringify(requestBody),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token,
-        },
-      })
-        .then(res => {
-          if (res.status !== 200 && res.status !== 201) {
-            throw new Error('Failed!')
-          }
-          return res.json()
-        })
-        .then(resData => {
-          this.setState(prevState => {
-            const updatedAttendees = [...prevState.attendees]
-            updatedAttendees.push({
-              userId: resData.data.checkInAttendee.userId,
-              name: resData.data.checkInAttendee.name,
-              drinkCounter: resData.data.checkInAttendee.drinkCounter,
-            })
-            return { attendees: updatedAttendees }
-          })
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
-  }
-
-  // convert this method to fetch from the sign in user table
-  fetchSignedInAttendees = () => {
-    this.setState({ isLoading: true })
-    const requestBody = {
-      query: `
-        query {
-          currentAttendees {
-            _id
-            firstName
-            lastName
-            drinks {
-              _id
-              name
-            }
-          }
-        }
-      `,
-    }
-
-    const token = this.context.token
-    fetch(`${process.env.REACT_APP_URL}graphql`, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!')
-        }
-        return res.json()
-      })
-      .then(resData => {
-        const attendees = resData.data.attendees
-        if (this.isActive) {
-          this.setState({
-            attendees: attendees,
-            filteredAttendees: attendees,
-            isLoading: false,
-          })
-        }
-      })
-      .catch(err => {
-        console.log(err)
-        if (this.isActive) {
-          this.setState({ isLoading: false })
-        }
-      })
-  }
-
-  fetchAttendees() {
-    this.setState({ isLoading: true })
-    const requestBody = {
-      query: `
-        query {
-            attendees {
-                userId
-                name
-                drinkCounter
-            }
-        }
-    `,
-    }
-
-    fetch(`${process.env.REACT_APP_URL}graphql`, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!')
-        }
-        return res.json()
-      })
-      .then(resData => {
-        const attendees = resData.data.attendees
-        if (this.isActive) {
-          this.setState({
-            attendees: attendees,
-            filteredAttendees: attendees,
-            isLoading: false,
-          })
-        }
-      })
-      .catch(err => {
-        console.log(err)
-        if (this.isActive) {
-          this.setState({ isLoading: false })
-        }
-      })
+      return { attendees: updatedAttendees }
+    }, console.log('attendees prev', this.state.attendees))
   }
 
   decreaseCount = event => {
@@ -300,76 +110,11 @@ class Attendees extends Component {
     // Maybe I can show a smaller one next to plus button to indicates the loading states
     // hit the graphQL endpoint
 
-    this.changeDrinkCount(event.currentTarget.id, -1)
+    changeDrinkCount(event.currentTarget.id, -1)
   }
 
   increaseCount = event => {
-    this.changeDrinkCount(event.currentTarget.id, 1)
-  }
-
-  changeDrinkCount = (userId, difference) => {
-    // this.setState({ isLoading: true })
-    const updatingAttendee = this.state.attendees.find(
-      attendee => attendee.userId === userId
-    )
-    const newCount = updatingAttendee.drinkCounter + difference
-
-    const requestBody = {
-      query: `
-          mutation UpdateDrinkCounter($userId: String!, $drinkCounter: Int!) {
-            updateDrinkCounter(drinkCounterUpdateInput: {userId: $userId, drinkCounter: $drinkCounter}) {
-              userId
-              name
-              drinkCounter
-            }
-          }
-        `,
-      variables: {
-        userId: userId,
-        drinkCounter: newCount,
-      },
-    }
-
-    const token = this.context.token
-
-    fetch(`${process.env.REACT_APP_URL}graphql`, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!')
-        }
-        return res.json()
-      })
-      .then(resData => {
-        this.setState(prevState => {
-          let updatedAttendees = [...prevState.attendees]
-          updatedAttendees.find((o, i) => {
-            if (o.userId === userId) {
-              updatedAttendees[i] = {
-                userId: userId,
-                name: resData.data.updateDrinkCounter.name,
-                drinkCounter: resData.data.updateDrinkCounter.drinkCounter,
-              }
-              return true
-            }
-          })
-          return {
-            attendees: updatedAttendees,
-          }
-        })
-        this.filterList()
-        // this.setState({ isLoading: false })
-      })
-      .catch(err => {
-        console.log(err)
-        // this.setState({ isLoading: false })
-      })
+    changeDrinkCount(event.currentTarget.id, 1)
   }
 
   filterList = () => {
@@ -410,8 +155,26 @@ class Attendees extends Component {
     // variable that holds the original list
   }
 
+  setAttendees = attendees => {
+    this.setState({ attendees: attendees })
+  }
+
+  setFilteredAttendees = attendees => {
+    this.setState({ filteredAttendees: attendees })
+  }
+
+  setLoading = loading => {
+    this.setState({ isLoading: loading })
+  }
+
   componentDidMount() {
-    this.fetchSignedInAttendees()
+    fetchSignedInAttendees(
+      this.context.token,
+      this.isActive,
+      this.setAttendees,
+      this.setFilteredAttendees,
+      this.setLoading
+    )
   }
 
   componentWillUnmount() {
@@ -447,21 +210,6 @@ class Attendees extends Component {
             <SearchIcon />
           </IconButton>
         </Paper>
-        {/* it is for adding new users. */}
-        {/* <div>
-          <form noValidate autoComplete="off">
-            <TextField
-              required
-              id="standard-required"
-              label="Required"
-              value={this.state.name}
-              onChange={this.onNameChange}
-            />
-          </form>
-          <Button variant="contained" color="primary" onClick={this.onRegister}>
-            Register
-          </Button>
-        </div> */}
 
         <div className={styles.attendeeList}>
           {this.state.isLoading || !this.state.attendees ? (

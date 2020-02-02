@@ -4,7 +4,10 @@ import Button from '@material-ui/core/Button'
 
 const EventItem = props => (
   <div key={props.userId} className={styles.itemWrapper}>
-    <div className={styles.item}>{props.name}</div>
+    {/* <div className={styles.item}>{props.name}</div> */}
+    <div className={styles.item}>{props.id}</div>
+    <div className={styles.item}>{props.firstName}</div>
+    <div className={styles.item}>{props.lastName}</div>
     <div className={styles.item}>{props.drinkCounter}</div>
     <Button
       variant="contained"

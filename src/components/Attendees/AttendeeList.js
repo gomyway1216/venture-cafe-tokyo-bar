@@ -6,9 +6,10 @@ const AttendeeList = props => {
   const attendees = props.attendees.map(attendee => {
     return (
       <AttendeeItem
-        key={attendee.userId}
-        userId={attendee.userId}
-        name={attendee.name}
+        key={attendee.id}
+        id={attendee.id}
+        firstName={attendee.firstName}
+        lastName={attendee.lastName}
         drinkCounter={attendee.drinkCounter}
         increaseCount={props.increaseCount}
         decreaseCount={props.decreaseCount}
