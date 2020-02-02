@@ -3,7 +3,7 @@ import styles from './attendee-item.module.css'
 import Button from '@material-ui/core/Button'
 
 const EventItem = props => (
-  <div key={props.userId} className={styles.itemWrapper}>
+  <div key={props.id} className={styles.itemWrapper}>
     {/* <div className={styles.item}>{props.name}</div> */}
     <div className={styles.item}>{props.id}</div>
     <div className={styles.item}>{props.firstName}</div>
@@ -12,7 +12,7 @@ const EventItem = props => (
     <Button
       variant="contained"
       color="secondary"
-      id={props.userId}
+      id={props.id}
       onClick={props.decreaseCount}
     >
       -
@@ -20,7 +20,7 @@ const EventItem = props => (
     <Button
       variant="contained"
       color="primary"
-      id={props.userId}
+      id={props.id}
       onClick={props.increaseCount}
     >
       +

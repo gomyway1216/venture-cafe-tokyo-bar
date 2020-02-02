@@ -68,10 +68,11 @@ class Attendees extends Component {
       this.setState({ scanData: data })
       // check if the current user exist in the frontend, otherwise do api call
       console.log('this is attendee', this.state.attendees)
-      if (!this.state.attendees.find(element => element.id === data)) {
+      if (!this.state.attendees.find(element => element.attendeeId === data)) {
         onSignIn(data, this.context.token, this.updateAttendees)
       }
-
+      console.log('this is attendee2', this.state.attendees)
+      // set the scanned QR code to be the filter value to search.
       this.setState({ filterValue: data }, () => {
         this.filterList()
       })
@@ -92,17 +93,22 @@ class Attendees extends Component {
     this.setState({ name: event.target.value })
   }
 
+  // add the attendee by QR code if the attendee doesn't exist in the list of people shown
   updateAttendees = data => {
-    this.setState(prevState => {
-      const updatedAttendees = [...prevState.attendees]
-      updatedAttendees.push({
-        id: data.id,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        drinks: data.drinks,
-      })
-      return { attendees: updatedAttendees }
-    }, console.log('attendees prev', this.state.attendees))
+    this.setState(
+      prevState => {
+        const updatedAttendees = [...prevState.attendees]
+        updatedAttendees.push({
+          id: data._id,
+          attendeeId: data.attendeeId,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          drinks: data.drinks,
+        })
+        return { attendees: updatedAttendees }
+      },
+      () => console.log('attendees prev', this.state.attendees)
+    )
   }
 
   decreaseCount = event => {
@@ -126,13 +132,13 @@ class Attendees extends Component {
     // if the search bar is not empty
     if (this.state.filterValue !== '') {
       currentList = this.state.attendees
-
+      console.log('currentList', currentList)
       newList = currentList.filter(item => {
         const firstName = item.firstName.toLowerCase()
         const lastName = item.lastName.toLowerCase()
         const filter = this.state.filterValue
         return (
-          item.id.includes(filter) ||
+          item.attendeeId.includes(filter) ||
           firstName.includes(filter.toLowerCase()) ||
           lastName.includes(filter.toLowerCase())
         )

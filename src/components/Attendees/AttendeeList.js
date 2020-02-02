@@ -7,7 +7,7 @@ const AttendeeList = props => {
     return (
       <AttendeeItem
         key={attendee.id}
-        id={attendee.id}
+        id={attendee.attendeeId}
         firstName={attendee.firstName}
         lastName={attendee.lastName}
         drinkCounter={attendee.drinkCounter}

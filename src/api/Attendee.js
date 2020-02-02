@@ -8,6 +8,7 @@ export const onSignIn = (id, token, updateAttendees) => {
           mutation SignInAttendee($id: String!, $date: String!){
             signInAttendee(signInAttendeeInput: {_id: $id, date: $date}) {
               id: _id
+              attendeeId
               firstName
               lastName
               drinks {
@@ -40,7 +41,7 @@ export const onSignIn = (id, token, updateAttendees) => {
     .then(resData => {
       //   console.log('attendees prev', this.state.attendees)
       console.log('resData.data', resData.data)
-      updateAttendees(resData.data)
+      updateAttendees(resData.data.signInAttendee)
     })
     .catch(err => {
       console.log(err)
@@ -123,6 +124,7 @@ export const fetchSignedInAttendees = (
         query {
           currentAttendees {
             id: _id
+            attendeeId
             firstName
             lastName
             drinks {
