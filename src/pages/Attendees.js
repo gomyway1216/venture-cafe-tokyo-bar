@@ -15,7 +15,9 @@ import {
   onSignIn,
   changeDrinkCount,
   fetchSignedInAttendees,
-} from '../api/Attendee'
+} from '../api/attendee'
+import { getDrinkList } from '../api/drink'
+import DrinkList from '../components/Drinks/DrinkList'
 
 const useStyles = theme => ({
   root: {
@@ -55,6 +57,7 @@ class Attendees extends Component {
       filteredAttendees: [],
       filterValue: '',
       scanData: '',
+      drinks: [],
     }
     // console.log('attendees in constructor', this.state.attendees)
   }
@@ -111,6 +114,14 @@ class Attendees extends Component {
     )
   }
 
+  // updateDrinks = data => {
+  //   this.setState(
+  //     prevState => {
+
+  //     }
+  //   )
+  // }
+
   decreaseCount = event => {
     //  isLoading: if I use this, the loading ring shows up, and it might not be good.
     // Maybe I can show a smaller one next to plus button to indicates the loading states
@@ -161,6 +172,10 @@ class Attendees extends Component {
     // variable that holds the original list
   }
 
+  setDrinks = drinks => {
+    this.setState({ drinks: drinks })
+  }
+
   setAttendees = attendees => {
     this.setState({ attendees: attendees })
   }
@@ -181,6 +196,7 @@ class Attendees extends Component {
       this.setFilteredAttendees,
       this.setLoading
     )
+    getDrinkList(this.context.token, this.setDrinks, this.setLoading)
   }
 
   componentWillUnmount() {
@@ -192,14 +208,22 @@ class Attendees extends Component {
     // this.filterList()
     return (
       <div className={styles.attendeesContainer}>
-        <QrReader
-          delay={300}
-          // onError={handleError}
-          onScan={this.handleScan}
-          style={{ width: '50%' }}
-          className={styles.qRReaderComponent}
-        />
-        <p>{this.state.scanData}</p>
+        <div className={styles.topContainers}>
+          <QrReader
+            delay={300}
+            // onError={handleError}
+            onScan={this.handleScan}
+            style={{ width: '50%' }}
+            className={styles.qRReaderComponent}
+          />
+          <div className={styles.drinkList}>
+            {this.state.isLoading || !this.state.drinks ? (
+              <Spinner />
+            ) : (
+              <DrinkList drinks={this.state.drinks} />
+            )}
+          </div>
+        </div>
         <Paper component="form" className={classes.searchField}>
           <InputBase
             className={classes.input}

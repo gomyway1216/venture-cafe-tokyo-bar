@@ -11,3 +11,8 @@
 .descriptionTitle {
   margin: auto;
 }
+
+.topContainers {
+  display: flex;
+  flex-direction: row;
+}
