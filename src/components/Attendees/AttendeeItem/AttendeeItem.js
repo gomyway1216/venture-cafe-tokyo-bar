@@ -23,10 +23,18 @@ const EventItem = props => {
     <div key={props.id} className={styles.itemWrapper}>
       {/* <div className={styles.item}>{props.name}</div> */}
       <div className={styles.attendeeInfo}>
-        <div className={styles.item}>{props.id}</div>
-        <div className={styles.item}>{props.firstName}</div>
-        <div className={styles.item}>{props.lastName}</div>
-        <div className={styles.item}>{props.drinkCounter}</div>
+        <span className={styles.item}>{props.id}</span>
+        <span className={styles.item}>{props.firstName}</span>
+        <span className={styles.item}>{props.lastName}</span>
+        <span
+          className={
+            styles.item && props.drinkCounter < 3
+              ? styles.drinkCountNormal
+              : styles.drinkCountExceed
+          }
+        >
+          {props.drinkCounter}
+        </span>
       </div>
       <div className={styles.buttons}>
         {props.drinks.map(drink => (

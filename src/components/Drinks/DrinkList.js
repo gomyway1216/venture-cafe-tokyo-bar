@@ -4,6 +4,7 @@ import DrinkItem from './DrinkItem/DrinkItem'
 import styles from './DrinkList.module.css'
 
 const DrinkList = props => {
+  // sort the drinks based on the category
   const sortedDrinks = props.drinks.sort((a, b) => {
     let aPriority = 1
     let bPriority = 1

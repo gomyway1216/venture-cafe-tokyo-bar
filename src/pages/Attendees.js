@@ -283,16 +283,24 @@ class Attendees extends Component {
             delay={300}
             // onError={handleError}
             onScan={this.handleScan}
-            style={{ width: '50%' }}
+            style={{ width: '30%' }}
             className={styles.qRReaderComponent}
           />
-          <div>
+          <div className={styles.topRight}>
             <div className={styles.drinkList}>
               {this.state.isLoading || !this.state.currentDrinks ? (
                 <Spinner />
               ) : (
                 <DrinkList drinks={this.state.currentDrinks} />
               )}
+            </div>
+            <div>
+              <Button variant="contained" color="secondary">
+                Delete all data
+              </Button>
+              <Button variant="contained" color="primary">
+                Save all data!
+              </Button>
             </div>
           </div>
         </div>
@@ -318,11 +326,11 @@ class Attendees extends Component {
             <Spinner />
           ) : (
             <div>
-              <div className={styles.description}>
+              {/* <div className={styles.description}>
                 <div className={styles.descriptionTitle}>Name</div>
                 <div className={styles.descriptionTitle}>Count</div>
                 <div className={styles.descriptionTitle}>Change</div>
-              </div>
+              </div> */}
               <AttendeeList
                 attendees={this.state.filteredAttendees}
                 // increaseCount={this.increaseCount}

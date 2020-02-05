@@ -10,6 +10,11 @@
   flex-direction: row;
 }
 
-.item {
-  margin: auto;
+.drinkName {
+  /* margin: 2%; */
+  margin-right: 5%;
+}
+
+.drinkCounter {
+  color: blue;
 }

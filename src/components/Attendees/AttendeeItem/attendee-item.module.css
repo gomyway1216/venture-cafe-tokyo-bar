@@ -19,5 +19,13 @@
   margin: auto;
 }
 
+.drinkCountNormal {
+  color: blue;
+}
+
+.drinkCountExceed {
+  color: red;
+}
+
 .buttons {
 }

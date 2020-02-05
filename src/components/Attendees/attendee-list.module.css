@@ -5,3 +5,9 @@
   list-style: none;
   padding: 0;
 }
+
+.description {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

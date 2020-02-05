@@ -15,4 +15,10 @@
 .topContainers {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
+
+.drinkList {
+  text-align: center;
+  font-size: x-large;
 }

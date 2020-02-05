@@ -4,7 +4,6 @@ import styles from './attendee-list.module.css'
 
 const AttendeeList = props => {
   const attendees = props.attendees.map(attendee => {
-    console.log('attendee', attendee)
     return (
       <AttendeeItem
         key={attendee.id}
@@ -20,7 +19,17 @@ const AttendeeList = props => {
     )
   })
 
-  return <ul className={styles.attendeeList}>{attendees}</ul>
+  return (
+    <div className={styles.attendeeList}>
+      <div className={styles.description}>
+        <span className={styles.descriptionTitle}>User ID</span>
+        <span className={styles.descriptionTitle}>First Name</span>
+        <span className={styles.descriptionTitle}>Last Name</span>
+        <span className={styles.descriptionTitle}>Drink Count</span>
+      </div>
+      <ul>{attendees}</ul>
+    </div>
+  )
 }
 
 export default AttendeeList

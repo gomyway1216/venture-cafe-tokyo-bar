@@ -4,9 +4,9 @@ import styles from './DrinkItem.module.css'
 const DrinkItem = props => {
   return (
     <div className={styles.itemWrapper}>
-      <div className={styles.item}>{props.name}</div>
-      <div className={styles.item}>{props.drinkTypeName}</div>
-      <div className={styles.item}>{props.drinkCounter}</div>
+      <span className={styles.drinkName}>{props.name}</span>
+      {/* <div className={styles.item}>{props.drinkTypeName}</div> */}
+      <span className={styles.drinkCounter}>{props.drinkCounter}</span>
     </div>
   )
 }
