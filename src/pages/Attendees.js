@@ -72,7 +72,6 @@ class Attendees extends Component {
     if (data) {
       this.setState({ scanData: data })
       // check if the current user exist in the frontend, otherwise do api call
-      // console.log('this is attendee', this.state.attendees)
       if (!this.state.attendees.find(element => element.attendeeId === data)) {
         onSignIn(data, this.context.token, this.updateAttendees)
       }
