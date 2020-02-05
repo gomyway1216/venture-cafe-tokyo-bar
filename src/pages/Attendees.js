@@ -11,14 +11,14 @@ import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import styles from './attendees.module.css'
 import QrReader from 'react-qr-reader'
+import { getCurrentDrinkList, getDrinkList } from '../api/drink'
+import DrinkList from '../components/Drinks/DrinkList'
 import {
   onSignIn,
   changeDrinkCount,
   fetchSignedInAttendees,
   updateAttendeeDrink,
 } from '../api/attendee'
-import { getCurrentDrinkList, getDrinkList } from '../api/drink'
-import DrinkList from '../components/Drinks/DrinkList'
 
 const useStyles = theme => ({
   root: {
