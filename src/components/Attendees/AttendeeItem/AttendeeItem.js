@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import styles from './attendee-item.module.css'
 import Button from '@material-ui/core/Button'
-import DrinkList from '../../Drinks/DrinkList'
 
 const EventItem = props => {
   const [selectedDrinkId, setSelectedDrinkId] = useState('')
@@ -17,11 +16,8 @@ const EventItem = props => {
     }
   }
 
-  console.log('props.drinkCounter', props.drinkCounter)
-
   return (
     <div key={props.id} className={styles.itemWrapper}>
-      {/* <div className={styles.item}>{props.name}</div> */}
       <div className={styles.attendeeInfo}>
         <span className={styles.item}>{props.id}</span>
         <span className={styles.item}>{props.firstName}</span>
@@ -38,7 +34,12 @@ const EventItem = props => {
       </div>
       <div className={styles.buttons}>
         {props.drinks.map(drink => (
-          <Button variant="contained" id={drink.id} onClick={handleSelectDrink}>
+          <Button
+            variant="contained"
+            id={drink.id}
+            key={drink.id}
+            onClick={handleSelectDrink}
+          >
             {drink.name}
           </Button>
         ))}

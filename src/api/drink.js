@@ -33,7 +33,6 @@ export const getCurrentDrinkList = (token, setCurrentDrinks, setLoading) => {
     })
     .then(resData => {
       const currentDrinks = resData.data.currentDrinks
-      console.log('this is currentDrinks', currentDrinks)
       setCurrentDrinks(currentDrinks)
     })
     .catch(err => {

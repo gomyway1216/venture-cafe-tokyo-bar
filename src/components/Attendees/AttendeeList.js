@@ -11,8 +11,6 @@ const AttendeeList = props => {
         firstName={attendee.firstName}
         lastName={attendee.lastName}
         drinkCounter={attendee.drinks.length}
-        // increaseCount={props.increaseCount}
-        // decreaseCount={props.decreaseCount}
         selectDrink={props.selectDrink}
         drinks={props.drinks}
       />
