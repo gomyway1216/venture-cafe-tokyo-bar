@@ -15,8 +15,9 @@ import {
   onSignIn,
   changeDrinkCount,
   fetchSignedInAttendees,
+  updateAttendeeDrink,
 } from '../api/attendee'
-import { getDrinkList } from '../api/drink'
+import { getCurrentDrinkList, getDrinkList } from '../api/drink'
 import DrinkList from '../components/Drinks/DrinkList'
 
 const useStyles = theme => ({
@@ -58,6 +59,7 @@ class Attendees extends Component {
       filterValue: '',
       scanData: '',
       drinks: [],
+      currentDrinks: [],
     }
     // console.log('attendees in constructor', this.state.attendees)
   }
@@ -70,11 +72,11 @@ class Attendees extends Component {
     if (data) {
       this.setState({ scanData: data })
       // check if the current user exist in the frontend, otherwise do api call
-      console.log('this is attendee', this.state.attendees)
+      // console.log('this is attendee', this.state.attendees)
       if (!this.state.attendees.find(element => element.attendeeId === data)) {
         onSignIn(data, this.context.token, this.updateAttendees)
       }
-      console.log('this is attendee2', this.state.attendees)
+      // console.log('this is attendee2', this.state.attendees)
       // set the scanned QR code to be the filter value to search.
       this.setState({ filterValue: data }, () => {
         this.filterList()
@@ -109,8 +111,8 @@ class Attendees extends Component {
           drinks: data.drinks,
         })
         return { attendees: updatedAttendees }
-      },
-      () => console.log('attendees prev', this.state.attendees)
+      }
+      // () => console.log('attendees prev', this.state.attendees)
     )
   }
 
@@ -132,6 +134,63 @@ class Attendees extends Component {
 
   increaseCount = event => {
     changeDrinkCount(event.currentTarget.id, 1)
+  }
+
+  // when a attendee choose a drink
+  selectDrink = (id, drinkId) => {
+    // do the api call here.
+    updateAttendeeDrink(
+      this.context.token,
+      this.isActive,
+      id,
+      drinkId,
+      this.updateSingleAttendee,
+      this.setLoading
+    )
+
+    // // also update the entire drink count
+    // getCurrentDrinkList(
+    //   this.context.token,
+    //   this.setCurrentDrinks,
+    //   this.setLoading
+    // )
+  }
+
+  // update the drink of single attendee
+  updateSingleAttendee = async data => {
+    // console.log('updateSingleAttendee is called')
+    // console.log('this is API data', data)
+    await this.setState(
+      prevState => {
+        let updatedAttendees = [...prevState.attendees]
+        updatedAttendees.find((o, i) => {
+          if (o.attendeeId === data.attendeeId) {
+            // console.log('this is O', o)
+            // console.log('this is data', data)
+            updatedAttendees[i] = {
+              id: data.id,
+              attendeeId: data.attendeeId,
+              firstName: data.firstName,
+              lastName: data.lastName,
+              drinks: data.drinks,
+            }
+            return true
+          }
+        })
+        return {
+          attendees: updatedAttendees,
+        }
+      },
+      () => {
+        this.filterList()
+        // also update the entire drink count
+        getCurrentDrinkList(
+          this.context.token,
+          this.setCurrentDrinks,
+          this.setLoading
+        )
+      }
+    )
   }
 
   filterList = () => {
@@ -176,6 +235,12 @@ class Attendees extends Component {
     this.setState({ drinks: drinks })
   }
 
+  setCurrentDrinks = currentDrinks => {
+    // here it needs to traverse all the current Attendee to get the drink count
+    console.log('setCurrentDrinks is called and new value', currentDrinks)
+    this.setState({ currentDrinks: currentDrinks })
+  }
+
   setAttendees = attendees => {
     this.setState({ attendees: attendees })
   }
@@ -197,6 +262,11 @@ class Attendees extends Component {
       this.setLoading
     )
     getDrinkList(this.context.token, this.setDrinks, this.setLoading)
+    getCurrentDrinkList(
+      this.context.token,
+      this.setCurrentDrinks,
+      this.setLoading
+    )
   }
 
   componentWillUnmount() {
@@ -205,6 +275,7 @@ class Attendees extends Component {
 
   render() {
     const { classes } = this.props
+    // console.log('this.state.currentDrinks', this.state.currentDrinks)
     // this.filterList()
     return (
       <div className={styles.attendeesContainer}>
@@ -216,12 +287,14 @@ class Attendees extends Component {
             style={{ width: '50%' }}
             className={styles.qRReaderComponent}
           />
-          <div className={styles.drinkList}>
-            {this.state.isLoading || !this.state.drinks ? (
-              <Spinner />
-            ) : (
-              <DrinkList drinks={this.state.drinks} />
-            )}
+          <div>
+            <div className={styles.drinkList}>
+              {this.state.isLoading || !this.state.currentDrinks ? (
+                <Spinner />
+              ) : (
+                <DrinkList drinks={this.state.currentDrinks} />
+              )}
+            </div>
           </div>
         </div>
         <Paper component="form" className={classes.searchField}>
@@ -253,8 +326,10 @@ class Attendees extends Component {
               </div>
               <AttendeeList
                 attendees={this.state.filteredAttendees}
-                increaseCount={this.increaseCount}
-                decreaseCount={this.decreaseCount}
+                // increaseCount={this.increaseCount}
+                // decreaseCount={this.decreaseCount}
+                selectDrink={this.selectDrink}
+                drinks={this.state.drinks}
               />
             </div>
           )}

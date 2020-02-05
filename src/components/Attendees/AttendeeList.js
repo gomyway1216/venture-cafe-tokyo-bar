@@ -4,15 +4,18 @@ import styles from './attendee-list.module.css'
 
 const AttendeeList = props => {
   const attendees = props.attendees.map(attendee => {
+    console.log('attendee', attendee)
     return (
       <AttendeeItem
         key={attendee.id}
         id={attendee.attendeeId}
         firstName={attendee.firstName}
         lastName={attendee.lastName}
-        drinkCounter={attendee.drinkCounter}
-        increaseCount={props.increaseCount}
-        decreaseCount={props.decreaseCount}
+        drinkCounter={attendee.drinks.length}
+        // increaseCount={props.increaseCount}
+        // decreaseCount={props.decreaseCount}
+        selectDrink={props.selectDrink}
+        drinks={props.drinks}
       />
     )
   })

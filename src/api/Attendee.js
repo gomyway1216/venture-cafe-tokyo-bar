@@ -40,11 +40,78 @@ export const onSignIn = (id, token, updateAttendees) => {
     })
     .then(resData => {
       //   console.log('attendees prev', this.state.attendees)
-      console.log('resData.data', resData.data)
+      // console.log('resData.data', resData.data)
       updateAttendees(resData.data.signInAttendee)
     })
     .catch(err => {
       console.log(err)
+    })
+}
+
+export const updateAttendeeDrink = (
+  token,
+  isActive,
+  id,
+  drinkId,
+  updateSingleAttendee,
+  setLoading
+) => {
+  setLoading(true)
+  // console.log('updateAttendeeDrink is called')
+  // console.log('id', id)
+  // console.log('drinkId', drinkId)
+  // console.log('date', new Date().toISOString())
+  const requestBody = {
+    query: `
+      mutation UpdateAttendeeDrinks($id: String!, $drinkId: String!, $date: String!) {
+        updateAttendeeDrinks(updateAttendeeDrinksInput: {_id: $id, drinkId: $drinkId, date: $date}) {
+          id: _id
+          attendeeId
+          firstName
+          lastName
+          drinks {
+            id: _id
+            name
+          }
+        }
+      }
+    `,
+    variables: {
+      id: id,
+      drinkId: drinkId,
+      date: new Date().toISOString(),
+    },
+  }
+
+  fetch(`${process.env.REACT_APP_URL}graphql`, {
+    method: 'POST',
+    body: JSON.stringify(requestBody),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
+  })
+    .then(res => {
+      // console.log('res', res)
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!')
+      }
+      return res.json()
+    })
+    .then(resData => {
+      // console.log('resData', resData)
+      const currentAttendee = resData.data.updateAttendeeDrinks
+      // console.log('drink updated currentAttendee', currentAttendee)
+      if (isActive) {
+        updateSingleAttendee(currentAttendee)
+        setLoading(false)
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      if (isActive) {
+        setLoading(false)
+      }
     })
 }
 
@@ -152,7 +219,7 @@ export const fetchSignedInAttendees = (
     })
     .then(resData => {
       const currentAttendees = resData.data.currentAttendees
-      console.log('attendee is renewed', currentAttendees)
+      // console.log('attendee is renewed', currentAttendees)
       if (isActive) {
         setAttendees(currentAttendees)
         setFilteredAttendees(currentAttendees)
@@ -171,13 +238,13 @@ export const fetchAttendees = () => {
   this.setState({ isLoading: true })
   const requestBody = {
     query: `
-        query {
-            attendees {
-                userId
-                name
-                drinkCounter
-            }
+      query {
+        attendees {
+          userId
+          name
+          drinkCounter
         }
+      }
     `,
   }
 
