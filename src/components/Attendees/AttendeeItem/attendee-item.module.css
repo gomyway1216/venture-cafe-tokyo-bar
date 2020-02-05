@@ -1,31 +1,38 @@
-.wrapper {
+/* .wrapper {
   display: flex;
   flex-direction: row;
   color: blueviolet;
-}
+} */
 
 /* somehow item-wrapper works for gatsby project, but I need to follow camelCase here somehow */
-.itemWrapper {
+/* .itemWrapper {
   display: flex;
   flex-direction: column;
-}
+} */
 
-.attendeeInfo {
+/* .attendeeInfo {
   display: flex;
   flex-direction: row;
-}
+} */
 
 .item {
   margin: auto;
 }
 
 .drinkCountNormal {
+  margin: auto;
   color: blue;
 }
 
 .drinkCountExceed {
+  margin: auto;
   color: red;
 }
 
 .buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }

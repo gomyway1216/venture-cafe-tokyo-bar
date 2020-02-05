@@ -1,4 +1,4 @@
-.attendeeList {
+/* .attendeeList {
   width: 40rem;
   max-width: 90%;
   margin: 2rem auto;
@@ -10,4 +10,20 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+} */
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: auto auto auto auto 50vw 3vw;
+  grid-gap: 10px;
+  /* background-color: #2196f3; */
+  padding: 10px;
+  /* background-color: lightcyan; */
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
 }

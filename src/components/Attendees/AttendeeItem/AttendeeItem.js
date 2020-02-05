@@ -17,21 +17,21 @@ const EventItem = props => {
   }
 
   return (
-    <div key={props.id} className={styles.itemWrapper}>
-      <div className={styles.attendeeInfo}>
-        <span className={styles.item}>{props.id}</span>
-        <span className={styles.item}>{props.firstName}</span>
-        <span className={styles.item}>{props.lastName}</span>
-        <span
-          className={
-            styles.item && props.drinkCounter < 3
-              ? styles.drinkCountNormal
-              : styles.drinkCountExceed
-          }
-        >
-          {props.drinkCounter}
-        </span>
-      </div>
+    // <div key={props.id} className={styles.itemWrapper}>
+    // <div className={styles.attendeeInfo}>
+    <>
+      <span className={styles.item}>{props.id}</span>
+      <span className={styles.item}>{props.firstName}</span>
+      <span className={styles.item}>{props.lastName}</span>
+      <span
+        className={
+          styles.item && props.drinkCounter < 3
+            ? styles.drinkCountNormal
+            : styles.drinkCountExceed
+        }
+      >
+        {props.drinkCounter}
+      </span>
       <div className={styles.buttons}>
         {props.drinks.map(drink => (
           <Button
@@ -43,17 +43,17 @@ const EventItem = props => {
             {drink.name}
           </Button>
         ))}
-        <Button
-          variant="contained"
-          color="primary"
-          id={props.id}
-          disabled={selectedDrinkId === ''}
-          onClick={handleSubmitDrink}
-        >
-          Add!
-        </Button>
       </div>
-    </div>
+      <Button
+        variant="contained"
+        color="primary"
+        id={props.id}
+        disabled={selectedDrinkId === ''}
+        onClick={handleSubmitDrink}
+      >
+        Add!
+      </Button>
+    </>
   )
 }
 

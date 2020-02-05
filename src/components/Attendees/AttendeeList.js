@@ -18,14 +18,35 @@ const AttendeeList = props => {
   })
 
   return (
-    <div className={styles.attendeeList}>
-      <div className={styles.description}>
-        <span className={styles.descriptionTitle}>User ID</span>
-        <span className={styles.descriptionTitle}>First Name</span>
-        <span className={styles.descriptionTitle}>Last Name</span>
-        <span className={styles.descriptionTitle}>Drink Count</span>
-      </div>
-      <ul>{attendees}</ul>
+    <div className={styles.gridContainer}>
+      {/* <div className={styles.description}> */}
+      <div>User ID</div>
+      <div>First Name</div>
+      <div>Last Name</div>
+      <div>Drink Count</div>
+      <div>Buttons</div>
+      <div>Confirm</div>
+      {/* </div> */}
+      {props.attendees.map(attendee => {
+        return (
+          // <>
+          //   {/* <div>name</div>
+          //   <div>first name</div>
+          //   <div>last name</div>
+          //   <div> drink name</div> */}
+          // </>
+          <AttendeeItem
+            key={attendee.id}
+            id={attendee.attendeeId}
+            firstName={attendee.firstName}
+            lastName={attendee.lastName}
+            drinkCounter={attendee.drinks.length}
+            selectDrink={props.selectDrink}
+            drinks={props.drinks}
+          />
+        )
+      })}
+      {/* <ul>{attendees}</ul> */}
     </div>
   )
 }

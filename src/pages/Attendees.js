@@ -10,7 +10,11 @@ import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import styles from './attendees.module.css'
 import QrReader from 'react-qr-reader'
-import { getCurrentDrinkList, getDrinkList } from '../api/drink'
+import {
+  getCurrentDrinkList,
+  getDrinkList,
+  deleteAllCurrentDrinks,
+} from '../api/drink'
 import DrinkList from '../components/Drinks/DrinkList'
 import {
   onSignIn,
@@ -255,8 +259,18 @@ class Attendees extends Component {
               )}
             </div>
             <div>
-              <Button variant="contained" color="secondary">
-                Delete all data
+              <Button
+                variant="contained"
+                onClick={() =>
+                  deleteAllCurrentDrinks(
+                    this.context.token,
+                    this.setCurrentDrinks,
+                    this.setLoading
+                  )
+                }
+                color="secondary"
+              >
+                Delete all drink list
               </Button>
               <Button variant="contained" color="primary">
                 Save all data!
