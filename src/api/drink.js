@@ -96,15 +96,7 @@ export const deleteAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
   const requestBody = {
     query: `
       mutation {
-        deleteAllCurrentDrinks {
-          id: _id
-          name
-          drinkType {
-            id: _id
-            name
-          }
-          count
-        }
+        deleteAllCurrentDrinks
       }
     `,
   }
@@ -123,10 +115,11 @@ export const deleteAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
       }
       return res.json()
     })
-    .then(resData => {
-      const currentDrinks = resData.data.deleteAllCurrentDrinks
-      console.log('this is currentDrinks', currentDrinks)
-      setCurrentDrinks(currentDrinks)
+    .then(async resData => {
+      // const currentDrinks = resData.data.deleteAllCurrentDrinks
+      // console.log('this is currentDrinks', currentDrinks)
+      // setCurrentDrinks(currentDrinks)
+      await getCurrentDrinkList(token, setCurrentDrinks, setLoading)
       setLoading(false)
     })
     .catch(err => {

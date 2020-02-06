@@ -278,3 +278,54 @@ export const fetchAttendees = () => {
       }
     })
 }
+
+export const deleteAllCurrentAttendees = (
+  token,
+  isActive,
+  setAttendees,
+  setFilteredAttendees,
+  setLoading
+) => {
+  setLoading(true)
+
+  const requestBody = {
+    query: `
+        mutation {
+            deleteAllCurrentAttendees
+        }
+      `,
+  }
+
+  fetch(`${process.env.REACT_APP_URL}graphql`, {
+    method: 'POST',
+    body: JSON.stringify(requestBody),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
+  })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!')
+      }
+      return res.json()
+    })
+    .then(async resData => {
+      // const currentDrinks = resData.data.deleteAllCurrentDrinks
+      // console.log('this is currentDrinks', currentDrinks)
+      // setCurrentDrinks(currentDrinks)
+      //   await getCurrentDrinkList(token, setCurrentDrinks, setLoading)
+      await fetchSignedInAttendees(
+        token,
+        isActive,
+        setAttendees,
+        setFilteredAttendees,
+        setLoading
+      )
+      setLoading(false)
+    })
+    .catch(err => {
+      console.log(err)
+      setLoading(false)
+    })
+}

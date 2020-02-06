@@ -21,7 +21,9 @@ import {
   changeDrinkCount,
   fetchSignedInAttendees,
   updateAttendeeDrink,
+  deleteAllCurrentAttendees,
 } from '../api/attendee'
+import Dialog from '../components/Dialog/Dialog'
 
 const useStyles = theme => ({
   root: {
@@ -63,6 +65,7 @@ class Attendees extends Component {
       scanData: '',
       drinks: [],
       currentDrinks: [],
+      dialogOpen: false,
     }
   }
 
@@ -242,6 +245,7 @@ class Attendees extends Component {
     const { classes } = this.props
     return (
       <div className={styles.attendeesContainer}>
+        <Dialog open={this.state.dialogOpen} />
         <div className={styles.topContainers}>
           <QrReader
             delay={300}
@@ -262,12 +266,29 @@ class Attendees extends Component {
               <Button
                 variant="contained"
                 onClick={() =>
+                  deleteAllCurrentAttendees(
+                    this.context.token,
+                    this.isActive,
+                    this.setAttendees,
+                    this.setFilteredAttendees,
+                    this.setLoading
+                  )
+                }
+                // onClick={() => this.setState({ dialogOpen: true })}
+                color="secondary"
+              >
+                Delete all the signedIn attendees
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() =>
                   deleteAllCurrentDrinks(
                     this.context.token,
                     this.setCurrentDrinks,
                     this.setLoading
                   )
                 }
+                // onClick={() => this.setState({ dialogOpen: true })}
                 color="secondary"
               >
                 Delete all drink list
