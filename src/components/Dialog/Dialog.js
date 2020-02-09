@@ -7,15 +7,22 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
 const AlertDialog = props => {
-  const [open, setOpen] = React.useState(props.open)
+  // const [open, setOpen] = React.useState(props.open)
+  // console.log('open', open)
 
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
+  // React.useEffect(() => {
+  //   setOpen(props.open)
+  // }, [props.open])
 
-  const handleClose = () => {
-    setOpen(false)
-  }
+  // const handleClickOpen = () => {
+  //   setOpen(true)
+  // }
+
+  // const handleClose = () => {
+  //   // console.log('open', open)
+  //   setOpen(false)
+  //   // console.log('open', open)
+  // }
 
   return (
     <div>
@@ -24,7 +31,7 @@ const AlertDialog = props => {
       </Button> */}
       <Dialog
         open={props.open}
-        onClose={handleClose}
+        onClose={props.handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -33,14 +40,14 @@ const AlertDialog = props => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            It is going to delete a lot of data displaying!
+            {props.children}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={props.handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
+          <Button onClick={props.onContinue} color="primary" autoFocus>
             Continue
           </Button>
         </DialogActions>

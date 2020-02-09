@@ -10,20 +10,17 @@ import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import styles from './attendees.module.css'
 import QrReader from 'react-qr-reader'
-import {
-  getCurrentDrinkList,
-  getDrinkList,
-  deleteAllCurrentDrinks,
-} from '../api/drink'
+import { getCurrentDrinkList, getDrinkList } from '../api/drink'
 import DrinkList from '../components/Drinks/DrinkList'
 import {
   onSignIn,
   changeDrinkCount,
   fetchSignedInAttendees,
   updateAttendeeDrink,
-  deleteAllCurrentAttendees,
 } from '../api/attendee'
 import Dialog from '../components/Dialog/Dialog'
+import Modal from './Modal'
+import DataHandling from '../components/DataHandling/DataHandling'
 
 const useStyles = theme => ({
   root: {
@@ -65,7 +62,6 @@ class Attendees extends Component {
       scanData: '',
       drinks: [],
       currentDrinks: [],
-      dialogOpen: false,
     }
   }
 
@@ -93,6 +89,17 @@ class Attendees extends Component {
 
   // add the attendee by QR code if the attendee doesn't exist in the list of people shown
   updateAttendees = data => {
+    // to prevent adding two same attendees.
+    // backend code returns the same currentAttendee if the signed in attendee
+    // already existed in db. So, this part of the code should also handle that
+    if (
+      !this.state.attendees.find(
+        element => element.attendeeId === data.attendeeId
+      )
+    ) {
+      this.forceUpdate()
+    }
+
     this.setState(
       prevState => {
         const updatedAttendees = [...prevState.attendees]
@@ -245,7 +252,6 @@ class Attendees extends Component {
     const { classes } = this.props
     return (
       <div className={styles.attendeesContainer}>
-        <Dialog open={this.state.dialogOpen} />
         <div className={styles.topContainers}>
           <QrReader
             delay={300}
@@ -262,41 +268,13 @@ class Attendees extends Component {
                 <DrinkList drinks={this.state.currentDrinks} />
               )}
             </div>
-            <div>
-              <Button
-                variant="contained"
-                onClick={() =>
-                  deleteAllCurrentAttendees(
-                    this.context.token,
-                    this.isActive,
-                    this.setAttendees,
-                    this.setFilteredAttendees,
-                    this.setLoading
-                  )
-                }
-                // onClick={() => this.setState({ dialogOpen: true })}
-                color="secondary"
-              >
-                Delete all the signedIn attendees
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() =>
-                  deleteAllCurrentDrinks(
-                    this.context.token,
-                    this.setCurrentDrinks,
-                    this.setLoading
-                  )
-                }
-                // onClick={() => this.setState({ dialogOpen: true })}
-                color="secondary"
-              >
-                Delete all drink list
-              </Button>
-              <Button variant="contained" color="primary">
-                Save all data!
-              </Button>
-            </div>
+            <DataHandling
+              setAttendees={this.setAttendees}
+              setFilteredAttendees={this.setFilteredAttendees}
+              isActive={this.isActive}
+              setLoading={this.setLoading}
+              setCurrentDrinks={this.setCurrentDrinks}
+            />
           </div>
         </div>
         <Paper component="form" className={classes.searchField}>
