@@ -41,6 +41,10 @@ export const onSignIn = (id, token, updateAttendees) => {
     .then(resData => {
       //   console.log('attendees prev', this.state.attendees)
       // console.log('resData.data', resData.data)
+      console.log(
+        'update attendees would be called with',
+        resData.data.signInAttendee
+      )
       updateAttendees(resData.data.signInAttendee)
     })
     .catch(err => {

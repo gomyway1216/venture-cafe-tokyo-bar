@@ -6,6 +6,7 @@ export const getCurrentDrinkList = (token, setCurrentDrinks, setLoading) => {
       query {
         currentDrinks {
               id: _id
+              drinkId
               name
               drinkType {
                 id: _id
@@ -119,6 +120,45 @@ export const deleteAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
       // const currentDrinks = resData.data.deleteAllCurrentDrinks
       // console.log('this is currentDrinks', currentDrinks)
       // setCurrentDrinks(currentDrinks)
+      await getCurrentDrinkList(token, setCurrentDrinks, setLoading)
+      setLoading(false)
+    })
+    .catch(err => {
+      console.log(err)
+      setLoading(false)
+    })
+}
+
+export const saveAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
+  setLoading(true)
+
+  // this should send the date of saving the drinks as a group
+  const requestBody = {
+    query: `
+      mutation SaveAllCurrentDrinks($date: String!) {
+        saveAllCurrentDrinks(date: $date)
+      }
+    `,
+    variables: {
+      date: new Date().toISOString(),
+    },
+  }
+
+  fetch(`${process.env.REACT_APP_URL}graphql`, {
+    method: 'POST',
+    body: JSON.stringify(requestBody),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
+  })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!')
+      }
+      return res.json()
+    })
+    .then(async resData => {
       await getCurrentDrinkList(token, setCurrentDrinks, setLoading)
       setLoading(false)
     })

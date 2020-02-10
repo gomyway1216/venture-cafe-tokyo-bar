@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import AuthContext from '../../context/auth-context'
 import { TextField, Button } from '@material-ui/core/'
 import Dialog from '../Dialog/Dialog'
-import { deleteAllCurrentDrinks } from '../../api/drink'
+import { deleteAllCurrentDrinks, saveAllCurrentDrinks } from '../../api/drink'
 import { deleteAllCurrentAttendees } from '../../api/attendee'
 
 const modalModeEnum = {
@@ -53,6 +53,7 @@ const DataHandling = props => {
             props.setFilteredAttendees,
             props.setLoading
           )
+          props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
       >
@@ -84,6 +85,7 @@ const DataHandling = props => {
             props.setCurrentDrinks,
             props.setLoading
           )
+          props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
       >
@@ -102,6 +104,19 @@ const DataHandling = props => {
         handleClose={handleDialogClose}
         onContinue={() => {
           console.log('do something! SAVEDATA')
+          saveAllCurrentDrinks(
+            auth.token,
+            props.setCurrentDrinks,
+            props.setLoading
+          )
+          deleteAllCurrentAttendees(
+            auth.token,
+            props.isActive,
+            props.setAttendees,
+            props.setFilteredAttendees,
+            props.setLoading
+          )
+          props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
       >

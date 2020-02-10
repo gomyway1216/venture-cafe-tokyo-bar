@@ -69,12 +69,14 @@ class Attendees extends Component {
 
   static contextType = AuthContext
 
-  handleScan = data => {
+  handleScan = async data => {
     if (data) {
       this.setState({ scanData: data })
       // check if the current user exist in the frontend, otherwise do api call
+      console.log('this.state.attendee', this.state.attendees)
+      console.log('scanning data', data)
       if (!this.state.attendees.find(element => element.attendeeId === data)) {
-        onSignIn(data, this.context.token, this.updateAttendees)
+        await onSignIn(data, this.context.token, this.updateAttendees)
       }
       // set the scanned QR code to be the filter value to search.
       this.setState({ filterValue: data }, () => {
@@ -93,11 +95,13 @@ class Attendees extends Component {
     // backend code returns the same currentAttendee if the signed in attendee
     // already existed in db. So, this part of the code should also handle that
     if (
-      !this.state.attendees.find(
+      this.state.attendees.find(
         element => element.attendeeId === data.attendeeId
       )
     ) {
+      console.log('same name already existed line 102')
       this.forceUpdate()
+      return
     }
 
     this.setState(
@@ -111,8 +115,8 @@ class Attendees extends Component {
           drinks: data.drinks,
         })
         return { attendees: updatedAttendees }
-      }
-      // () => console.log('attendees prev', this.state.attendees)
+      },
+      () => this.filterList()
     )
   }
 
@@ -182,6 +186,7 @@ class Attendees extends Component {
     // if the search bar is not empty
     if (this.state.filterValue !== '') {
       currentList = this.state.attendees
+      console.log('this.state.attendees in filtered list', currentList)
       newList = currentList.filter(item => {
         const firstName = item.firstName.toLowerCase()
         const lastName = item.lastName.toLowerCase()
@@ -226,6 +231,10 @@ class Attendees extends Component {
 
   setLoading = loading => {
     this.setState({ isLoading: loading })
+  }
+
+  setFilterValueEmpty = () => {
+    this.setState({ filterValue: '' })
   }
 
   componentDidMount() {
@@ -274,6 +283,7 @@ class Attendees extends Component {
               isActive={this.isActive}
               setLoading={this.setLoading}
               setCurrentDrinks={this.setCurrentDrinks}
+              setFilterValueEmpty={this.setFilterValueEmpty}
             />
           </div>
         </div>
