@@ -5,6 +5,7 @@ import MainNavigation from './components/Navigation/MainNavigation'
 import AttendeesPage from './pages/Attendees'
 import AuthPage from './pages/Auth'
 import './App.css'
+import DataListPage from './pages/DataList'
 
 class App extends React.Component {
   constructor(props) {
@@ -55,6 +56,9 @@ class App extends React.Component {
                 )}
                 {this.state.token && (
                   <Route path="/attendees" component={AttendeesPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/datalist" component={DataListPage} />
                 )}
                 {/* delete this after and uncomment the above */}
                 {/* <Route path="/attendees" component={AttendeesPage} /> */}
