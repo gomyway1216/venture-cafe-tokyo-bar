@@ -14,7 +14,6 @@ import { getCurrentDrinkList, getDrinkList } from '../api/drink'
 import DrinkList from '../components/Drinks/DrinkList'
 import {
   onSignIn,
-  changeDrinkCount,
   fetchSignedInAttendees,
   updateAttendeeDrink,
 } from '../api/attendee'
@@ -118,18 +117,6 @@ class Attendees extends Component {
       },
       () => this.filterList()
     )
-  }
-
-  decreaseCount = event => {
-    //  isLoading: if I use this, the loading ring shows up, and it might not be good.
-    // Maybe I can show a smaller one next to plus button to indicates the loading states
-    // hit the graphQL endpoint
-
-    changeDrinkCount(event.currentTarget.id, -1)
-  }
-
-  increaseCount = event => {
-    changeDrinkCount(event.currentTarget.id, 1)
   }
 
   // when a attendee choose a drink

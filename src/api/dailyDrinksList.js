@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+// using custom hooks to fetch data
+// to get the list of drinks for each day for Data List page
 export const useDailyDrinksList = token => {
   const [state, setState] = useState({ data: null, loading: true })
 
@@ -45,9 +47,6 @@ export const useDailyDrinksList = token => {
         return res.json()
       })
       .then(resData => {
-        //   console.log('attendees prev', this.state.attendees)
-        // console.log('resData.data', resData.data)
-        console.log('dailyDrinksList', resData.data.dailyDrinksList)
         setState({ data: resData.data.dailyDrinksList, loading: false })
       })
       .catch(err => {

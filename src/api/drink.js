@@ -1,6 +1,8 @@
+// get the current drink list to display
+// essentially, this tells what drinks does the specific day have
+// this method might need refactoring
 export const getCurrentDrinkList = (token, setCurrentDrinks, setLoading) => {
   setLoading(true)
-  // console.log('getDrinkList is called')
   const requestBody = {
     query: `
       query {
@@ -38,16 +40,13 @@ export const getCurrentDrinkList = (token, setCurrentDrinks, setLoading) => {
     })
     .catch(err => {
       console.log(err)
-      // if (isActive) {
-      //   setLoading(false)
-      // }
       setLoading(false)
     })
 }
 
+// get all the possible drinks saved in database
 export const getDrinkList = (token, setDrinks, setLoading) => {
   setLoading(true)
-  // console.log('getDrinkList is called')
   const requestBody = {
     query: `
       query {
@@ -79,18 +78,15 @@ export const getDrinkList = (token, setDrinks, setLoading) => {
     })
     .then(resData => {
       const drinks = resData.data.drinks
-      // console.log('drinks', drinks)
       setDrinks(drinks)
     })
     .catch(err => {
       console.log(err)
-      // if (isActive) {
-      //   setLoading(false)
-      // }
       setLoading(false)
     })
 }
 
+// clean up the count for the drinks for the date
 export const deleteAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
   setLoading(true)
 
@@ -117,9 +113,6 @@ export const deleteAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
       return res.json()
     })
     .then(async resData => {
-      // const currentDrinks = resData.data.deleteAllCurrentDrinks
-      // console.log('this is currentDrinks', currentDrinks)
-      // setCurrentDrinks(currentDrinks)
       await getCurrentDrinkList(token, setCurrentDrinks, setLoading)
       setLoading(false)
     })
@@ -129,6 +122,7 @@ export const deleteAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
     })
 }
 
+// save the drink counts of the day into daily drinks table
 export const saveAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
   setLoading(true)
 
