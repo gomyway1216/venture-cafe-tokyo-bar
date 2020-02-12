@@ -17,8 +17,6 @@ const EventItem = props => {
   }
 
   return (
-    // <div key={props.id} className={styles.itemWrapper}>
-    // <div className={styles.attendeeInfo}>
     <>
       <span className={styles.item}>{props.id}</span>
       <span className={styles.item}>{props.firstName}</span>
@@ -35,6 +33,7 @@ const EventItem = props => {
       <div className={styles.buttons}>
         {props.drinks.map(drink => (
           <Button
+            key={drink.id}
             variant="contained"
             id={drink.id}
             key={drink.id}

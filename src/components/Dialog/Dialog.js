@@ -7,28 +7,8 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
 const AlertDialog = props => {
-  // const [open, setOpen] = React.useState(props.open)
-  // console.log('open', open)
-
-  // React.useEffect(() => {
-  //   setOpen(props.open)
-  // }, [props.open])
-
-  // const handleClickOpen = () => {
-  //   setOpen(true)
-  // }
-
-  // const handleClose = () => {
-  //   // console.log('open', open)
-  //   setOpen(false)
-  //   // console.log('open', open)
-  // }
-
   return (
     <div>
-      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button> */}
       <Dialog
         open={props.open}
         onClose={props.handleClose}

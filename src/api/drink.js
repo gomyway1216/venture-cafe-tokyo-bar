@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 // get the current drink list to display
 // essentially, this tells what drinks does the specific day have
 // this method might need refactoring
@@ -134,7 +136,7 @@ export const saveAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
       }
     `,
     variables: {
-      date: new Date().toISOString(),
+      date: moment().format(),
     },
   }
 

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import AuthContext from '../../context/auth-context'
-import { TextField, Button } from '@material-ui/core/'
+import { Button } from '@material-ui/core/'
 import Dialog from '../Dialog/Dialog'
 import { deleteAllCurrentDrinks, saveAllCurrentDrinks } from '../../api/drink'
 import { deleteAllCurrentAttendees } from '../../api/attendee'
@@ -13,9 +13,7 @@ const modalModeEnum = {
 }
 
 const DataHandling = props => {
-  //   console.log('This is token', context.token)
   const auth = useContext(AuthContext)
-  //   console.log(auth.token)
   const [modalMode, setModalMode] = useState(modalModeEnum.CLOSE)
 
   const handleDialogClose = () => {
@@ -26,15 +24,6 @@ const DataHandling = props => {
     <div>
       <Button
         variant="contained"
-        // onClick={() =>
-        //   deleteAllCurrentAttendees(
-        //     this.context.token,
-        //     this.isActive,
-        //     this.setAttendees,
-        //     this.setFilteredAttendees,
-        //     this.setLoading
-        //   )
-        // }
         onClick={() => setModalMode(modalModeEnum.DELETEDRINKLIST)}
         color="secondary"
       >
@@ -45,7 +34,6 @@ const DataHandling = props => {
         open={modalMode === modalModeEnum.DELETEDRINKLIST}
         handleClose={handleDialogClose}
         onContinue={() => {
-          console.log('do something! DELETEDRINKLIST')
           deleteAllCurrentAttendees(
             auth.token,
             props.isActive,
@@ -62,13 +50,6 @@ const DataHandling = props => {
 
       <Button
         variant="contained"
-        // onClick={() =>
-        //   deleteAllCurrentDrinks(
-        //     this.context.token,
-        //     this.setCurrentDrinks,
-        //     this.setLoading
-        //   )
-        // }
         onClick={() => setModalMode(modalModeEnum.DETETECURERENTATTENDEES)}
         color="secondary"
       >
@@ -79,7 +60,6 @@ const DataHandling = props => {
         open={modalMode === modalModeEnum.DETETECURERENTATTENDEES}
         handleClose={handleDialogClose}
         onContinue={() => {
-          console.log('do something! DETETECURERENTATTENDEES')
           deleteAllCurrentDrinks(
             auth.token,
             props.setCurrentDrinks,
@@ -103,7 +83,6 @@ const DataHandling = props => {
         open={modalMode === modalModeEnum.SAVEDATA}
         handleClose={handleDialogClose}
         onContinue={() => {
-          console.log('do something! SAVEDATA')
           saveAllCurrentDrinks(
             auth.token,
             props.setCurrentDrinks,

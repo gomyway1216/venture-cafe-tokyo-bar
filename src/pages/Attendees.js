@@ -1,6 +1,5 @@
-import React, { useState, Component } from 'react'
-import { TextField, Button } from '@material-ui/core/'
-import { withStyles, fade, StylesProvider } from '@material-ui/core/styles'
+import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import AuthContext from '../context/auth-context'
 import Spinner from '../components/Spinner/Spinner'
 import AttendeeList from '../components/Attendees/AttendeeList'
@@ -17,8 +16,6 @@ import {
   fetchSignedInAttendees,
   updateAttendeeDrink,
 } from '../api/attendee'
-import Dialog from '../components/Dialog/Dialog'
-import Modal from './Modal'
 import DataHandling from '../components/DataHandling/DataHandling'
 
 const useStyles = theme => ({
@@ -72,8 +69,6 @@ class Attendees extends Component {
     if (data) {
       this.setState({ scanData: data })
       // check if the current user exist in the frontend, otherwise do api call
-      console.log('this.state.attendee', this.state.attendees)
-      console.log('scanning data', data)
       if (!this.state.attendees.find(element => element.attendeeId === data)) {
         await onSignIn(data, this.context.token, this.updateAttendees)
       }
@@ -98,7 +93,6 @@ class Attendees extends Component {
         element => element.attendeeId === data.attendeeId
       )
     ) {
-      console.log('same name already existed line 102')
       this.forceUpdate()
       return
     }
@@ -173,7 +167,6 @@ class Attendees extends Component {
     // if the search bar is not empty
     if (this.state.filterValue !== '') {
       currentList = this.state.attendees
-      console.log('this.state.attendees in filtered list', currentList)
       newList = currentList.filter(item => {
         const firstName = item.firstName.toLowerCase()
         const lastName = item.lastName.toLowerCase()
@@ -224,6 +217,10 @@ class Attendees extends Component {
     this.setState({ filterValue: '' })
   }
 
+  handleError = err => {
+    console.error(err)
+  }
+
   componentDidMount() {
     fetchSignedInAttendees(
       this.context.token,
@@ -251,7 +248,7 @@ class Attendees extends Component {
         <div className={styles.topContainers}>
           <QrReader
             delay={300}
-            // onError={handleError}
+            onError={this.handleError}
             onScan={this.handleScan}
             style={{ width: '30%' }}
             className={styles.qRReaderComponent}

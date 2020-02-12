@@ -1,24 +1,8 @@
-/* .attendeeList {
-  width: 40rem;
-  max-width: 90%;
-  margin: 2rem auto;
-  list-style: none;
-  padding: 0;
-}
-
-.description {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-} */
-
 .gridContainer {
   display: grid;
   grid-template-columns: auto auto auto auto 50vw 3vw;
   grid-gap: 10px;
-  /* background-color: #2196f3; */
   padding: 10px;
-  /* background-color: lightcyan; */
 }
 
 .grid-container > div {

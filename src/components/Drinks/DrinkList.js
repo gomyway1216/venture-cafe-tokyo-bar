@@ -1,5 +1,4 @@
 import React from 'react'
-import { getDrinkList } from '../../api/drink'
 import DrinkItem from './DrinkItem/DrinkItem'
 import styles from './DrinkList.module.css'
 

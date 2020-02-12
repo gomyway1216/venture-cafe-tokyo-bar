@@ -1,8 +1,8 @@
+import moment from 'moment'
+
 // when an attendee existed in db just check in,
 // accessing the backend to add the attendee to current attendee
 export const onSignIn = (id, token, updateAttendees) => {
-  const date = new Date().toISOString()
-
   const requestBody = {
     query: `
             mutation SignInAttendee($id: String!, $date: String!){
@@ -20,7 +20,7 @@ export const onSignIn = (id, token, updateAttendees) => {
           `,
     variables: {
       id: id,
-      date: date,
+      date: moment().format(),
     },
   }
 
@@ -74,7 +74,7 @@ export const updateAttendeeDrink = (
     variables: {
       id: id,
       drinkId: drinkId,
-      date: new Date().toISOString(),
+      date: moment().format(),
     },
   }
 
