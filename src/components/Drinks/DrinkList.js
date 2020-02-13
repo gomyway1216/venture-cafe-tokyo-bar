@@ -1,5 +1,5 @@
 import React from 'react'
-import DrinkItem from './DrinkItem/DrinkItem'
+import CustomizedMenus from './CustomizedMenus'
 import styles from './DrinkList.module.css'
 
 const DrinkList = props => {
@@ -22,20 +22,40 @@ const DrinkList = props => {
     return bPriority - aPriority
   })
 
-  const drinks = sortedDrinks.map(drink => {
-    return (
-      <DrinkItem
-        key={drink.id}
-        name={drink.name}
-        drinkTypeName={drink.drinkType.name}
-        drinkCounter={drink.count.length}
-      />
-    )
+  let totalDrinkCount = 0
+  sortedDrinks.forEach(drink => {
+    totalDrinkCount += drink.count.length
   })
+
   return (
     <div>
-      <div>Drink List</div>
-      <ul className={styles.attendeeList}>{drinks}</ul>
+      <div className={styles.titleWrapper}>
+        <div className={styles.title}>Drink List</div>
+        <CustomizedMenus
+          setAttendees={props.setAttendees}
+          setFilteredAttendees={props.setFilteredAttendees}
+          isActive={props.isActive}
+          setLoading={props.setLoading}
+          setCurrentDrinks={props.setCurrentDrinks}
+          setFilterValueEmpty={props.setFilterValueEmpty}
+        />
+      </div>
+      <table>
+        <tr>
+          <th>Drink Name</th>
+          <th>Count</th>
+        </tr>
+        <tr>
+          <th>Total Drinks</th>
+          <th>{totalDrinkCount}</th>
+        </tr>
+        {sortedDrinks.map(drink => (
+          <tr>
+            <td>{drink.name}</td>
+            <td>{drink.count.length}</td>
+          </tr>
+        ))}
+      </table>
     </div>
   )
 }

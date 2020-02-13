@@ -1,15 +1,15 @@
 .attendeesContainer {
   margin: auto;
-}
-
-.description {
-  margin: auto;
   display: flex;
   flex-direction: row;
+  margin-top: 10vh;
 }
 
-.descriptionTitle {
-  margin: auto;
+.leftContainer {
+  width: 75vw;
+}
+.rightContainer {
+  width: 20vw;
 }
 
 .topContainers {
@@ -19,6 +19,5 @@
 }
 
 .drinkList {
-  text-align: center;
-  font-size: x-large;
+  margin-bottom: 2vh;
 }

@@ -16,7 +16,6 @@ import {
   fetchSignedInAttendees,
   updateAttendeeDrink,
 } from '../api/attendee'
-import DataHandling from '../components/DataHandling/DataHandling'
 
 const useStyles = theme => ({
   root: {
@@ -245,61 +244,62 @@ class Attendees extends Component {
     const { classes } = this.props
     return (
       <div className={styles.attendeesContainer}>
-        <div className={styles.topContainers}>
+        <div className={styles.leftContainer}>
+          <Paper component="form" className={classes.searchField}>
+            <InputBase
+              className={classes.input}
+              placeholder="Search Names"
+              inputProps={{ 'aria-label': 'search names' }}
+              onChange={this.handleSearchBarChange}
+              value={this.state.filterValue}
+            />
+            <IconButton
+              type="submit"
+              className={classes.iconButton}
+              aria-label="search"
+            >
+              <SearchIcon />
+            </IconButton>
+          </Paper>
+
+          <div className={styles.attendeeList}>
+            {this.state.isLoading || !this.state.attendees ? (
+              <Spinner />
+            ) : (
+              <div>
+                <AttendeeList
+                  attendees={this.state.filteredAttendees}
+                  selectDrink={this.selectDrink}
+                  drinks={this.state.drinks}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+        <div className={styles.rightContainer}>
+          <div className={styles.drinkList}>
+            {this.state.isLoading || !this.state.currentDrinks ? (
+              <Spinner />
+            ) : (
+              <DrinkList
+                drinks={this.state.currentDrinks}
+                setAttendees={this.setAttendees}
+                setFilteredAttendees={this.setFilteredAttendees}
+                isActive={this.isActive}
+                setLoading={this.setLoading}
+                setCurrentDrinks={this.setCurrentDrinks}
+                setFilterValueEmpty={this.setFilterValueEmpty}
+              />
+            )}
+          </div>
+
           <QrReader
             delay={300}
             onError={this.handleError}
             onScan={this.handleScan}
-            style={{ width: '30%' }}
+            style={{ width: '100%' }}
             className={styles.qRReaderComponent}
           />
-          <div className={styles.topRight}>
-            <div className={styles.drinkList}>
-              {this.state.isLoading || !this.state.currentDrinks ? (
-                <Spinner />
-              ) : (
-                <DrinkList drinks={this.state.currentDrinks} />
-              )}
-            </div>
-            <DataHandling
-              setAttendees={this.setAttendees}
-              setFilteredAttendees={this.setFilteredAttendees}
-              isActive={this.isActive}
-              setLoading={this.setLoading}
-              setCurrentDrinks={this.setCurrentDrinks}
-              setFilterValueEmpty={this.setFilterValueEmpty}
-            />
-          </div>
-        </div>
-        <Paper component="form" className={classes.searchField}>
-          <InputBase
-            className={classes.input}
-            placeholder="Search Names"
-            inputProps={{ 'aria-label': 'search names' }}
-            onChange={this.handleSearchBarChange}
-            value={this.state.filterValue}
-          />
-          <IconButton
-            type="submit"
-            className={classes.iconButton}
-            aria-label="search"
-          >
-            <SearchIcon />
-          </IconButton>
-        </Paper>
-
-        <div className={styles.attendeeList}>
-          {this.state.isLoading || !this.state.attendees ? (
-            <Spinner />
-          ) : (
-            <div>
-              <AttendeeList
-                attendees={this.state.filteredAttendees}
-                selectDrink={this.selectDrink}
-                drinks={this.state.drinks}
-              />
-            </div>
-          )}
         </div>
       </div>
     )

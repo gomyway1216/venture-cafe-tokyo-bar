@@ -1,8 +1,8 @@
 .gridContainer {
   display: grid;
-  grid-template-columns: auto auto auto auto 50vw 3vw;
+  grid-template-columns: auto auto auto auto 40vw 3vw;
   grid-gap: 10px;
-  padding: 10px;
+  padding: 50px;
 }
 
 .grid-container > div {
