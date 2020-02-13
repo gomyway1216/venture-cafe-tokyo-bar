@@ -3,11 +3,12 @@
   grid-template-columns: auto auto auto auto 40vw 3vw;
   grid-gap: 10px;
   padding: 50px;
+  min-width: 0;
 }
 
-.grid-container > div {
+/* .gridContainer > div {
   background-color: rgba(255, 255, 255, 0.8);
   text-align: center;
   padding: 20px 0;
   font-size: 30px;
-}
+} */

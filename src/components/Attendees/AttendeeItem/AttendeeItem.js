@@ -49,6 +49,7 @@ const EventItem = props => {
         id={props.id}
         disabled={selectedDrinkId === ''}
         onClick={handleSubmitDrink}
+        className={styles.item}
       >
         Add!
       </Button>

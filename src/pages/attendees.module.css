@@ -1,5 +1,5 @@
 .attendeesContainer {
-  margin: auto;
+  /* margin: auto; */
   display: flex;
   flex-direction: row;
   margin-top: 10vh;
@@ -7,9 +7,11 @@
 
 .leftContainer {
   width: 75vw;
+  max-width: 75vw;
 }
 .rightContainer {
   width: 20vw;
+  max-width: 20vw;
 }
 
 .topContainers {

@@ -5,12 +5,12 @@ import styles from './attendee-list.module.css'
 const AttendeeList = props => {
   return (
     <div className={styles.gridContainer}>
-      <div>User ID</div>
-      <div>First Name</div>
-      <div>Last Name</div>
-      <div>Drink Count</div>
-      <div>Buttons</div>
-      <div>Confirm</div>
+      <div className={styles.item}>User ID</div>
+      <div className={styles.item}>First Name</div>
+      <div className={styles.item}>Last Name</div>
+      <div className={styles.item}>Drink Count</div>
+      <div className={styles.item}>Buttons</div>
+      <div className={styles.item}>Confirm</div>
       {props.attendees.map(attendee => {
         return (
           <AttendeeItem
