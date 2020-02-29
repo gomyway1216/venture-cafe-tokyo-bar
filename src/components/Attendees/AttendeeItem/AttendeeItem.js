@@ -12,7 +12,10 @@ const EventItem = props => {
   const handleSubmitDrink = event => {
     if (selectedDrinkId !== '') {
       // pair of the attendee and the drink id the user choose
-      props.selectDrink(props.id, selectedDrinkId)
+      props.selectDrink({
+        id: props.id,
+        drinkId: selectedDrinkId,
+      })
     }
   }
 
@@ -36,7 +39,6 @@ const EventItem = props => {
             key={drink.id}
             variant="contained"
             id={drink.id}
-            key={drink.id}
             onClick={handleSelectDrink}
           >
             {drink.name}

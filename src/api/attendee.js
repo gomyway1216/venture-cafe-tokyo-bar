@@ -1,8 +1,9 @@
 import moment from 'moment'
+import { doFetch } from './doFetch'
 
 // when an attendee existed in db just check in,
 // accessing the backend to add the attendee to current attendee
-export const onSignIn = (id, token, updateAttendees) => {
+export const onSignIn = id => {
   const requestBody = {
     query: `
             mutation SignInAttendee($id: String!, $date: String!){
@@ -24,38 +25,11 @@ export const onSignIn = (id, token, updateAttendees) => {
     },
   }
 
-  fetch(`${process.env.REACT_APP_URL}graphql`, {
-    method: 'POST',
-    body: JSON.stringify(requestBody),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    },
-  })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!')
-      }
-      return res.json()
-    })
-    .then(resData => {
-      updateAttendees(resData.data.signInAttendee)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+  return doFetch(requestBody)
 }
 
 // when attendee's drink changes, update the database each time
-export const updateAttendeeDrink = (
-  token,
-  isActive,
-  id,
-  drinkId,
-  updateSingleAttendee,
-  setLoading
-) => {
-  setLoading(true)
+export const updateAttendeeDrink = ({ id, drinkId }) => {
   const requestBody = {
     query: `
         mutation UpdateAttendeeDrinks($id: String!, $drinkId: String!, $date: String!) {
@@ -78,44 +52,11 @@ export const updateAttendeeDrink = (
     },
   }
 
-  fetch(`${process.env.REACT_APP_URL}graphql`, {
-    method: 'POST',
-    body: JSON.stringify(requestBody),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    },
-  })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!')
-      }
-      return res.json()
-    })
-    .then(resData => {
-      const currentAttendee = resData.data.updateAttendeeDrinks
-      if (isActive) {
-        updateSingleAttendee(currentAttendee)
-        setLoading(false)
-      }
-    })
-    .catch(err => {
-      console.log(err)
-      if (isActive) {
-        setLoading(false)
-      }
-    })
+  return doFetch(requestBody)
 }
 
 // fetch all the currentAttendees to show the signed in attendee list
-export const fetchSignedInAttendees = (
-  token,
-  isActive,
-  setAttendees,
-  setFilteredAttendees,
-  setLoading
-) => {
-  setLoading(true)
+export const fetchSignedInAttendees = () => {
   const requestBody = {
     query: `
           query {
@@ -133,34 +74,7 @@ export const fetchSignedInAttendees = (
         `,
   }
 
-  fetch(`${process.env.REACT_APP_URL}graphql`, {
-    method: 'POST',
-    body: JSON.stringify(requestBody),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    },
-  })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!')
-      }
-      return res.json()
-    })
-    .then(resData => {
-      const currentAttendees = resData.data.currentAttendees
-      if (isActive) {
-        setAttendees(currentAttendees)
-        setFilteredAttendees(currentAttendees)
-        setLoading(false)
-      }
-    })
-    .catch(err => {
-      console.log(err)
-      if (isActive) {
-        setLoading(false)
-      }
-    })
+  return doFetch(requestBody)
 }
 
 // fetch all the signed up attendees
@@ -178,19 +92,7 @@ export const fetchAttendees = () => {
       `,
   }
 
-  fetch(`${process.env.REACT_APP_URL}graphql`, {
-    method: 'POST',
-    body: JSON.stringify(requestBody),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!')
-      }
-      return res.json()
-    })
+  doFetch(requestBody)
     .then(resData => {
       const attendees = resData.data.attendees
       if (this.isActive) {
@@ -227,20 +129,7 @@ export const deleteAllCurrentAttendees = (
       `,
   }
 
-  fetch(`${process.env.REACT_APP_URL}graphql`, {
-    method: 'POST',
-    body: JSON.stringify(requestBody),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    },
-  })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!')
-      }
-      return res.json()
-    })
+  doFetch(requestBody)
     .then(async resData => {
       await fetchSignedInAttendees(
         token,

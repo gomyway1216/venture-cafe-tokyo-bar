@@ -1,10 +1,10 @@
 import moment from 'moment'
+import { doFetch } from './doFetch'
 
 // get the current drink list to display
 // essentially, this tells what drinks does the specific day have
 // this method might need refactoring
-export const getCurrentDrinkList = (token, setCurrentDrinks, setLoading) => {
-  setLoading(true)
+export const getCurrentDrinkList = () => {
   const requestBody = {
     query: `
       query {
@@ -22,28 +22,30 @@ export const getCurrentDrinkList = (token, setCurrentDrinks, setLoading) => {
     `,
   }
 
-  fetch(`${process.env.REACT_APP_URL}graphql`, {
-    method: 'POST',
-    body: JSON.stringify(requestBody),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    },
-  })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!')
-      }
-      return res.json()
-    })
-    .then(resData => {
-      const currentDrinks = resData.data.currentDrinks
-      setCurrentDrinks(currentDrinks)
-    })
-    .catch(err => {
-      console.log(err)
-      setLoading(false)
-    })
+  return doFetch(requestBody)
+  // fetch(`${process.env.REACT_APP_URL}graphql`, {
+  //   method: 'POST',
+  //   body: JSON.stringify(requestBody),
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     Authorization: 'Bearer ' + token,
+  //   },
+  // })
+  //   .then(res => {
+  //     if (res.status !== 200 && res.status !== 201) {
+  //       throw new Error('Failed!')
+  //     }
+  //     return res.json()
+  //   })
+  //   .then(resData => {
+  //     setLoading(false)
+  //     const currentDrinks = resData.data.currentDrinks
+  //     setCurrentDrinks(currentDrinks)
+  //   })
+  //   .catch(err => {
+  //     console.log(err)
+  //     setLoading(false)
+  //   })
 }
 
 // get all the possible drinks saved in database
@@ -79,6 +81,7 @@ export const getDrinkList = (token, setDrinks, setLoading) => {
       return res.json()
     })
     .then(resData => {
+      setLoading(false)
       const drinks = resData.data.drinks
       setDrinks(drinks)
     })
