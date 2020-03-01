@@ -117,7 +117,7 @@ const CustomizedMenus = props => {
         onContinue={() => {
           deleteAllCurrentDrinks(
             auth.token,
-            props.setCurrentDrinks,
+            props.fetchCurrentDrinks,
             props.setLoading
           )
           props.setFilterValueEmpty()
@@ -133,8 +133,7 @@ const CustomizedMenus = props => {
         onContinue={() => {
           deleteAllCurrentAttendees(
             auth.token,
-            props.isActive,
-            props.setAttendees,
+            props.fetchAttendees,
             props.setFilteredAttendees,
             props.setLoading
           )
@@ -151,13 +150,12 @@ const CustomizedMenus = props => {
         onContinue={() => {
           saveAllCurrentDrinks(
             auth.token,
-            props.setCurrentDrinks,
+            props.fetchCurrentDrinks,
             props.setLoading
           )
           deleteAllCurrentAttendees(
             auth.token,
-            props.isActive,
-            props.setAttendees,
+            props.fetchAttendees,
             props.setFilteredAttendees,
             props.setLoading
           )

@@ -114,7 +114,6 @@ export const fetchAttendees = () => {
 // deleting all the signed in attendees from the signed in list
 export const deleteAllCurrentAttendees = (
   token,
-  isActive,
   setAttendees,
   setFilteredAttendees,
   setLoading
@@ -133,7 +132,6 @@ export const deleteAllCurrentAttendees = (
     .then(async resData => {
       await fetchSignedInAttendees(
         token,
-        isActive,
         setAttendees,
         setFilteredAttendees,
         setLoading

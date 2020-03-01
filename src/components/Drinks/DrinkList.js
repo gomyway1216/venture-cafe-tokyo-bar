@@ -32,10 +32,9 @@ const DrinkList = props => {
       <div className={styles.titleWrapper}>
         <div className={styles.title}>Drink List</div>
         <CustomizedMenus
-          setAttendees={props.setAttendees}
-          isActive={props.isActive}
+          fetchAttendees={props.fetchAttendees}
           setLoading={props.setLoading}
-          setCurrentDrinks={props.setCurrentDrinks}
+          fetchCurrentDrinks={props.fetchCurrentDrinks}
           setFilterValueEmpty={props.setFilterValueEmpty}
         />
       </div>

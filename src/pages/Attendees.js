@@ -62,7 +62,7 @@ const filterAttendeeList = (attendees, filterValue) => {
 }
 
 const Attendees = props => {
-  const { setAttendees, isActive, setLoading, setCurrentDrinks } = props
+  const { setAttendees, setLoading, setCurrentDrinks } = props
   const classes = useStyles()
 
   const {
@@ -76,6 +76,7 @@ const Attendees = props => {
     error: fetchingAttendeesError,
     selectDrink,
     currentDrinks,
+    fetchCurrentDrinks,
   } = useContext(AttendeeContext)
 
   const { fetchDrinkList, drinkList, isFetchingDrinkList } = useContext(
@@ -132,10 +133,9 @@ const Attendees = props => {
           ) : (
             <DrinkList
               drinks={currentDrinks}
-              setAttendees={setAttendees}
-              isActive={isActive}
+              fetchAttendees={fetchAttendees}
               setLoading={setLoading}
-              setCurrentDrinks={setCurrentDrinks}
+              fetchCurrentDrinks={fetchCurrentDrinks}
               setFilterValueEmpty={() => setFilterValue('')}
             />
           )}
