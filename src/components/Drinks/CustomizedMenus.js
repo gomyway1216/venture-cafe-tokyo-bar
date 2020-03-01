@@ -14,6 +14,7 @@ import Dialog from '../Dialog/Dialog'
 import { deleteAllCurrentDrinks, saveAllCurrentDrinks } from '../../api/drink'
 import { deleteAllCurrentAttendees } from '../../api/attendee'
 import { AttendeeContext } from '../../providers/AttendeeProvider'
+import { DrinkContext } from '../../providers/DrinkProvider'
 
 const StyledMenu = withStyles({
   paper: {
@@ -55,7 +56,12 @@ const modalModeEnum = {
 
 const CustomizedMenus = props => {
   const auth = useContext(AuthContext)
-  const { fetchAttendees, fetchCurrentDrinks } = useContext(AttendeeContext)
+  const {
+    fetchAttendees,
+    fetchCurrentDrinks,
+    deleteAllCurrentAttendees,
+  } = useContext(AttendeeContext)
+  const { deleteAllCurrentDrinks } = useContext(DrinkContext)
   const [modalMode, setModalMode] = useState(modalModeEnum.CLOSE)
   const [anchorEl, setAnchorEl] = React.useState(null)
 
@@ -129,12 +135,7 @@ const CustomizedMenus = props => {
         open={modalMode === modalModeEnum.DETETECURERENTATTENDEES}
         handleClose={handleDialogClose}
         onContinue={() => {
-          deleteAllCurrentAttendees(
-            auth.token,
-            fetchAttendees,
-            props.setFilteredAttendees,
-            props.setLoading
-          )
+          deleteAllCurrentAttendees()
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
@@ -146,13 +147,10 @@ const CustomizedMenus = props => {
         open={modalMode === modalModeEnum.SAVEDATA}
         handleClose={handleDialogClose}
         onContinue={() => {
+          // the api would clear the current drink list, when the data is saved
           saveAllCurrentDrinks(auth.token, fetchCurrentDrinks, props.setLoading)
-          deleteAllCurrentAttendees(
-            auth.token,
-            fetchAttendees,
-            props.setFilteredAttendees,
-            props.setLoading
-          )
+          // clear the current attendees table
+          deleteAllCurrentAttendees()
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
