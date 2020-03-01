@@ -6,6 +6,9 @@ import AttendeesPage from './pages/AttendeesContainer'
 import AuthPage from './pages/Auth'
 import './App.css'
 import DataListPage from './pages/DataList'
+import SettingPage from './pages/Settings'
+import { AttendeeProvider } from './providers/AttendeeProvider'
+import { DrinkProvider } from './providers/DrinkProvider'
 
 class App extends React.Component {
   constructor(props) {
@@ -42,29 +45,36 @@ class App extends React.Component {
               logout: this.logout,
             }}
           >
-            <MainNavigation />
-            <main className="main-content">
-              <Switch>
-                {this.state.token && (
-                  <Redirect from="/" to="/attendees" exact />
-                )}
-                {this.state.token && (
-                  <Redirect from="/auth" to="/attendees" exact />
-                )}
-                {!this.state.token && (
-                  <Route path="/auth" component={AuthPage} />
-                )}
-                {this.state.token && (
-                  <Route path="/attendees" component={AttendeesPage} />
-                )}
-                {this.state.token && (
-                  <Route path="/datalist" component={DataListPage} />
-                )}
-                {/* delete this after and uncomment the above */}
-                {/* <Route path="/attendees" component={AttendeesPage} /> */}
-                {!this.state.token && <Redirect to="/auth" exact />}
-              </Switch>
-            </main>
+            <AttendeeProvider>
+              <DrinkProvider>
+                <MainNavigation />
+                <main className="main-content">
+                  <Switch>
+                    {this.state.token && (
+                      <Redirect from="/" to="/attendees" exact />
+                    )}
+                    {this.state.token && (
+                      <Redirect from="/auth" to="/attendees" exact />
+                    )}
+                    {!this.state.token && (
+                      <Route path="/auth" component={AuthPage} />
+                    )}
+                    {this.state.token && (
+                      <Route path="/attendees" component={AttendeesPage} />
+                    )}
+                    {this.state.token && (
+                      <Route path="/datalist" component={DataListPage} />
+                    )}
+                    {this.state.token && (
+                      <Route path="/settings" component={SettingPage} />
+                    )}
+                    {/* delete this after and uncomment the above */}
+                    {/* <Route path="/attendees" component={AttendeesPage} /> */}
+                    {!this.state.token && <Redirect to="/auth" exact />}
+                  </Switch>
+                </main>
+              </DrinkProvider>
+            </AttendeeProvider>
           </AuthContext.Provider>
         </>
       </BrowserRouter>

@@ -11,6 +11,7 @@ import QrReader from 'react-qr-reader'
 import DrinkList from '../components/Drinks/DrinkList'
 import { AttendeeContext } from '../providers/AttendeeProvider'
 import { DrinkContext } from '../providers/DrinkProvider'
+import AvailableDrinks from '../components/AvailableDrinks/AvailableDrinks'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -87,7 +88,7 @@ const Attendees = props => {
     [attendees, filterValue]
   )
 
-  if (isFetchingAttendees) {
+  if (isFetchingAttendees || isFetchingDrinkList) {
     return <Spinner />
   }
 
@@ -125,6 +126,11 @@ const Attendees = props => {
           )}
         </div>
       </div>
+
+      {/* <div className={styles.availableDrinks}>
+        <AvailableDrinks />
+      </div> */}
+
       <div className={styles.rightContainer}>
         <div className={styles.drinkList}>
           {isLoading || !currentDrinks ? (

@@ -6,6 +6,7 @@ export const DrinkContext = createContext({})
 
 export const DrinkProvider = ({ children }) => {
   const [drinkList, setDrinkList] = useState(null)
+  const [drinkTypes, setDrinkTypes] = useState(null)
 
   const {
     isFetching: isFetchingDrinkList,
@@ -14,11 +15,18 @@ export const DrinkProvider = ({ children }) => {
   } = useApi(DrinkApi.getDrinkList)
 
   // I don't think the backend returns anything
+  // but it it needs to make sure the data is correctly removed before changing the frontend
   const {
     isFetching: isDeletingAllCurrentDrinks,
     response: deletingAllCurrentDrinksResponse,
     makeFetch: deleteAllCurrentDrinks,
   } = useApi(DrinkApi.deleteAllCurrentDrinks)
+
+  const {
+    isFetching: isFetchingDrinkTypes,
+    response: drinkTypesResponse,
+    makeFetch: fetchDrinkTypes,
+  } = useApi(DrinkApi.getDrinkTypes)
 
   useEffect(() => {
     if (!drinkListResponse) {
@@ -30,7 +38,18 @@ export const DrinkProvider = ({ children }) => {
   }, [drinkListResponse])
 
   useEffect(() => {
+    if (!drinkTypesResponse) {
+      return
+    }
+
+    const { drinkTypes } = drinkTypesResponse.data
+    setDrinkTypes(drinkTypes)
+  }, [drinkTypesResponse])
+
+  // fetch the data when rendering
+  useEffect(() => {
     fetchDrinkList()
+    fetchDrinkTypes()
   }, [])
 
   return (
@@ -40,6 +59,9 @@ export const DrinkProvider = ({ children }) => {
         drinkList,
         isFetchingDrinkList,
         deleteAllCurrentDrinks,
+        drinkTypes,
+        isFetchingDrinkTypes,
+        fetchDrinkTypes,
         // error,
       }}
     >

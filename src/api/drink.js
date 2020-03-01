@@ -120,3 +120,22 @@ export const saveAllCurrentDrinks = () => {
   //     setLoading(false)
   //   })
 }
+
+export const getDrinkTypes = () => {
+  const requestBody = {
+    query: `
+      query {
+        drinkTypes {
+          id: _id
+          name
+          createdDrinks {
+            id: _id
+            name
+          }
+        }
+      }
+    `,
+  }
+
+  return doFetch(requestBody)
+}
