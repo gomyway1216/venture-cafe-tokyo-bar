@@ -62,7 +62,6 @@ const filterAttendeeList = (attendees, filterValue) => {
 }
 
 const Attendees = props => {
-  const { setAttendees, setLoading, setCurrentDrinks } = props
   const classes = useStyles()
 
   const {
@@ -131,13 +130,7 @@ const Attendees = props => {
           {isLoading || !currentDrinks ? (
             <Spinner />
           ) : (
-            <DrinkList
-              drinks={currentDrinks}
-              fetchAttendees={fetchAttendees}
-              setLoading={setLoading}
-              fetchCurrentDrinks={fetchCurrentDrinks}
-              setFilterValueEmpty={() => setFilterValue('')}
-            />
+            <DrinkList setFilterValueEmpty={() => setFilterValue('')} />
           )}
         </div>
 

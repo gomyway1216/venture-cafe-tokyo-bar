@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import CustomizedMenus from './CustomizedMenus'
 import styles from './DrinkList.module.css'
+import { AttendeeContext } from '../../providers/AttendeeProvider'
 
 const DrinkList = props => {
+  const { fetchAttendees, currentDrinks, fetchCurrentDrinks } = useContext(
+    AttendeeContext
+  )
   // sort the drinks based on the category
-  const sortedDrinks = props.drinks.sort((a, b) => {
+  const sortedDrinks = currentDrinks.sort((a, b) => {
     let aPriority = 1
     let bPriority = 1
     if (a.drinkType.name === 'juice') {
@@ -31,12 +35,7 @@ const DrinkList = props => {
     <div>
       <div className={styles.titleWrapper}>
         <div className={styles.title}>Drink List</div>
-        <CustomizedMenus
-          fetchAttendees={props.fetchAttendees}
-          setLoading={props.setLoading}
-          fetchCurrentDrinks={props.fetchCurrentDrinks}
-          setFilterValueEmpty={props.setFilterValueEmpty}
-        />
+        <CustomizedMenus setFilterValueEmpty={props.setFilterValueEmpty} />
       </div>
       <table>
         <tr>

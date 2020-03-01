@@ -13,6 +13,13 @@ export const DrinkProvider = ({ children }) => {
     makeFetch: fetchDrinkList,
   } = useApi(DrinkApi.getDrinkList)
 
+  // I don't think the backend returns anything
+  const {
+    isFetching: isDeletingCurrentDrinks,
+    response: deletingCurrentDrinksResponse,
+    makeFetch: deleteCurrentDrinks,
+  } = useApi(DrinkApi.deleteAllCurrentDrinks)
+
   useEffect(() => {
     if (!drinkListResponse) {
       return
@@ -32,6 +39,7 @@ export const DrinkProvider = ({ children }) => {
         fetchDrinkList,
         drinkList,
         isFetchingDrinkList,
+        deleteCurrentDrinks,
         // error,
       }}
     >

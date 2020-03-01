@@ -112,14 +112,7 @@ export const fetchAttendees = () => {
 }
 
 // deleting all the signed in attendees from the signed in list
-export const deleteAllCurrentAttendees = (
-  token,
-  setAttendees,
-  setFilteredAttendees,
-  setLoading
-) => {
-  setLoading(true)
-
+export const deleteAllCurrentAttendees = () => {
   const requestBody = {
     query: `
         mutation {
@@ -128,18 +121,20 @@ export const deleteAllCurrentAttendees = (
       `,
   }
 
-  doFetch(requestBody)
-    .then(async resData => {
-      await fetchSignedInAttendees(
-        token,
-        setAttendees,
-        setFilteredAttendees,
-        setLoading
-      )
-      setLoading(false)
-    })
-    .catch(err => {
-      console.log(err)
-      setLoading(false)
-    })
+  return doFetch(requestBody)
+
+  // doFetch(requestBody)
+  //   .then(async resData => {
+  //     await fetchSignedInAttendees(
+  //       token,
+  //       setAttendees,
+  //       setFilteredAttendees,
+  //       setLoading
+  //     )
+  //     setLoading(false)
+  //   })
+  //   .catch(err => {
+  //     console.log(err)
+  //     setLoading(false)
+  //   })
 }

@@ -13,6 +13,7 @@ import AuthContext from '../../context/auth-context'
 import Dialog from '../Dialog/Dialog'
 import { deleteAllCurrentDrinks, saveAllCurrentDrinks } from '../../api/drink'
 import { deleteAllCurrentAttendees } from '../../api/attendee'
+import { AttendeeContext } from '../../providers/AttendeeProvider'
 
 const StyledMenu = withStyles({
   paper: {
@@ -54,6 +55,7 @@ const modalModeEnum = {
 
 const CustomizedMenus = props => {
   const auth = useContext(AuthContext)
+  const { fetchAttendees, fetchCurrentDrinks } = useContext(AttendeeContext)
   const [modalMode, setModalMode] = useState(modalModeEnum.CLOSE)
   const [anchorEl, setAnchorEl] = React.useState(null)
 
@@ -115,11 +117,7 @@ const CustomizedMenus = props => {
         open={modalMode === modalModeEnum.DELETEDRINKLIST}
         handleClose={handleDialogClose}
         onContinue={() => {
-          deleteAllCurrentDrinks(
-            auth.token,
-            props.fetchCurrentDrinks,
-            props.setLoading
-          )
+          deleteAllCurrentDrinks()
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
@@ -133,7 +131,7 @@ const CustomizedMenus = props => {
         onContinue={() => {
           deleteAllCurrentAttendees(
             auth.token,
-            props.fetchAttendees,
+            fetchAttendees,
             props.setFilteredAttendees,
             props.setLoading
           )
@@ -148,14 +146,10 @@ const CustomizedMenus = props => {
         open={modalMode === modalModeEnum.SAVEDATA}
         handleClose={handleDialogClose}
         onContinue={() => {
-          saveAllCurrentDrinks(
-            auth.token,
-            props.fetchCurrentDrinks,
-            props.setLoading
-          )
+          saveAllCurrentDrinks(auth.token, fetchCurrentDrinks, props.setLoading)
           deleteAllCurrentAttendees(
             auth.token,
-            props.fetchAttendees,
+            fetchAttendees,
             props.setFilteredAttendees,
             props.setLoading
           )

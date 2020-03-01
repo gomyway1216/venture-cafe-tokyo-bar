@@ -20,18 +20,26 @@ export const AttendeeProvider = ({ children }) => {
     response: attendeesResData,
     makeFetch: fetchAttendees,
   } = useApi(AttendeeApi.fetchSignedInAttendees)
+
   const {
     isFetching: isUpdatingAttendee,
     // error: updatingAttendeeError,
     response: updateAttendeeDrinkResponse,
     makeFetch: updateAttendeeDrink,
   } = useApi(AttendeeApi.updateAttendeeDrink)
+
   const {
     isFetching: isFetchingDrinks,
     // error: fetchingDrinkListError,
     response: currentDrinksResponse,
     makeFetch: fetchCurrentDrinks,
   } = useApi(DrinkApi.getCurrentDrinkList)
+
+  const {
+    isFetching: isDeletingAllCurrentAttendees,
+    response: deleteAllCurrentAttendeesResponse,
+    makeFetch: deleteAllCurrentAttendees,
+  } = useApi(AttendeeApi.deleteAllCurrentAttendees)
 
   const updateSingleAttendee = data => {
     const updatedAttendees = attendees.map(attendee =>
@@ -108,6 +116,7 @@ export const AttendeeProvider = ({ children }) => {
         selectDrink: updateAttendeeDrink,
         currentDrinks,
         fetchCurrentDrinks,
+        deleteAllCurrentAttendees,
       }}
     >
       {children}

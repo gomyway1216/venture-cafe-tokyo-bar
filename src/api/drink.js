@@ -46,9 +46,7 @@ export const getDrinkList = () => {
 }
 
 // clean up the count for the drinks for the date
-export const deleteAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
-  setLoading(true)
-
+export const deleteAllCurrentDrinks = () => {
   const requestBody = {
     query: `
       mutation {
@@ -57,34 +55,34 @@ export const deleteAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
     `,
   }
 
-  fetch(`${process.env.REACT_APP_URL}graphql`, {
-    method: 'POST',
-    body: JSON.stringify(requestBody),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    },
-  })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!')
-      }
-      return res.json()
-    })
-    .then(async resData => {
-      await getCurrentDrinkList(token, setCurrentDrinks, setLoading)
-      setLoading(false)
-    })
-    .catch(err => {
-      console.log(err)
-      setLoading(false)
-    })
+  return doFetch(requestBody)
+
+  // fetch(`${process.env.REACT_APP_URL}graphql`, {
+  //   method: 'POST',
+  //   body: JSON.stringify(requestBody),
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     Authorization: 'Bearer ' + token,
+  //   },
+  // })
+  //   .then(res => {
+  //     if (res.status !== 200 && res.status !== 201) {
+  //       throw new Error('Failed!')
+  //     }
+  //     return res.json()
+  //   })
+  //   .then(async resData => {
+  //     await getCurrentDrinkList(token, setCurrentDrinks, setLoading)
+  //     setLoading(false)
+  //   })
+  //   .catch(err => {
+  //     console.log(err)
+  //     setLoading(false)
+  //   })
 }
 
 // save the drink counts of the day into daily drinks table
-export const saveAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
-  setLoading(true)
-
+export const saveAllCurrentDrinks = () => {
   // this should send the date of saving the drinks as a group
   const requestBody = {
     query: `
@@ -97,26 +95,28 @@ export const saveAllCurrentDrinks = (token, setCurrentDrinks, setLoading) => {
     },
   }
 
-  fetch(`${process.env.REACT_APP_URL}graphql`, {
-    method: 'POST',
-    body: JSON.stringify(requestBody),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    },
-  })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!')
-      }
-      return res.json()
-    })
-    .then(async resData => {
-      await getCurrentDrinkList(token, setCurrentDrinks, setLoading)
-      setLoading(false)
-    })
-    .catch(err => {
-      console.log(err)
-      setLoading(false)
-    })
+  return doFetch(requestBody)
+
+  // fetch(`${process.env.REACT_APP_URL}graphql`, {
+  //   method: 'POST',
+  //   body: JSON.stringify(requestBody),
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     Authorization: 'Bearer ' + token,
+  //   },
+  // })
+  //   .then(res => {
+  //     if (res.status !== 200 && res.status !== 201) {
+  //       throw new Error('Failed!')
+  //     }
+  //     return res.json()
+  //   })
+  //   .then(async resData => {
+  //     await getCurrentDrinkList(token, setCurrentDrinks, setLoading)
+  //     setLoading(false)
+  //   })
+  //   .catch(err => {
+  //     console.log(err)
+  //     setLoading(false)
+  //   })
 }
