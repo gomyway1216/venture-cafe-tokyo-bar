@@ -11,6 +11,8 @@ export const AttendeeProvider = ({ children }) => {
   const [currentDrinks, setCurrentDrinks] = useState([])
   const [filterValue, setFilterValue] = useState('')
 
+  // pair of callback and response. When callback(makeFetch) is called,
+  // useApi custom hook will return the new response and appropriate useEffect fires
   const {
     isFetchingAttendees,
     error,
@@ -68,6 +70,7 @@ export const AttendeeProvider = ({ children }) => {
     const currentAttendee =
       updateAttendeeDrinkResponse.data.updateAttendeeDrinks
     updateSingleAttendee(currentAttendee)
+    // when individual attendee's drink gets updated, this updates the current drink list
     fetchCurrentDrinks()
   }, [updateAttendeeDrinkResponse])
 
@@ -79,7 +82,11 @@ export const AttendeeProvider = ({ children }) => {
     setCurrentDrinks(currentDrinks)
   }, [currentDrinksResponse])
 
+  // this would be called anytime the component renders
+  // so when the drink count of each person gets updated, this useEffect fires and
+  // update
   useEffect(() => {
+    // it is inefficient that fetchAttendees is called many times, even updating just single person
     fetchAttendees()
     fetchCurrentDrinks()
   }, [])

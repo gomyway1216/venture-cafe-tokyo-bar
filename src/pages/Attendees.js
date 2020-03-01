@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import Spinner from '../components/Spinner/Spinner'
 import AttendeeList from '../components/Attendees/AttendeeList'
 import InputBase from '@material-ui/core/InputBase'
@@ -11,7 +11,7 @@ import QrReader from 'react-qr-reader'
 import DrinkList from '../components/Drinks/DrinkList'
 import { AttendeeContext } from '../providers/AttendeeProvider'
 
-const useStyles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -37,7 +37,7 @@ const useStyles = theme => ({
     height: 28,
     margin: 4,
   },
-})
+}))
 
 const filterAttendeeList = (attendees, filterValue) => {
   if (filterValue === '') {
@@ -61,14 +61,8 @@ const filterAttendeeList = (attendees, filterValue) => {
 }
 
 const Attendees = props => {
-  const {
-    classes,
-    drinks,
-    setAttendees,
-    isActive,
-    setLoading,
-    setCurrentDrinks,
-  } = props
+  const { drinks, setAttendees, isActive, setLoading, setCurrentDrinks } = props
+  const classes = useStyles()
 
   const {
     attendees,
@@ -154,4 +148,4 @@ const Attendees = props => {
   )
 }
 
-export default withStyles(useStyles, { withTheme: true })(Attendees)
+export default Attendees

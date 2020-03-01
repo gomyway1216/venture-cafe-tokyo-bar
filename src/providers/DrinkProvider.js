@@ -1,5 +1,5 @@
 import React, { useState, createContext } from 'react'
-import { doFetch } from './apiCall'
+import { doFetch } from '../api/doFetch'
 
 export const DrinkListContext = createContext({})
 
