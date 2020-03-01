@@ -13,6 +13,7 @@ export const AttendeeProvider = ({ children }) => {
 
   // pair of callback and response. When callback(makeFetch) is called,
   // useApi custom hook will return the new response and appropriate useEffect fires
+  // why the first one is different?
   const {
     isFetchingAttendees,
     error,

@@ -20,7 +20,7 @@ const AttendeeList = props => {
             lastName={attendee.lastName}
             drinkCounter={attendee.drinks.length}
             selectDrink={props.selectDrink}
-            drinks={props.drinks}
+            drinkList={props.drinkList}
           />
         )
       })}

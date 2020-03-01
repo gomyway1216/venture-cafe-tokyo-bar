@@ -57,13 +57,15 @@ class AttendeeContainer extends Component {
   render() {
     return (
       <AttendeeProvider>
-        <Attendees
-          drinks={this.state.drinks}
-          setAttendees={this.setAttendees}
-          isActive={this.isActive}
-          // setLoading={this.setLoading}
-          setCurrentDrinks={this.setCurrentDrinks}
-        />
+        <DrinkProvider>
+          <Attendees
+            drinks={this.state.drinks}
+            setAttendees={this.setAttendees}
+            isActive={this.isActive}
+            // setLoading={this.setLoading}
+            setCurrentDrinks={this.setCurrentDrinks}
+          />
+        </DrinkProvider>
       </AttendeeProvider>
     )
   }

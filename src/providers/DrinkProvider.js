@@ -1,50 +1,41 @@
-import React, { useState, createContext } from 'react'
-import { doFetch } from '../api/doFetch'
+import React, { useState, createContext, useEffect } from 'react'
+import * as DrinkApi from '../api/drink'
+import { useApi } from '../hooks/useApi'
 
-export const DrinkListContext = createContext({})
+export const DrinkContext = createContext({})
 
-const requestBody = {
-  query: `
-      query {
-        drinks {
-              id: _id
-              name
-              drinkType {
-                id: _id
-                name
-              }
-          }
-      }
-    `,
-}
-
-export const DrinkListProvider = ({ children }) => {
+export const DrinkProvider = ({ children }) => {
   const [drinkList, setDrinkList] = useState(null)
-  const [isFetching, setIsFetching] = useState(false)
-  const [error, setError] = useState(null)
 
-  const fetchDrinkList = async () => {
-    try {
-      setIsFetching(true)
-      const resData = await doFetch(requestBody)
-      const { drinks } = resData.data
-      setDrinkList(drinks)
-      setIsFetching(false)
-    } catch (err) {
-      setError(err)
+  const {
+    isFetching: isFetchingDrinkList,
+    response: drinkListResponse,
+    makeFetch: fetchDrinkList,
+  } = useApi(DrinkApi.getDrinkList)
+
+  useEffect(() => {
+    if (!drinkListResponse) {
+      return
     }
-  }
+
+    const { drinks } = drinkListResponse.data
+    setDrinkList(drinks)
+  }, [drinkListResponse])
+
+  useEffect(() => {
+    fetchDrinkList()
+  }, [])
 
   return (
-    <DrinkListContext.Provider
+    <DrinkContext.Provider
       value={{
         fetchDrinkList,
         drinkList,
-        isFetching,
-        error,
+        isFetchingDrinkList,
+        // error,
       }}
     >
       {children}
-    </DrinkListContext.Provider>
+    </DrinkContext.Provider>
   )
 }

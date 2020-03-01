@@ -10,6 +10,7 @@ import styles from './attendees.module.css'
 import QrReader from 'react-qr-reader'
 import DrinkList from '../components/Drinks/DrinkList'
 import { AttendeeContext } from '../providers/AttendeeProvider'
+import { DrinkContext } from '../providers/DrinkProvider'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -61,7 +62,7 @@ const filterAttendeeList = (attendees, filterValue) => {
 }
 
 const Attendees = props => {
-  const { drinks, setAttendees, isActive, setLoading, setCurrentDrinks } = props
+  const { setAttendees, isActive, setLoading, setCurrentDrinks } = props
   const classes = useStyles()
 
   const {
@@ -76,6 +77,10 @@ const Attendees = props => {
     selectDrink,
     currentDrinks,
   } = useContext(AttendeeContext)
+
+  const { fetchDrinkList, drinkList, isFetchingDrinkList } = useContext(
+    DrinkContext
+  )
 
   const filteredAttendees = useMemo(
     () => filterAttendeeList(attendees, filterValue),
@@ -114,7 +119,7 @@ const Attendees = props => {
               <AttendeeList
                 attendees={filteredAttendees}
                 selectDrink={selectDrink}
-                drinks={drinks}
+                drinkList={drinkList}
               />
             </div>
           )}

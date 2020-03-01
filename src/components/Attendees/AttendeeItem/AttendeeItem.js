@@ -34,7 +34,7 @@ const EventItem = props => {
         {props.drinkCounter}
       </span>
       <div className={styles.buttons}>
-        {props.drinks.map(drink => (
+        {props.drinkList.map(drink => (
           <Button
             key={drink.id}
             variant="contained"
