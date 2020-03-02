@@ -3,7 +3,7 @@
 VCT_bar_Screenshot.png
 
 ## About The Project
-This is a project cooperating with Venture Cafe Tokyo. This application keeps track of drink informaiton with users. I am currently working on refactoring and creating visualization tool for drink history. Once these updates on dev branch is finalized, it would be merged to master (production).
+This is a project cooperating with Venture Cafe Tokyo. This application keeps track of drink informaiton with users. I am currently working on refactoring and creating visualization tool for drink history. Also, the UI would be updated soon. Once these updates on dev branch is finalized, it would be merged to master (production).
 
 ## Getting Started
 To run this project, access keys to backend server is required. Currently the keys are hidden because it is using confidential data. This project mainly utilizes latest React Hooks instead of using class component.
