@@ -1,13 +1,15 @@
 import React, { useState, createContext, useEffect } from 'react'
 // import { fetchSignedInAttendees, updateAttendeeDrink } from '../api/attendee'
-import * as AttendeeApi from '../api/attendee'
+// import * as AttendeeApi from '../api/attendee'
+import * as UserApi from '../api/user/user'
+import * as AttendeeApi from '../api/user/attendee'
 import * as DrinkApi from '../api/drink'
 
 import { useApi } from '../hooks/useApi'
 export const AttendeeContext = createContext({})
 
 export const AttendeeProvider = ({ children }) => {
-  const [attendees, setAttendees] = useState([])
+  const [attendeeList, setAttendeeList] = useState([])
   // const [currentDrinks, setCurrentDrinks] = useState([])
   const [filterValue, setFilterValue] = useState('')
 
@@ -15,18 +17,18 @@ export const AttendeeProvider = ({ children }) => {
   // useApi custom hook will return the new response and appropriate useEffect fires
   // why the first one is different?
   const {
-    isFetching: isFetchingAttendees,
-    error: fetchingAttendeesError,
-    response: attendeesResData,
-    makeFetch: fetchAttendees,
-  } = useApi(AttendeeApi.fetchSignedInAttendees)
+    isFetching: isGettingAttendeeList,
+    error: gettingAttendeeListError,
+    response: attendeeListResponse,
+    makeFetch: getAttendeeList,
+  } = useApi(AttendeeApi.getAttendeeList)
 
   const {
-    isFetching: isUpdatingAttendee,
-    // error: updatingAttendeeError,
-    response: updateAttendeeDrinkResponse,
-    makeFetch: updateAttendeeDrink,
-  } = useApi(AttendeeApi.updateAttendeeDrink)
+    isFetching: isUpdatingAttendeeDrinkList,
+    error: updatingAttendeeDrinkListError,
+    response: updateAttendeeDrinkListResponse,
+    makeFetch: updateAttendeeDrinkList,
+  } = useApi(AttendeeApi.updateAttendeeDrinkList)
 
   // const {
   //   isFetching: isFetchingDrinks,
@@ -36,53 +38,56 @@ export const AttendeeProvider = ({ children }) => {
   // } = useApi(DrinkApi.getCurrentDrinkList)
 
   const {
-    isFetching: isDeletingAllCurrentAttendees,
-    response: deleteAllCurrentAttendeesResponse,
-    makeFetch: deleteAllCurrentAttendees,
-  } = useApi(AttendeeApi.deleteAllCurrentAttendees)
+    isFetching: isDeletingAttendees,
+    error: deletingAttendeesError,
+    response: deleteAttendeesResponse,
+    makeFetch: deleteAttendees,
+  } = useApi(AttendeeApi.deleteAttendees)
 
   const updateSingleAttendee = data => {
-    const updatedAttendees = attendees.map(attendee =>
-      attendee.attendeeId === data.attendeeId
-        ? { ...attendee, drinks: data.drinks }
+    const updatedAttendeeList = attendeeList.map(attendee =>
+      attendee.id === data.id
+        ? { ...attendee, drinkList: data.drinkList }
         : attendee
     )
-    setAttendees(updatedAttendees)
+    setAttendeeList(updatedAttendeeList)
   }
 
-  const handleScan = async attendeeId => {
-    if (attendeeId) {
-      const attendeeExists = attendees.some(
-        element => element.attendeeId === attendeeId
+  const handleScan = async userID => {
+    if (userID) {
+      const attendeeExists = attendeeList.some(
+        element => element.userID === userID
       )
       // check if the current user exist in the frontend, otherwise do api call
       if (!attendeeExists) {
-        await AttendeeApi.onSignIn(attendeeId)
-        await fetchAttendees()
+        await AttendeeApi.checkInUser(userID)
+        await getAttendeeList()
       }
-      setFilterValue(attendeeId)
+      setFilterValue(userID)
     }
   }
 
   useEffect(() => {
-    if (!attendeesResData) {
+    if (!attendeeListResponse) {
       return
     }
-    const { currentAttendees } = attendeesResData.data
-    setAttendees(currentAttendees)
-  }, [attendeesResData])
+    const { getAttendeeList } = attendeeListResponse.data
+    setAttendeeList(getAttendeeList)
+  }, [attendeeListResponse])
 
   useEffect(() => {
-    if (!updateAttendeeDrinkResponse) {
+    if (!updateAttendeeDrinkListResponse) {
       return
     }
-    console.log('updateAttendeeDrinkResponse: ', updateAttendeeDrinkResponse)
-    const currentAttendee =
-      updateAttendeeDrinkResponse.data.updateAttendeeDrinks
-    updateSingleAttendee(currentAttendee)
+    console.log(
+      'updateAttendeeDrinkListResponse: ',
+      updateAttendeeDrinkListResponse
+    )
+    const { updateAttendeeDrinkList } = updateAttendeeDrinkListResponse.data
+    updateSingleAttendee(updateAttendeeDrinkList)
     // when individual attendee's drink gets updated, this updates the current drink list
     // fetchCurrentDrinks()
-  }, [updateAttendeeDrinkResponse])
+  }, [updateAttendeeDrinkListResponse])
 
   // useEffect(() => {
   //   if (!currentDrinksResponse) {
@@ -97,23 +102,23 @@ export const AttendeeProvider = ({ children }) => {
   // update
   useEffect(() => {
     // it is inefficient that fetchAttendees is called many times, even updating just single person
-    fetchAttendees()
+    getAttendeeList()
     // fetchCurrentDrinks()
   }, [])
 
   return (
     <AttendeeContext.Provider
       value={{
-        fetchAttendees,
+        getAttendeeList,
         filterValue,
         setFilterValue,
-        attendees,
-        isFetchingAttendees,
-        error: fetchingAttendeesError,
+        attendeeList,
+        isGettingAttendeeList,
+        error: gettingAttendeeListError,
         handleScan,
-        selectDrink: updateAttendeeDrink,
-        isUpdatingAttendee,
-        deleteAllCurrentAttendees,
+        selectDrink: updateAttendeeDrinkList,
+        isUpdatingAttendeeDrinkList,
+        deleteAttendees,
       }}
     >
       {children}

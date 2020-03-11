@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { doFetch } from './doFetch'
+import { doFetch } from '../doFetch'
 
 export const existRegisteredDrink = id => {
   const requestBody = {
@@ -48,9 +48,6 @@ export const getRegisteredDrinkList = () => {
         }
       }
       `,
-    variables: {
-      id: id,
-    },
   }
   return doFetch(requestBody)
 }

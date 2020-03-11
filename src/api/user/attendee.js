@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { doFetch } from './doFetch'
+import { doFetch } from '../doFetch'
 
 export const existAttendee = id => {
   const requestBody = {

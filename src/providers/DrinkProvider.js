@@ -1,80 +1,90 @@
 import React, { useState, createContext, useEffect } from 'react'
-import * as DrinkApi from '../api/drink'
+import * as AvailableDrinkApi from '../api/drink/availableDrink'
+import * as DrinkTypeApi from '../api/drink/drinkType'
+import * as RegisteredDrinkApi from '../api/drink/registeredDrink'
 import { useApi } from '../hooks/useApi'
 
 export const DrinkContext = createContext({})
 
 export const DrinkProvider = ({ children }) => {
-  const [currentDrinkList, setCurrentDrinkList] = useState([])
+  const [availableDrinkList, setAvailableDrinkList] = useState([])
 
-  // get all the possible drink list
+  // get available drink list
   const {
-    isFetching: isFetchingDrinkList,
-    response: drinkList,
-    makeFetch: fetchDrinkList,
-  } = useApi(DrinkApi.getDrinkList, res => res.data.drinks)
+    isFetching: isGettingAvailableDrinkList,
+    error: gettingAvailableDrinkListError,
+    response: getAvailableDrinkListResponse,
+    makeFetch: getAvailableDrinkList,
+  } = useApi(
+    AvailableDrinkApi.getAvailableDrinkList,
+    res => res.data.getAvailableDrinkList
+  )
 
-  // delete all drinks
-  // I don't think the backend returns anything
-  // but it it needs to make sure the data is correctly removed before changing the frontend
   const {
-    isFetching: isDeletingAllCurrentDrinks,
-    response: deleteAllCurrentDrinksResponse,
-    makeFetch: deleteAllCurrentDrinks,
-  } = useApi(DrinkApi.deleteAllCurrentDrinks)
+    isFetching: isDeletingAvailableDrinks,
+    error: deletingAvailableDrinksError,
+    response: deleteAvailableDrinksResponse,
+    makeFetch: deleteAvailableDrinks,
+  } = useApi(
+    AvailableDrinkApi.deleteAvailableDrinks,
+    res => res.data.deleteAvailableDrinks
+  )
 
   // get all the drink type
   const {
-    isFetching: isFetchingDrinkTypes,
-    response: drinkTypes,
-    makeFetch: fetchDrinkTypes,
-  } = useApi(DrinkApi.getDrinkTypes, res => res.data.drinkTypes)
+    isFetching: isGettingDrinkTypeList,
+    error: gettingDrinkTypeListError,
+    response: getDrinkTypeListResponse,
+    makeFetch: getDrinkTypeList,
+  } = useApi(DrinkTypeApi.getDrinkTypeList, res => res.data.getDrinkTypeList)
 
+  // get registered drink list
   const {
-    isFetching: isFetchingCurrentDrinkList,
-    // error: fetchingDrinkListError,
-    response: currentDrinkListResponse,
-    makeFetch: fetchCurrentDrinkList,
-  } = useApi(DrinkApi.getCurrentDrinkList)
+    isFetching: isGettingRegisteredDrinkList,
+    error: gettingRegisteredDrinkListError,
+    response: getRegisteredDrinkListResponse,
+    makeFetch: getRegisteredDrinkList,
+  } = useApi(RegisteredDrinkApi.getRegisteredDrinkList)
 
-  // for all current drinks
+  // for available drink list
   useEffect(() => {
-    if (!currentDrinkListResponse) {
+    if (!getAvailableDrinkListResponse) {
       return
     }
     // currentDrinks is the api response. I need to modify backend
-    const { currentDrinks } = currentDrinkListResponse.data
-    setCurrentDrinkList(currentDrinks)
-  }, [currentDrinkListResponse])
+    setAvailableDrinkList(getAvailableDrinkListResponse)
+  }, [getAvailableDrinkListResponse])
 
   useEffect(() => {
-    if (!deleteAllCurrentDrinksResponse) {
+    if (!deleteAvailableDrinksResponse) {
       return
     }
 
-    fetchCurrentDrinkList()
-  }, [deleteAllCurrentDrinksResponse])
+    getAvailableDrinkList()
+  }, [deleteAvailableDrinksResponse])
 
   // fetch the data when rendering
   useEffect(() => {
-    fetchDrinkList()
-    fetchDrinkTypes()
-    fetchCurrentDrinkList()
+    getRegisteredDrinkList()
+    getDrinkTypeList()
+    getAvailableDrinkList()
   }, [])
 
   return (
     <DrinkContext.Provider
       value={{
-        fetchDrinkList,
-        drinkList,
-        isFetchingDrinkList,
-        deleteAllCurrentDrinks,
-        drinkTypes,
-        isFetchingDrinkTypes,
-        fetchDrinkTypes,
-        fetchCurrentDrinkList,
-        currentDrinkList,
-        isFetchingCurrentDrinkList,
+        getRegisteredDrinkList,
+        getRegisteredDrinkListResponse,
+        isGettingRegisteredDrinkList,
+
+        getDrinkTypeListResponse,
+        isGettingDrinkTypeList,
+        getDrinkTypeList,
+
+        getAvailableDrinkList,
+        availableDrinkList,
+        isGettingAvailableDrinkList,
+        deleteAvailableDrinks,
         // error,
       }}
     >
