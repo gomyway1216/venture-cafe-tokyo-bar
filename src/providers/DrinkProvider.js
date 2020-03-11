@@ -5,51 +5,61 @@ import { useApi } from '../hooks/useApi'
 export const DrinkContext = createContext({})
 
 export const DrinkProvider = ({ children }) => {
-  const [drinkList, setDrinkList] = useState(null)
-  const [drinkTypes, setDrinkTypes] = useState(null)
+  const [currentDrinkList, setCurrentDrinkList] = useState([])
 
+  // get all the possible drink list
   const {
     isFetching: isFetchingDrinkList,
-    response: drinkListResponse,
+    response: drinkList,
     makeFetch: fetchDrinkList,
-  } = useApi(DrinkApi.getDrinkList)
+  } = useApi(DrinkApi.getDrinkList, res => res.data.drinks)
 
+  // delete all drinks
   // I don't think the backend returns anything
   // but it it needs to make sure the data is correctly removed before changing the frontend
   const {
     isFetching: isDeletingAllCurrentDrinks,
-    response: deletingAllCurrentDrinksResponse,
+    response: deleteAllCurrentDrinksResponse,
     makeFetch: deleteAllCurrentDrinks,
   } = useApi(DrinkApi.deleteAllCurrentDrinks)
 
+  // get all the drink type
   const {
     isFetching: isFetchingDrinkTypes,
-    response: drinkTypesResponse,
+    response: drinkTypes,
     makeFetch: fetchDrinkTypes,
-  } = useApi(DrinkApi.getDrinkTypes)
+  } = useApi(DrinkApi.getDrinkTypes, res => res.data.drinkTypes)
+
+  const {
+    isFetching: isFetchingCurrentDrinkList,
+    // error: fetchingDrinkListError,
+    response: currentDrinkListResponse,
+    makeFetch: fetchCurrentDrinkList,
+  } = useApi(DrinkApi.getCurrentDrinkList)
+
+  // for all current drinks
+  useEffect(() => {
+    if (!currentDrinkListResponse) {
+      return
+    }
+    // currentDrinks is the api response. I need to modify backend
+    const { currentDrinks } = currentDrinkListResponse.data
+    setCurrentDrinkList(currentDrinks)
+  }, [currentDrinkListResponse])
 
   useEffect(() => {
-    if (!drinkListResponse) {
+    if (!deleteAllCurrentDrinksResponse) {
       return
     }
 
-    const { drinks } = drinkListResponse.data
-    setDrinkList(drinks)
-  }, [drinkListResponse])
-
-  useEffect(() => {
-    if (!drinkTypesResponse) {
-      return
-    }
-
-    const { drinkTypes } = drinkTypesResponse.data
-    setDrinkTypes(drinkTypes)
-  }, [drinkTypesResponse])
+    fetchCurrentDrinkList()
+  }, [deleteAllCurrentDrinksResponse])
 
   // fetch the data when rendering
   useEffect(() => {
     fetchDrinkList()
     fetchDrinkTypes()
+    fetchCurrentDrinkList()
   }, [])
 
   return (
@@ -62,6 +72,9 @@ export const DrinkProvider = ({ children }) => {
         drinkTypes,
         isFetchingDrinkTypes,
         fetchDrinkTypes,
+        fetchCurrentDrinkList,
+        currentDrinkList,
+        isFetchingCurrentDrinkList,
         // error,
       }}
     >

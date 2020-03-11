@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styles from './attendee-item.module.css'
 import Button from '@material-ui/core/Button'
+import { DrinkContext } from '../../../providers/DrinkProvider'
+import Spinner from '../../Spinner/Spinner'
 
-const EventItem = props => {
+const AttendeeItem = props => {
   const [selectedDrinkId, setSelectedDrinkId] = useState('')
+  const { currentDrinkList, isFetchingCurrentDrinkList } = useContext(
+    DrinkContext
+  )
 
   const handleSelectDrink = event => {
     setSelectedDrinkId(event.currentTarget.id)
@@ -17,6 +22,11 @@ const EventItem = props => {
         drinkId: selectedDrinkId,
       })
     }
+  }
+
+  const isLoading = isFetchingCurrentDrinkList || !currentDrinkList
+  if (isLoading) {
+    return <Spinner />
   }
 
   return (
@@ -34,7 +44,7 @@ const EventItem = props => {
         {props.drinkCounter}
       </span>
       <div className={styles.buttons}>
-        {props.drinkList.map(drink => (
+        {currentDrinkList.map(drink => (
           <Button
             key={drink.id}
             variant="contained"
@@ -59,4 +69,4 @@ const EventItem = props => {
   )
 }
 
-export default EventItem
+export default AttendeeItem

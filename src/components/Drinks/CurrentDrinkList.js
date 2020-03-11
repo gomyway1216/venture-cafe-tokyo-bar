@@ -1,14 +1,12 @@
 import React, { useContext } from 'react'
 import CustomizedMenus from './CustomizedMenus'
-import styles from './DrinkList.module.css'
-import { AttendeeContext } from '../../providers/AttendeeProvider'
+import styles from './currentDrinkList.module.css'
+import { DrinkContext } from '../../providers/DrinkProvider'
+import Spinner from '../Spinner/Spinner'
 
-const DrinkList = props => {
-  const { fetchAttendees, currentDrinks, fetchCurrentDrinks } = useContext(
-    AttendeeContext
-  )
-  // sort the drinks based on the category
-  const sortedDrinks = currentDrinks.sort((a, b) => {
+// sort the drinks based on the category
+const sortDrinkList = drinkList => {
+  const sortedDrinks = [...drinkList].sort((a, b) => {
     let aPriority = 1
     let bPriority = 1
     if (a.drinkType.name === 'juice') {
@@ -26,10 +24,28 @@ const DrinkList = props => {
     return bPriority - aPriority
   })
 
-  let totalDrinkCount = 0
-  sortedDrinks.forEach(drink => {
-    totalDrinkCount += drink.count.length
-  })
+  return sortedDrinks
+}
+const DrinkList = props => {
+  const { isFetchingCurrentDrinkList, currentDrinkList } = useContext(
+    DrinkContext
+  )
+
+  if (isFetchingCurrentDrinkList || !currentDrinkList) {
+    return <Spinner />
+  }
+
+  const sortedDrinkList = sortDrinkList(currentDrinkList)
+
+  // let totalDrinkCount = 0
+  // sortedDrinkList.forEach(drink => {
+  //   totalDrinkCount += drink.count.length
+  // })
+
+  const totalDrinkCount = sortedDrinkList.reduce(
+    (count, drink) => count + drink.count.length,
+    0
+  )
 
   return (
     <div>
@@ -46,7 +62,7 @@ const DrinkList = props => {
           <th>Total Drinks</th>
           <th>{totalDrinkCount}</th>
         </tr>
-        {sortedDrinks.map(drink => (
+        {sortedDrinkList.map(drink => (
           <tr>
             <td>{drink.name}</td>
             <td>{drink.count.length}</td>

@@ -1,6 +1,7 @@
 import React from 'react'
 import './Auth.css'
 import AuthContext from '../context/auth-context'
+import moment from 'moment'
 
 class AuthPage extends React.Component {
   constructor(props) {
@@ -32,9 +33,11 @@ class AuthPage extends React.Component {
 
     let requestBody = {
       query: `
-          query Login($email: String!, $password: String!) {
-              login(email: $email, password: $password) {
-                  userId
+          mutation LogInAdminUser($email: String!, $password: String!, $date: String!) {
+            logInAdminUser(logInAdminUserInput: {
+              email: $email, password: $password, date: $date
+            }) {
+                  userID
                   token
                   tokenExpiration
               }
@@ -43,25 +46,26 @@ class AuthPage extends React.Component {
       variables: {
         email: email,
         password: password,
+        date: moment().format(),
       },
     }
 
-    if (!this.state.isLogin) {
-      requestBody = {
-        query: `
-            mutation CreateUser($email: String!, $password: String!) {
-                createUser(userInput: {email: $email, password: $password}) {
-                    _id
-                    email
-                }
-            }
-          `,
-        variables: {
-          email: email,
-          password: password,
-        },
-      }
-    }
+    // if (!this.state.isLogin) {
+    //   requestBody = {
+    //     query: `
+    //         mutation CreateAdminUser($email: String!, $password: String!) {
+    //           createAdminUser(userInput: {email: $email, password: $password}) {
+    //                 _id
+    //                 email
+    //             }
+    //         }
+    //       `,
+    //     variables: {
+    //       email: email,
+    //       password: password,
+    //     },
+    //   }
+    // }
 
     fetch(`${process.env.REACT_APP_URL}graphql`, {
       method: 'POST',
@@ -77,11 +81,11 @@ class AuthPage extends React.Component {
         return res.json()
       })
       .then(resData => {
-        if (resData.data.login.token) {
+        if (resData.data.logInAdminUser.token) {
           this.context.login(
-            resData.data.login.token,
-            resData.data.login.userId,
-            resData.data.login.tokenExpiration
+            resData.data.logInAdminUser.token,
+            resData.data.logInAdminUser.userID,
+            resData.data.logInAdminUser.tokenExpiration
           )
         }
       })

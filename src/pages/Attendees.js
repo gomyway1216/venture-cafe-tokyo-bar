@@ -8,10 +8,11 @@ import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import styles from './attendees.module.css'
 import QrReader from 'react-qr-reader'
-import DrinkList from '../components/Drinks/DrinkList'
+// import DrinkList from '../components/Drinks/DrinkList'
 import { AttendeeContext } from '../providers/AttendeeProvider'
 import { DrinkContext } from '../providers/DrinkProvider'
-import AvailableDrinks from '../components/AvailableDrinks/AvailableDrinks'
+import CurrentDrinkList from '../components/Drinks/CurrentDrinkList'
+// import AvailableDrinks from '../components/AvailableDrinks/AvailableDrinks'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,24 +70,44 @@ const Attendees = props => {
     attendees,
     fetchAttendees,
     handleScan,
-    isLoading,
     filterValue,
     setFilterValue,
     isFetchingAttendees,
     error: fetchingAttendeesError,
     selectDrink,
     currentDrinks,
-    fetchCurrentDrinks,
+    isUpdatingAttendee,
   } = useContext(AttendeeContext)
 
-  const { fetchDrinkList, drinkList, isFetchingDrinkList } = useContext(
-    DrinkContext
-  )
+  const {
+    fetchDrinkList,
+    drinkList,
+    isFetchingDrinkList,
+    isFetchingDrinkTypes,
+    isFetchingCurrentDrinkList,
+    fetchCurrentDrinkList,
+    currentDrinkList,
+  } = useContext(DrinkContext)
+
+  useEffect(() => {
+    if (!attendees) {
+      return
+    }
+    // When we move fetchCurrentDrinks to DrinkContext
+    fetchCurrentDrinkList()
+  }, [attendees])
 
   const filteredAttendees = useMemo(
     () => filterAttendeeList(attendees, filterValue),
     [attendees, filterValue]
   )
+
+  const isLoading =
+    isFetchingAttendees ||
+    isUpdatingAttendee ||
+    isFetchingDrinkList ||
+    isFetchingCurrentDrinkList ||
+    isFetchingDrinkTypes
 
   if (isFetchingAttendees || isFetchingDrinkList) {
     return <Spinner />
@@ -133,11 +154,7 @@ const Attendees = props => {
 
       <div className={styles.rightContainer}>
         <div className={styles.drinkList}>
-          {isLoading || !currentDrinks ? (
-            <Spinner />
-          ) : (
-            <DrinkList setFilterValueEmpty={() => setFilterValue('')} />
-          )}
+          <CurrentDrinkList setFilterValueEmpty={() => setFilterValue('')} />
         </div>
 
         <QrReader

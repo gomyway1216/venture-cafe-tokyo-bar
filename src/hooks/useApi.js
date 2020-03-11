@@ -4,7 +4,7 @@ import React, { useState, createContext, useEffect } from 'react'
  * @param {(...args) => Promise<any>} apiCall
  * The API call to make
  */
-export const useApi = apiCall => {
+export const useApi = (apiCall, mapResponse = response => response) => {
   const [isFetching, setIsFetching] = useState(false)
   const [error, setError] = useState(null)
   const [response, setResponse] = useState(null)
@@ -13,7 +13,8 @@ export const useApi = apiCall => {
     try {
       setIsFetching(true)
       const res = await apiCall(...args)
-      setResponse(res)
+      const mappedResponse = mapResponse(res)
+      setResponse(mappedResponse)
       setIsFetching(false)
     } catch (err) {
       setIsFetching(false)

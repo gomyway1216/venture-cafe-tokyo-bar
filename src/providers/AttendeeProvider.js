@@ -8,15 +8,15 @@ export const AttendeeContext = createContext({})
 
 export const AttendeeProvider = ({ children }) => {
   const [attendees, setAttendees] = useState([])
-  const [currentDrinks, setCurrentDrinks] = useState([])
+  // const [currentDrinks, setCurrentDrinks] = useState([])
   const [filterValue, setFilterValue] = useState('')
 
   // pair of callback and response. When callback(makeFetch) is called,
   // useApi custom hook will return the new response and appropriate useEffect fires
   // why the first one is different?
   const {
-    isFetchingAttendees,
-    error,
+    isFetching: isFetchingAttendees,
+    error: fetchingAttendeesError,
     response: attendeesResData,
     makeFetch: fetchAttendees,
   } = useApi(AttendeeApi.fetchSignedInAttendees)
@@ -28,12 +28,12 @@ export const AttendeeProvider = ({ children }) => {
     makeFetch: updateAttendeeDrink,
   } = useApi(AttendeeApi.updateAttendeeDrink)
 
-  const {
-    isFetching: isFetchingDrinks,
-    // error: fetchingDrinkListError,
-    response: currentDrinksResponse,
-    makeFetch: fetchCurrentDrinks,
-  } = useApi(DrinkApi.getCurrentDrinkList)
+  // const {
+  //   isFetching: isFetchingDrinks,
+  //   // error: fetchingDrinkListError,
+  //   response: currentDrinksResponse,
+  //   makeFetch: fetchCurrentDrinks,
+  // } = useApi(DrinkApi.getCurrentDrinkList)
 
   const {
     isFetching: isDeletingAllCurrentAttendees,
@@ -76,32 +76,31 @@ export const AttendeeProvider = ({ children }) => {
     if (!updateAttendeeDrinkResponse) {
       return
     }
+    console.log('updateAttendeeDrinkResponse: ', updateAttendeeDrinkResponse)
     const currentAttendee =
       updateAttendeeDrinkResponse.data.updateAttendeeDrinks
     updateSingleAttendee(currentAttendee)
     // when individual attendee's drink gets updated, this updates the current drink list
-    fetchCurrentDrinks()
+    // fetchCurrentDrinks()
   }, [updateAttendeeDrinkResponse])
 
-  useEffect(() => {
-    if (!currentDrinksResponse) {
-      return
-    }
-    const { currentDrinks } = currentDrinksResponse.data
-    setCurrentDrinks(currentDrinks)
-  }, [currentDrinksResponse])
+  // useEffect(() => {
+  //   if (!currentDrinksResponse) {
+  //     return
+  //   }
+  //   const { currentDrinks } = currentDrinksResponse.data
+  //   setCurrentDrinks(currentDrinks)
+  // }, [currentDrinksResponse])
 
-  // this would be called anytime the component renders
+  // this is called once
   // so when the drink count of each person gets updated, this useEffect fires and
   // update
   useEffect(() => {
     // it is inefficient that fetchAttendees is called many times, even updating just single person
     fetchAttendees()
-    fetchCurrentDrinks()
+    // fetchCurrentDrinks()
   }, [])
 
-  const isLoading =
-    isFetchingAttendees || isUpdatingAttendee || isFetchingDrinks
   return (
     <AttendeeContext.Provider
       value={{
@@ -110,12 +109,10 @@ export const AttendeeProvider = ({ children }) => {
         setFilterValue,
         attendees,
         isFetchingAttendees,
-        isLoading,
-        error,
+        error: fetchingAttendeesError,
         handleScan,
         selectDrink: updateAttendeeDrink,
-        currentDrinks,
-        fetchCurrentDrinks,
+        isUpdatingAttendee,
         deleteAllCurrentAttendees,
       }}
     >
