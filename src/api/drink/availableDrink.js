@@ -118,8 +118,8 @@ export const deleteAvailableDrink = id => {
 export const deleteAvailableDrinks = () => {
   const requestBody = {
     query: `
-      mutation DeleteAvailableDrinks($id: ID!) {
-        deleteAvailableDrinks(id: $id)
+      mutation DeleteAvailableDrinks {
+        deleteAvailableDrinks
       }
     `,
   }

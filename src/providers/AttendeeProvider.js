@@ -1,9 +1,6 @@
 import React, { useState, createContext, useEffect } from 'react'
-// import { fetchSignedInAttendees, updateAttendeeDrink } from '../api/attendee'
-// import * as AttendeeApi from '../api/attendee'
 import * as UserApi from '../api/user/user'
 import * as AttendeeApi from '../api/user/attendee'
-import * as DrinkApi from '../api/drink'
 
 import { useApi } from '../hooks/useApi'
 export const AttendeeContext = createContext({})
@@ -14,7 +11,7 @@ export const AttendeeProvider = ({ children }) => {
 
   // pair of callback and response. When callback(makeFetch) is called,
   // useApi custom hook will return the new response and appropriate useEffect fires
-  // why the first one is different?
+
   const getAttendeeList = useApi(
     AttendeeApi.getAttendeeList,
     res => res.data.getAttendeeList
@@ -77,6 +74,7 @@ export const AttendeeProvider = ({ children }) => {
   useEffect(() => {
     // it is inefficient that fetchAttendees is called many times, even updating just single person
     getAttendeeList.makeFetch()
+    // this might have to be called.
     // fetchCurrentDrinks()
   }, [])
 

@@ -46,6 +46,7 @@ const AttendeeItem = props => {
         {getAvailableDrinkList.response.map(drink => (
           <Button
             key={drink.id}
+            z
             variant="contained"
             id={drink.id}
             onClick={handleSelectDrink}

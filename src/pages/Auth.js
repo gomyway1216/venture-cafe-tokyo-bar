@@ -50,6 +50,7 @@ class AuthPage extends React.Component {
       },
     }
 
+    // this way of admin login should be modified.
     // if (!this.state.isLogin) {
     //   requestBody = {
     //     query: `

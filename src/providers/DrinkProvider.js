@@ -2,6 +2,8 @@ import React, { useState, createContext, useEffect } from 'react'
 import * as AvailableDrinkApi from '../api/drink/availableDrink'
 import * as DrinkTypeApi from '../api/drink/drinkType'
 import * as RegisteredDrinkApi from '../api/drink/registeredDrink'
+import * as DrinkHistoryApi from '../api/drink/drinkHistory'
+
 import { useApi } from '../hooks/useApi'
 
 export const DrinkContext = createContext({})
@@ -14,13 +16,6 @@ export const DrinkProvider = ({ children }) => {
     AvailableDrinkApi.getAvailableDrinkList,
     res => res.data.getAvailableDrinkList
   )
-
-  // const {
-  //   isFetching: isGettingAvailableDrinkList,
-  //   error: gettingAvailableDrinkListError,
-  //   response: getAvailableDrinkListResponse,
-  //   makeFetch: getAvailableDrinkList,
-  // } = availableDrinkList
 
   const deleteAvailableDrinks = useApi(
     AvailableDrinkApi.deleteAvailableDrinks,
@@ -37,6 +32,8 @@ export const DrinkProvider = ({ children }) => {
   const getRegisteredDrinkList = useApi(
     RegisteredDrinkApi.getRegisteredDrinkList
   )
+
+  const addDrinkHistoryList = useApi(DrinkHistoryApi.addDrinkHistoryList)
 
   useEffect(() => {
     if (!deleteAvailableDrinks.response) {
@@ -60,6 +57,7 @@ export const DrinkProvider = ({ children }) => {
         deleteAvailableDrinks,
         getDrinkTypeList,
         getRegisteredDrinkList,
+        addDrinkHistoryList,
       }}
     >
       {children}

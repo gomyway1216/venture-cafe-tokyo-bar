@@ -8,11 +8,9 @@ import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import styles from './attendees.module.css'
 import QrReader from 'react-qr-reader'
-// import DrinkList from '../components/Drinks/DrinkList'
 import { AttendeeContext } from '../providers/AttendeeProvider'
 import { DrinkContext } from '../providers/DrinkProvider'
 import AvailableDrinkList from '../components/Drinks/AvailableDrinkList'
-// import AvailableDrinks from '../components/AvailableDrinks/AvailableDrinks'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -67,17 +65,6 @@ const Attendees = props => {
   const classes = useStyles()
 
   const {
-    // attendees,
-    // fetchAttendees,
-    // handleScan,
-    // filterValue,
-    // setFilterValue,
-    // isFetchingAttendees,
-    // error: fetchingAttendeesError,
-    // selectDrink,
-    // // currentDrinks,
-    // isUpdatingAttendee,
-
     attendeeList,
     filterValue,
     setFilterValue,
@@ -88,14 +75,6 @@ const Attendees = props => {
   } = useContext(AttendeeContext)
 
   const {
-    // fetchDrinkList,
-    // drinkList,
-    // isFetchingDrinkList,
-    // isFetchingDrinkTypes,
-    // isFetchingCurrentDrinkList,
-    // fetchCurrentDrinkList,
-    // currentDrinkList,
-
     getAvailableDrinkList,
     deleteAvailableDrinks,
     getDrinkTypeList,

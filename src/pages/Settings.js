@@ -36,7 +36,6 @@ export const Settings = () => {
     setOpen(!open)
   }
 
-  // I don't know why it is still throwing endefined error for drinkTypes
   if (isFetchingDrinkTypes) {
     return <Spinner />
   }
