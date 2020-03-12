@@ -12,15 +12,17 @@ const AttendeeList = props => {
       <div className={styles.item}>Buttons</div>
       <div className={styles.item}>Confirm</div>
       {props.attendees.map(attendee => {
+        console.log('attendee.drinkList', attendee.drinkList)
         return (
           <AttendeeItem
             key={attendee.id}
-            id={attendee.attendeeId}
+            id={attendee.id}
+            userID={attendee.userID}
             firstName={attendee.firstName}
             lastName={attendee.lastName}
-            drinkCounter={attendee.drinks.length}
+            drinkCounter={attendee.drinkList.length}
             selectDrink={props.selectDrink}
-            drinks={props.drinks}
+            drinkList={props.drinkList}
           />
         )
       })}

@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles'
-import AuthContext from '../context/auth-context'
+import React, { useContext, useEffect, useState, useMemo } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 import Spinner from '../components/Spinner/Spinner'
 import AttendeeList from '../components/Attendees/AttendeeList'
 import InputBase from '@material-ui/core/InputBase'
@@ -9,15 +8,11 @@ import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import styles from './attendees.module.css'
 import QrReader from 'react-qr-reader'
-import { getCurrentDrinkList, getDrinkList } from '../api/drink'
-import DrinkList from '../components/Drinks/DrinkList'
-import {
-  onSignIn,
-  fetchSignedInAttendees,
-  updateAttendeeDrink,
-} from '../api/attendee'
+import { AttendeeContext } from '../providers/AttendeeProvider'
+import { DrinkContext } from '../providers/DrinkProvider'
+import AvailableDrinkList from '../components/Drinks/AvailableDrinkList'
 
-const useStyles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -43,267 +38,129 @@ const useStyles = theme => ({
     height: 28,
     margin: 4,
   },
-})
+}))
 
-class Attendees extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      name: '',
-      isLoading: false,
-      attendees: [],
-      filteredAttendees: [],
-      filterValue: '',
-      scanData: '',
-      drinks: [],
-      currentDrinks: [],
-    }
+const filterAttendeeList = (attendees, filterValue) => {
+  if (filterValue === '') {
+    return attendees
   }
 
-  isActive = true
+  const lowerCaseFilter = filterValue.toLowerCase()
 
-  static contextType = AuthContext
+  const newList = attendees.filter(attendee => {
+    const firstName = attendee.firstName.toLowerCase()
+    const lastName = attendee.lastName.toLowerCase()
 
-  handleScan = async data => {
-    if (data) {
-      this.setState({ scanData: data })
-      // check if the current user exist in the frontend, otherwise do api call
-      if (!this.state.attendees.find(element => element.attendeeId === data)) {
-        await onSignIn(data, this.context.token, this.updateAttendees)
-      }
-      // set the scanned QR code to be the filter value to search.
-      this.setState({ filterValue: data }, () => {
-        this.filterList()
-      })
-    }
-  }
-
-  onNameChange = event => {
-    this.setState({ name: event.target.value })
-  }
-
-  // add the attendee by QR code if the attendee doesn't exist in the list of people shown
-  updateAttendees = data => {
-    // to prevent adding two same attendees.
-    // backend code returns the same currentAttendee if the signed in attendee
-    // already existed in db. So, this part of the code should also handle that
-    if (
-      this.state.attendees.find(
-        element => element.attendeeId === data.attendeeId
-      )
-    ) {
-      this.forceUpdate()
-      return
-    }
-
-    this.setState(
-      prevState => {
-        const updatedAttendees = [...prevState.attendees]
-        updatedAttendees.push({
-          id: data._id,
-          attendeeId: data.attendeeId,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          drinks: data.drinks,
-        })
-        return { attendees: updatedAttendees }
-      },
-      () => this.filterList()
-    )
-  }
-
-  // when a attendee choose a drink
-  selectDrink = (id, drinkId) => {
-    // do the api call here.
-    updateAttendeeDrink(
-      this.context.token,
-      this.isActive,
-      id,
-      drinkId,
-      this.updateSingleAttendee,
-      this.setLoading
-    )
-  }
-
-  // update the drink of single attendee
-  updateSingleAttendee = async data => {
-    await this.setState(
-      prevState => {
-        let updatedAttendees = [...prevState.attendees]
-        updatedAttendees.find((o, i) => {
-          if (o.attendeeId === data.attendeeId) {
-            updatedAttendees[i] = {
-              id: data.id,
-              attendeeId: data.attendeeId,
-              firstName: data.firstName,
-              lastName: data.lastName,
-              drinks: data.drinks,
-            }
-            return true
-          }
-        })
-        return {
-          attendees: updatedAttendees,
-        }
-      },
-      () => {
-        this.filterList()
-        // also update the entire drink count
-        getCurrentDrinkList(
-          this.context.token,
-          this.setCurrentDrinks,
-          this.setLoading
-        )
-      }
-    )
-  }
-
-  filterList = () => {
-    let currentList = []
-    // variable that holds the filtered list before putting into state
-    let newList = []
-
-    // if the search bar is not empty
-    if (this.state.filterValue !== '') {
-      currentList = this.state.attendees
-      newList = currentList.filter(item => {
-        const firstName = item.firstName.toLowerCase()
-        const lastName = item.lastName.toLowerCase()
-        const filter = this.state.filterValue
-        return (
-          item.attendeeId.includes(filter) ||
-          firstName.includes(filter.toLowerCase()) ||
-          lastName.includes(filter.toLowerCase())
-        )
-      })
-    } else {
-      newList = this.state.attendees
-    }
-    this.setState({
-      filteredAttendees: newList,
-    })
-  }
-
-  handleSearchBarChange = event => {
-    // since setState is async, we need to use callback to call the function.
-    this.setState({ filterValue: event.target.value }, () => {
-      this.filterList()
-    })
-  }
-
-  setDrinks = drinks => {
-    this.setState({ drinks: drinks })
-  }
-
-  setCurrentDrinks = currentDrinks => {
-    // here it needs to traverse all the current Attendee to get the drink count
-    this.setState({ currentDrinks: currentDrinks })
-  }
-
-  setAttendees = attendees => {
-    this.setState({ attendees: attendees })
-  }
-
-  setFilteredAttendees = attendees => {
-    this.setState({ filteredAttendees: attendees })
-  }
-
-  setLoading = loading => {
-    this.setState({ isLoading: loading })
-  }
-
-  setFilterValueEmpty = () => {
-    this.setState({ filterValue: '' })
-  }
-
-  handleError = err => {
-    console.error(err)
-  }
-
-  componentDidMount() {
-    fetchSignedInAttendees(
-      this.context.token,
-      this.isActive,
-      this.setAttendees,
-      this.setFilteredAttendees,
-      this.setLoading
-    )
-    getDrinkList(this.context.token, this.setDrinks, this.setLoading)
-    getCurrentDrinkList(
-      this.context.token,
-      this.setCurrentDrinks,
-      this.setLoading
-    )
-  }
-
-  componentWillUnmount() {
-    this.isActive = false
-  }
-
-  render() {
-    const { classes } = this.props
     return (
-      <div className={styles.attendeesContainer}>
-        <div className={styles.leftContainer}>
-          <Paper component="form" className={classes.searchField}>
-            <InputBase
-              className={classes.input}
-              placeholder="Search Names"
-              inputProps={{ 'aria-label': 'search names' }}
-              onChange={this.handleSearchBarChange}
-              value={this.state.filterValue}
-            />
-            <IconButton
-              type="submit"
-              className={classes.iconButton}
-              aria-label="search"
-            >
-              <SearchIcon />
-            </IconButton>
-          </Paper>
-
-          <div className={styles.attendeeList}>
-            {this.state.isLoading || !this.state.attendees ? (
-              <Spinner />
-            ) : (
-              <div>
-                <AttendeeList
-                  attendees={this.state.filteredAttendees}
-                  selectDrink={this.selectDrink}
-                  drinks={this.state.drinks}
-                />
-              </div>
-            )}
-          </div>
-        </div>
-        <div className={styles.rightContainer}>
-          <div className={styles.drinkList}>
-            {this.state.isLoading || !this.state.currentDrinks ? (
-              <Spinner />
-            ) : (
-              <DrinkList
-                drinks={this.state.currentDrinks}
-                setAttendees={this.setAttendees}
-                setFilteredAttendees={this.setFilteredAttendees}
-                isActive={this.isActive}
-                setLoading={this.setLoading}
-                setCurrentDrinks={this.setCurrentDrinks}
-                setFilterValueEmpty={this.setFilterValueEmpty}
-              />
-            )}
-          </div>
-
-          <QrReader
-            delay={300}
-            onError={this.handleError}
-            onScan={this.handleScan}
-            style={{ width: '100%' }}
-            className={styles.qRReaderComponent}
-          />
-        </div>
-      </div>
+      attendee.userID.includes(filterValue) ||
+      firstName.includes(lowerCaseFilter) ||
+      lastName.includes(lowerCaseFilter)
     )
-  }
+  })
+
+  return newList
 }
 
-export default withStyles(useStyles, { withTheme: true })(Attendees)
+const Attendees = props => {
+  const classes = useStyles()
+
+  const {
+    attendeeList,
+    filterValue,
+    setFilterValue,
+    handleScan,
+    getAttendeeList,
+    updateAttendeeDrinkList,
+    deleteAttendees,
+  } = useContext(AttendeeContext)
+
+  const {
+    getAvailableDrinkList,
+    deleteAvailableDrinks,
+    getDrinkTypeList,
+    getRegisteredDrinkList,
+  } = useContext(DrinkContext)
+
+  useEffect(() => {
+    if (!attendeeList) {
+      return
+    }
+    // When we move fetchCurrentDrinks to DrinkContext
+    getAvailableDrinkList.makeFetch()
+  }, [attendeeList])
+
+  const filteredAttendees = useMemo(
+    () => filterAttendeeList(attendeeList, filterValue),
+    [attendeeList, filterValue]
+  )
+
+  const isLoading =
+    getAttendeeList.isFetching ||
+    updateAttendeeDrinkList.isFetching ||
+    deleteAttendees.isFetching ||
+    getAvailableDrinkList.isFetching ||
+    deleteAvailableDrinks.isFetching ||
+    getDrinkTypeList.isFetching ||
+    getRegisteredDrinkList.isFetching
+
+  if (getAttendeeList.isFetching || getAvailableDrinkList.isFetching) {
+    return <Spinner />
+  }
+
+  return (
+    <div className={styles.attendeesContainer}>
+      <div className={styles.leftContainer}>
+        <Paper component="form" className={classes.searchField}>
+          <InputBase
+            className={classes.input}
+            placeholder="Search Names"
+            inputProps={{ 'aria-label': 'search names' }}
+            onChange={e => setFilterValue(e.target.value)}
+            value={filterValue}
+          />
+          <IconButton
+            type="submit"
+            className={classes.iconButton}
+            aria-label="search"
+          >
+            <SearchIcon />
+          </IconButton>
+        </Paper>
+
+        <div className={styles.attendeeList}>
+          {isLoading || !getAttendeeList.response ? (
+            <Spinner />
+          ) : (
+            <div>
+              <AttendeeList
+                attendees={filteredAttendees}
+                selectDrink={updateAttendeeDrinkList.makeFetch}
+                drinkList={getAvailableDrinkList.response}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* <div className={styles.availableDrinks}>
+        <AvailableDrinks />
+      </div> */}
+
+      <div className={styles.rightContainer}>
+        <div className={styles.drinkList}>
+          <AvailableDrinkList setFilterValueEmpty={() => setFilterValue('')} />
+        </div>
+
+        <QrReader
+          delay={300}
+          onError={err => console.log(err)}
+          onScan={handleScan}
+          style={{ width: '100%' }}
+          className={styles.qRReaderComponent}
+        />
+      </div>
+    </div>
+  )
+}
+
+export default Attendees

@@ -11,8 +11,8 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import SaveIcon from '@material-ui/icons/Save'
 import AuthContext from '../../context/auth-context'
 import Dialog from '../Dialog/Dialog'
-import { deleteAllCurrentDrinks, saveAllCurrentDrinks } from '../../api/drink'
-import { deleteAllCurrentAttendees } from '../../api/attendee'
+import { AttendeeContext } from '../../providers/AttendeeProvider'
+import { DrinkContext } from '../../providers/DrinkProvider'
 
 const StyledMenu = withStyles({
   paper: {
@@ -54,6 +54,10 @@ const modalModeEnum = {
 
 const CustomizedMenus = props => {
   const auth = useContext(AuthContext)
+  const { getAttendeeList, deleteAttendees } = useContext(AttendeeContext)
+  const { deleteAvailableDrinks, addDrinkHistoryList } = useContext(
+    DrinkContext
+  )
   const [modalMode, setModalMode] = useState(modalModeEnum.CLOSE)
   const [anchorEl, setAnchorEl] = React.useState(null)
 
@@ -115,11 +119,7 @@ const CustomizedMenus = props => {
         open={modalMode === modalModeEnum.DELETEDRINKLIST}
         handleClose={handleDialogClose}
         onContinue={() => {
-          deleteAllCurrentDrinks(
-            auth.token,
-            props.setCurrentDrinks,
-            props.setLoading
-          )
+          deleteAvailableDrinks.makeFetch()
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
@@ -131,13 +131,7 @@ const CustomizedMenus = props => {
         open={modalMode === modalModeEnum.DETETECURERENTATTENDEES}
         handleClose={handleDialogClose}
         onContinue={() => {
-          deleteAllCurrentAttendees(
-            auth.token,
-            props.isActive,
-            props.setAttendees,
-            props.setFilteredAttendees,
-            props.setLoading
-          )
+          deleteAttendees()
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
@@ -149,18 +143,10 @@ const CustomizedMenus = props => {
         open={modalMode === modalModeEnum.SAVEDATA}
         handleClose={handleDialogClose}
         onContinue={() => {
-          saveAllCurrentDrinks(
-            auth.token,
-            props.setCurrentDrinks,
-            props.setLoading
-          )
-          deleteAllCurrentAttendees(
-            auth.token,
-            props.isActive,
-            props.setAttendees,
-            props.setFilteredAttendees,
-            props.setLoading
-          )
+          // the api would clear the current drink list, when the data is saved
+          addDrinkHistoryList()
+          // clear the current attendees table
+          deleteAttendees()
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}

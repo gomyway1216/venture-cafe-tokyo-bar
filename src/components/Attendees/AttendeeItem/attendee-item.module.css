@@ -1,5 +1,6 @@
 .item {
   /* margin: auto; */
+  /* prevent overwrapping */
   overflow: hidden;
   min-width: 0;
 }
@@ -20,6 +21,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  /* prevent overwrapping */
   overflow: hidden;
   min-width: 0;
 }
