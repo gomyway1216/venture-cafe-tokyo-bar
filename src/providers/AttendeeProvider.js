@@ -10,41 +10,29 @@ export const AttendeeContext = createContext({})
 
 export const AttendeeProvider = ({ children }) => {
   const [attendeeList, setAttendeeList] = useState([])
-  // const [currentDrinks, setCurrentDrinks] = useState([])
   const [filterValue, setFilterValue] = useState('')
 
   // pair of callback and response. When callback(makeFetch) is called,
   // useApi custom hook will return the new response and appropriate useEffect fires
   // why the first one is different?
-  const {
-    isFetching: isGettingAttendeeList,
-    error: gettingAttendeeListError,
-    response: attendeeListResponse,
-    makeFetch: getAttendeeList,
-  } = useApi(AttendeeApi.getAttendeeList)
+  const getAttendeeList = useApi(
+    AttendeeApi.getAttendeeList,
+    res => res.data.getAttendeeList
+  )
 
-  const {
-    isFetching: isUpdatingAttendeeDrinkList,
-    error: updatingAttendeeDrinkListError,
-    response: updateAttendeeDrinkListResponse,
-    makeFetch: updateAttendeeDrinkList,
-  } = useApi(AttendeeApi.updateAttendeeDrinkList)
+  const updateAttendeeDrinkList = useApi(
+    AttendeeApi.updateAttendeeDrinkList,
+    res => res.data.updateAttendeeDrinkList
+  )
 
-  // const {
-  //   isFetching: isFetchingDrinks,
-  //   // error: fetchingDrinkListError,
-  //   response: currentDrinksResponse,
-  //   makeFetch: fetchCurrentDrinks,
-  // } = useApi(DrinkApi.getCurrentDrinkList)
+  const deleteAttendees = useApi(
+    AttendeeApi.deleteAttendees,
+    res => res.data.deleteAttendees
+  )
 
-  const {
-    isFetching: isDeletingAttendees,
-    error: deletingAttendeesError,
-    response: deleteAttendeesResponse,
-    makeFetch: deleteAttendees,
-  } = useApi(AttendeeApi.deleteAttendees)
+  const checkInUser = useApi(AttendeeApi.checkInUser)
 
-  const updateSingleAttendee = data => {
+  const updateDrinkListForSingleAttendee = data => {
     const updatedAttendeeList = attendeeList.map(attendee =>
       attendee.id === data.id
         ? { ...attendee, drinkList: data.drinkList }
@@ -60,64 +48,48 @@ export const AttendeeProvider = ({ children }) => {
       )
       // check if the current user exist in the frontend, otherwise do api call
       if (!attendeeExists) {
-        await AttendeeApi.checkInUser(userID)
-        await getAttendeeList()
+        await checkInUser.makeFetch(userID)
+        await getAttendeeList.makeFetch()
       }
       setFilterValue(userID)
     }
   }
 
   useEffect(() => {
-    if (!attendeeListResponse) {
+    if (!getAttendeeList.response) {
       return
     }
-    const { getAttendeeList } = attendeeListResponse.data
-    setAttendeeList(getAttendeeList)
-  }, [attendeeListResponse])
+    setAttendeeList(getAttendeeList.response)
+  }, [getAttendeeList.response])
 
   useEffect(() => {
-    if (!updateAttendeeDrinkListResponse) {
+    if (!updateAttendeeDrinkList.response) {
       return
     }
-    console.log(
-      'updateAttendeeDrinkListResponse: ',
-      updateAttendeeDrinkListResponse
-    )
-    const { updateAttendeeDrinkList } = updateAttendeeDrinkListResponse.data
-    updateSingleAttendee(updateAttendeeDrinkList)
+    updateDrinkListForSingleAttendee(updateAttendeeDrinkList.response)
     // when individual attendee's drink gets updated, this updates the current drink list
     // fetchCurrentDrinks()
-  }, [updateAttendeeDrinkListResponse])
-
-  // useEffect(() => {
-  //   if (!currentDrinksResponse) {
-  //     return
-  //   }
-  //   const { currentDrinks } = currentDrinksResponse.data
-  //   setCurrentDrinks(currentDrinks)
-  // }, [currentDrinksResponse])
+  }, [updateAttendeeDrinkList.response])
 
   // this is called once
   // so when the drink count of each person gets updated, this useEffect fires and
   // update
   useEffect(() => {
     // it is inefficient that fetchAttendees is called many times, even updating just single person
-    getAttendeeList()
+    getAttendeeList.makeFetch()
     // fetchCurrentDrinks()
   }, [])
 
   return (
     <AttendeeContext.Provider
       value={{
-        getAttendeeList,
+        attendeeList,
         filterValue,
         setFilterValue,
-        attendeeList,
-        isGettingAttendeeList,
-        error: gettingAttendeeListError,
         handleScan,
-        selectDrink: updateAttendeeDrinkList,
-        isUpdatingAttendeeDrinkList,
+
+        getAttendeeList,
+        updateAttendeeDrinkList,
         deleteAttendees,
       }}
     >

@@ -26,24 +26,18 @@ const sortDrinkList = drinkList => {
 
   return sortedDrinks
 }
-const DrinkList = props => {
-  const { isFetchingCurrentDrinkList, currentDrinkList } = useContext(
-    DrinkContext
-  )
 
-  if (isFetchingCurrentDrinkList || !currentDrinkList) {
+const AvailableDrinkList = props => {
+  const { getAvailableDrinkList } = useContext(DrinkContext)
+
+  if (getAvailableDrinkList.isFetching || !getAvailableDrinkList.response) {
     return <Spinner />
   }
 
-  const sortedDrinkList = sortDrinkList(currentDrinkList)
-
-  // let totalDrinkCount = 0
-  // sortedDrinkList.forEach(drink => {
-  //   totalDrinkCount += drink.count.length
-  // })
+  const sortedDrinkList = sortDrinkList(getAvailableDrinkList.response)
 
   const totalDrinkCount = sortedDrinkList.reduce(
-    (count, drink) => count + drink.count.length,
+    (count, drink) => count + drink.consumedDateList.length,
     0
   )
 
@@ -65,7 +59,7 @@ const DrinkList = props => {
         {sortedDrinkList.map(drink => (
           <tr>
             <td>{drink.name}</td>
-            <td>{drink.count.length}</td>
+            <td>{drink.consumedDateList.length}</td>
           </tr>
         ))}
       </table>
@@ -73,4 +67,4 @@ const DrinkList = props => {
   )
 }
 
-export default DrinkList
+export default AvailableDrinkList

@@ -6,9 +6,7 @@ import Spinner from '../../Spinner/Spinner'
 
 const AttendeeItem = props => {
   const [selectedDrinkId, setSelectedDrinkId] = useState('')
-  const { currentDrinkList, isFetchingCurrentDrinkList } = useContext(
-    DrinkContext
-  )
+  const { getAvailableDrinkList } = useContext(DrinkContext)
 
   const handleSelectDrink = event => {
     setSelectedDrinkId(event.currentTarget.id)
@@ -19,19 +17,20 @@ const AttendeeItem = props => {
       // pair of the attendee and the drink id the user choose
       props.selectDrink({
         id: props.id,
-        drinkId: selectedDrinkId,
+        availableDrinkID: selectedDrinkId,
       })
     }
   }
 
-  const isLoading = isFetchingCurrentDrinkList || !currentDrinkList
+  const isLoading =
+    getAvailableDrinkList.isFetching || !getAvailableDrinkList.response
   if (isLoading) {
     return <Spinner />
   }
 
   return (
     <>
-      <span className={styles.item}>{props.id}</span>
+      <span className={styles.item}>{props.userID}</span>
       <span className={styles.item}>{props.firstName}</span>
       <span className={styles.item}>{props.lastName}</span>
       <span
@@ -44,7 +43,7 @@ const AttendeeItem = props => {
         {props.drinkCounter}
       </span>
       <div className={styles.buttons}>
-        {currentDrinkList.map(drink => (
+        {getAvailableDrinkList.response.map(drink => (
           <Button
             key={drink.id}
             variant="contained"

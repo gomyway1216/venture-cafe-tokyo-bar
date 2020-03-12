@@ -4,7 +4,7 @@ import { doFetch } from '../doFetch'
 export const existAvailableDrink = id => {
   const requestBody = {
     query: `
-      query ExistAvailableDrink($id: String!) {
+      query ExistAvailableDrink($id: ID!) {
         existAvailableDrink(id: $id)
       }
     `,
@@ -18,14 +18,15 @@ export const existAvailableDrink = id => {
 export const getAvailableDrink = id => {
   const requestBody = {
     query: `
-      query GetAvailableDrink($id: String!) {
+      query GetAvailableDrink($id: ID!) {
         getAvailableDrink(id: $id) {
           id: _id
           drinkID
           name
           drinkType {
-              name
+            name
           }
+          consumedDateList
         }
       }
       `,
@@ -45,8 +46,9 @@ export const getAvailableDrinkList = () => {
           drinkID
           name
           drinkType {
-              name
+            name
           }
+          consumedDateList
         }
       }
       `,
@@ -57,7 +59,7 @@ export const getAvailableDrinkList = () => {
 export const addAvailableDrink = id => {
   const requestBody = {
     query: `
-      mutation AddAvailableDrink($id: String!) {
+      mutation AddAvailableDrink($id: ID!) {
         addAvailableDrink(id: $id) {
           id: _id
           drinkID
@@ -65,6 +67,7 @@ export const addAvailableDrink = id => {
           drinkType {
             name
           }
+          consumedDateList
         }
       }
       `,
@@ -78,7 +81,7 @@ export const addAvailableDrink = id => {
 export const updateAvailableDrinkCount = id => {
   const requestBody = {
     query: `
-      mutation updateAvailableDrinkCount($id: String!, $date: String!) {
+      mutation updateAvailableDrinkCount($id: ID!, $date: String!) {
         updateAvailableDrinkCount(id: $id, date: $date) {
           id: _id
           drinkID
@@ -86,6 +89,7 @@ export const updateAvailableDrinkCount = id => {
           drinkType {
             name
           }
+          consumedDateList
         }
       }
       `,
@@ -100,7 +104,7 @@ export const updateAvailableDrinkCount = id => {
 export const deleteAvailableDrink = id => {
   const requestBody = {
     query: `
-      mutation DeleteAvailableDrink($id: String!) {
+      mutation DeleteAvailableDrink($id: ID!) {
         deleteAvailableDrink(id: $id)
       }
     `,
@@ -114,7 +118,7 @@ export const deleteAvailableDrink = id => {
 export const deleteAvailableDrinks = () => {
   const requestBody = {
     query: `
-      mutation DeleteAvailableDrinks($id: String!) {
+      mutation DeleteAvailableDrinks($id: ID!) {
         deleteAvailableDrinks(id: $id)
       }
     `,

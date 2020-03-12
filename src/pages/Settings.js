@@ -41,8 +41,6 @@ export const Settings = () => {
     return <Spinner />
   }
 
-  console.log(drinkTypes)
-
   return (
     <List
       component="nav"

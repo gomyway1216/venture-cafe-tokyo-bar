@@ -88,7 +88,7 @@ export const createUser = ({ firstName, lastName, email }) => {
 export const existUser = id => {
   const requestBody = {
     query: `
-      query ExistUser($id: String!) {
+      query ExistUser($id: ID!) {
         existUser(id: $id)
       }
     `,
@@ -102,7 +102,7 @@ export const existUser = id => {
 export const getUser = id => {
   const requestBody = {
     query: `
-      query GetUser($id: String!) {
+      query GetUser($id: ID!) {
         getUser(id: $id) {
           id: _id
           firstName
@@ -121,7 +121,7 @@ export const getUser = id => {
 export const deleteUser = id => {
   const requestBody = {
     query: `
-      query DeleteUser($id: String!) {
+      query DeleteUser($id: ID!) {
         deleteUser(id: $id)
       }
     `,

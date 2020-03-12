@@ -4,7 +4,7 @@ import { doFetch } from '../doFetch'
 export const existDrinkType = id => {
   const requestBody = {
     query: `
-      query ExistDrinkType($id: String!) {
+      query ExistDrinkType($id: ID!) {
         existDrinkType(id: $id)
       }
     `,
@@ -18,7 +18,7 @@ export const existDrinkType = id => {
 export const getDrinkType = id => {
   const requestBody = {
     query: `
-      query GetDrinkType($id: String!) {
+      query GetDrinkType($id: ID!) {
         getDrinkType(id: $id) {
           id: _id
           name
@@ -66,7 +66,7 @@ export const addDrinkType = name => {
 export const deleteDrinkType = id => {
   const requestBody = {
     query: `
-      mutation DeleteDrinkType($id: String!) {
+      mutation DeleteDrinkType($id: ID!) {
         deleteDrinkType(id: $id)
       }
     `,

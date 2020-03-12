@@ -7,85 +7,59 @@ import { useApi } from '../hooks/useApi'
 export const DrinkContext = createContext({})
 
 export const DrinkProvider = ({ children }) => {
-  const [availableDrinkList, setAvailableDrinkList] = useState([])
+  // const [availableDrinkList, setAvailableDrinkList] = useState([])
 
   // get available drink list
-  const {
-    isFetching: isGettingAvailableDrinkList,
-    error: gettingAvailableDrinkListError,
-    response: getAvailableDrinkListResponse,
-    makeFetch: getAvailableDrinkList,
-  } = useApi(
+  const getAvailableDrinkList = useApi(
     AvailableDrinkApi.getAvailableDrinkList,
     res => res.data.getAvailableDrinkList
   )
 
-  const {
-    isFetching: isDeletingAvailableDrinks,
-    error: deletingAvailableDrinksError,
-    response: deleteAvailableDrinksResponse,
-    makeFetch: deleteAvailableDrinks,
-  } = useApi(
+  // const {
+  //   isFetching: isGettingAvailableDrinkList,
+  //   error: gettingAvailableDrinkListError,
+  //   response: getAvailableDrinkListResponse,
+  //   makeFetch: getAvailableDrinkList,
+  // } = availableDrinkList
+
+  const deleteAvailableDrinks = useApi(
     AvailableDrinkApi.deleteAvailableDrinks,
     res => res.data.deleteAvailableDrinks
   )
 
   // get all the drink type
-  const {
-    isFetching: isGettingDrinkTypeList,
-    error: gettingDrinkTypeListError,
-    response: getDrinkTypeListResponse,
-    makeFetch: getDrinkTypeList,
-  } = useApi(DrinkTypeApi.getDrinkTypeList, res => res.data.getDrinkTypeList)
+  const getDrinkTypeList = useApi(
+    DrinkTypeApi.getDrinkTypeList,
+    res => res.data.getDrinkTypeList
+  )
 
   // get registered drink list
-  const {
-    isFetching: isGettingRegisteredDrinkList,
-    error: gettingRegisteredDrinkListError,
-    response: getRegisteredDrinkListResponse,
-    makeFetch: getRegisteredDrinkList,
-  } = useApi(RegisteredDrinkApi.getRegisteredDrinkList)
-
-  // for available drink list
-  useEffect(() => {
-    if (!getAvailableDrinkListResponse) {
-      return
-    }
-    // currentDrinks is the api response. I need to modify backend
-    setAvailableDrinkList(getAvailableDrinkListResponse)
-  }, [getAvailableDrinkListResponse])
+  const getRegisteredDrinkList = useApi(
+    RegisteredDrinkApi.getRegisteredDrinkList
+  )
 
   useEffect(() => {
-    if (!deleteAvailableDrinksResponse) {
+    if (!deleteAvailableDrinks.response) {
       return
     }
 
-    getAvailableDrinkList()
-  }, [deleteAvailableDrinksResponse])
+    getAvailableDrinkList.makeFetch()
+  }, [deleteAvailableDrinks.response])
 
   // fetch the data when rendering
   useEffect(() => {
-    getRegisteredDrinkList()
-    getDrinkTypeList()
-    getAvailableDrinkList()
+    getRegisteredDrinkList.makeFetch()
+    getDrinkTypeList.makeFetch()
+    getAvailableDrinkList.makeFetch()
   }, [])
 
   return (
     <DrinkContext.Provider
       value={{
-        getRegisteredDrinkList,
-        getRegisteredDrinkListResponse,
-        isGettingRegisteredDrinkList,
-
-        getDrinkTypeListResponse,
-        isGettingDrinkTypeList,
-        getDrinkTypeList,
-
         getAvailableDrinkList,
-        availableDrinkList,
-        isGettingAvailableDrinkList,
         deleteAvailableDrinks,
-        // error,
+        getDrinkTypeList,
+        getRegisteredDrinkList,
       }}
     >
       {children}

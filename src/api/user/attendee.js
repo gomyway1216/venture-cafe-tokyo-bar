@@ -18,7 +18,7 @@ export const existAttendee = id => {
 export const getAttendee = id => {
   const requestBody = {
     query: `
-      query GetAttendee($id: String!) {
+      query GetAttendee($id: ID!) {
         getAttendee(id: $id) {
           id: _id
           userID
@@ -67,9 +67,9 @@ export const getAttendeeList = () => {
 export const checkInUser = id => {
   const requestBody = {
     query: `
-        mutation CheckInUser($id: String!, $date: String!) {
+        mutation CheckInUser($id: ID!, $date: String!) {
           checkInUser(checkInUserInput: {
-            _id: $id, date: $date
+            id: $id, date: $date
           }) {
             id: _id
             userID
@@ -93,7 +93,7 @@ export const checkInUser = id => {
 export const resetAttendeeDrinkList = id => {
   const requestBody = {
     query: `
-      query ResetAttendeeDrinkList($id: String!) {
+      query ResetAttendeeDrinkList($id: ID!) {
         resetAttendeeDrinkList(id: $id) {
           id: _id
           userID
@@ -123,9 +123,9 @@ export const resetAttendeeDrinkList = id => {
 export const updateAttendeeDrinkList = ({ id, availableDrinkID }) => {
   const requestBody = {
     query: `
-        mutation UpdateAttendeeDrinkList($id: String!, $availableDrinkID: String!, $date: String!) {
+        mutation UpdateAttendeeDrinkList($id: ID!, $availableDrinkID: ID!, $date: String!) {
           updateAttendeeDrinkList(updateAttendeeDrinkListInput: {
-            _id: $id, availableDrinkID: $availableDrinkID, date: $date
+            id: $id, availableDrinkID: $availableDrinkID, date: $date
           }) {
             id: _id
             userID
@@ -150,7 +150,7 @@ export const updateAttendeeDrinkList = ({ id, availableDrinkID }) => {
 export const deleteAttendee = id => {
   const requestBody = {
     query: `
-      mutation DeleteAttendee($id: String!) {
+      mutation DeleteAttendee($id: ID!) {
         deleteAttendee(id: $id)
       }
     `,

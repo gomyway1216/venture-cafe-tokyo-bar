@@ -4,7 +4,7 @@ import { doFetch } from './doFetch'
 export const existEventType = id => {
   const requestBody = {
     query: `
-      query ExistEventType($id: String!) {
+      query ExistEventType($id: ID!) {
         existEventType(id: $id)
       }
     `,
@@ -18,7 +18,7 @@ export const existEventType = id => {
 export const getEventType = id => {
   const requestBody = {
     query: `
-      query GetEventType($id: String!) {
+      query GetEventType($id: ID!) {
         getEventType(id: $id) {
           id: _id
           name
@@ -69,7 +69,7 @@ export const addEventType = name => {
 export const deleteEventType = id => {
   const requestBody = {
     query: `
-      mutation DeleteEventType($id: String!) {
+      mutation DeleteEventType($id: ID!) {
         deleteEventType(id: $id)
       }
     `,

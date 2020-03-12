@@ -11,7 +11,7 @@ import QrReader from 'react-qr-reader'
 // import DrinkList from '../components/Drinks/DrinkList'
 import { AttendeeContext } from '../providers/AttendeeProvider'
 import { DrinkContext } from '../providers/DrinkProvider'
-import CurrentDrinkList from '../components/Drinks/CurrentDrinkList'
+import AvailableDrinkList from '../components/Drinks/AvailableDrinkList'
 // import AvailableDrinks from '../components/AvailableDrinks/AvailableDrinks'
 
 const useStyles = makeStyles(theme => ({
@@ -54,7 +54,7 @@ const filterAttendeeList = (attendees, filterValue) => {
     const lastName = attendee.lastName.toLowerCase()
 
     return (
-      attendee.attendeeId.includes(filterValue) ||
+      attendee.userID.includes(filterValue) ||
       firstName.includes(lowerCaseFilter) ||
       lastName.includes(lowerCaseFilter)
     )
@@ -67,49 +67,64 @@ const Attendees = props => {
   const classes = useStyles()
 
   const {
-    attendees,
-    fetchAttendees,
-    handleScan,
+    // attendees,
+    // fetchAttendees,
+    // handleScan,
+    // filterValue,
+    // setFilterValue,
+    // isFetchingAttendees,
+    // error: fetchingAttendeesError,
+    // selectDrink,
+    // // currentDrinks,
+    // isUpdatingAttendee,
+
+    attendeeList,
     filterValue,
     setFilterValue,
-    isFetchingAttendees,
-    error: fetchingAttendeesError,
-    selectDrink,
-    currentDrinks,
-    isUpdatingAttendee,
+    handleScan,
+    getAttendeeList,
+    updateAttendeeDrinkList,
+    deleteAttendees,
   } = useContext(AttendeeContext)
 
   const {
-    fetchDrinkList,
-    drinkList,
-    isFetchingDrinkList,
-    isFetchingDrinkTypes,
-    isFetchingCurrentDrinkList,
-    fetchCurrentDrinkList,
-    currentDrinkList,
+    // fetchDrinkList,
+    // drinkList,
+    // isFetchingDrinkList,
+    // isFetchingDrinkTypes,
+    // isFetchingCurrentDrinkList,
+    // fetchCurrentDrinkList,
+    // currentDrinkList,
+
+    getAvailableDrinkList,
+    deleteAvailableDrinks,
+    getDrinkTypeList,
+    getRegisteredDrinkList,
   } = useContext(DrinkContext)
 
   useEffect(() => {
-    if (!attendees) {
+    if (!attendeeList) {
       return
     }
     // When we move fetchCurrentDrinks to DrinkContext
-    fetchCurrentDrinkList()
-  }, [attendees])
+    getAvailableDrinkList.makeFetch()
+  }, [attendeeList])
 
   const filteredAttendees = useMemo(
-    () => filterAttendeeList(attendees, filterValue),
-    [attendees, filterValue]
+    () => filterAttendeeList(attendeeList, filterValue),
+    [attendeeList, filterValue]
   )
 
   const isLoading =
-    isFetchingAttendees ||
-    isUpdatingAttendee ||
-    isFetchingDrinkList ||
-    isFetchingCurrentDrinkList ||
-    isFetchingDrinkTypes
+    getAttendeeList.isFetching ||
+    updateAttendeeDrinkList.isFetching ||
+    deleteAttendees.isFetching ||
+    getAvailableDrinkList.isFetching ||
+    deleteAvailableDrinks.isFetching ||
+    getDrinkTypeList.isFetching ||
+    getRegisteredDrinkList.isFetching
 
-  if (isFetchingAttendees || isFetchingDrinkList) {
+  if (getAttendeeList.isFetching || getAvailableDrinkList.isFetching) {
     return <Spinner />
   }
 
@@ -134,14 +149,14 @@ const Attendees = props => {
         </Paper>
 
         <div className={styles.attendeeList}>
-          {isLoading || !attendees ? (
+          {isLoading || !getAttendeeList.response ? (
             <Spinner />
           ) : (
             <div>
               <AttendeeList
                 attendees={filteredAttendees}
-                selectDrink={selectDrink}
-                drinkList={drinkList}
+                selectDrink={updateAttendeeDrinkList.makeFetch}
+                drinkList={getAvailableDrinkList.response}
               />
             </div>
           )}
@@ -154,7 +169,7 @@ const Attendees = props => {
 
       <div className={styles.rightContainer}>
         <div className={styles.drinkList}>
-          <CurrentDrinkList setFilterValueEmpty={() => setFilterValue('')} />
+          <AvailableDrinkList setFilterValueEmpty={() => setFilterValue('')} />
         </div>
 
         <QrReader

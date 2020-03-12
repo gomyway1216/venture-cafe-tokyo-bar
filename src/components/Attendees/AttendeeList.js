@@ -15,10 +15,11 @@ const AttendeeList = props => {
         return (
           <AttendeeItem
             key={attendee.id}
-            id={attendee.attendeeId}
+            id={attendee.id}
+            userID={attendee.userID}
             firstName={attendee.firstName}
             lastName={attendee.lastName}
-            drinkCounter={attendee.drinks.length}
+            drinkCounter={attendee.drinkList.length}
             selectDrink={props.selectDrink}
             drinkList={props.drinkList}
           />
