@@ -30,6 +30,18 @@ This app runs on [localhost:3000](http://localhost:3000/).
 ## Language and libraries
 JavaScript, React, GraphQL
 
+## Logistics
+This pull request updates all the old API calls and transfers them to the new ones. In addition, it changes the names of some components to match the ones in the backend.
+The naming convention is the following:
+Getting multiple documents -> adding List in the end
+Each API call name starts with action ex) getAvailableDrinkList
+It is removing the "current" keyword because it is confusing. Instead, there are
+"Registered Drink": All the drinks that are registered so far.
+"Available Drink": The drinks available for a specific event. So, before the event starts, the organizer would pic the drinks from the Registered Drink list. This feature would be implemented in future commits.
+"User": User includes everyone who has registered, including admin. Admin would have an admin flag and can access Dashboard.
+"Attendee": Attendee is users who attend to a specific event. Once the event is done, they are removed to prevent saving unnecessary personal information. 
+"DrinkHistroy": Saves the history of drink consumed. Each row is associated with event and date, so it is easier to query specific types of data such as "drinks consumed around 7 PM from the event happening in Los Angels." 
+
 ## Task
 Working on renaming and restructuring.
 
