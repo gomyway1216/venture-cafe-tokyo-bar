@@ -47,7 +47,6 @@ export const DrinkProvider = ({ children }) => {
   useEffect(() => {
     getRegisteredDrinkList.makeFetch()
     getDrinkTypeList.makeFetch()
-    getAvailableDrinkList.makeFetch()
   }, [])
 
   return (

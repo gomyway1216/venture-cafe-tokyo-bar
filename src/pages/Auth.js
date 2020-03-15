@@ -82,12 +82,9 @@ class AuthPage extends React.Component {
         return res.json()
       })
       .then(resData => {
-        if (resData.data.logInAdminUser.token) {
-          this.context.login(
-            resData.data.logInAdminUser.token,
-            resData.data.logInAdminUser.userID,
-            resData.data.logInAdminUser.tokenExpiration
-          )
+        const { token, userID, tokenExpiration } = resData.data.logInAdminUser
+        if (token) {
+          this.context.login(token, userID, tokenExpiration)
         }
       })
       .catch(err => {

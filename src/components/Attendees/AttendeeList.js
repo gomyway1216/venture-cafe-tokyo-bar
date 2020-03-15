@@ -12,7 +12,6 @@ const AttendeeList = props => {
       <div className={styles.item}>Buttons</div>
       <div className={styles.item}>Confirm</div>
       {props.attendees.map(attendee => {
-        console.log('attendee.drinkList', attendee.drinkList)
         return (
           <AttendeeItem
             key={attendee.id}

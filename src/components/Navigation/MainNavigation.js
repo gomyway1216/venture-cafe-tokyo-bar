@@ -1,49 +1,47 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import AuthContext from '../../context/auth-context'
 import './MainNavigation.css'
 
-const mainNavigation = props => (
-  <AuthContext.Consumer>
-    {context => {
-      return (
-        <header className="main-navigation">
-          <div className="main-navigation__logo">
-            <h1>Drink Counter</h1>
-          </div>
-          <nav className="main-navigation__items">
-            <ul>
-              {!context.token && (
-                <li>
-                  <NavLink to="/auth">Authenticate</NavLink>
-                </li>
-              )}
-              {context.token && (
-                <React.Fragment>
-                  <li>
-                    <NavLink to="/attendees">Attendee</NavLink>
-                  </li>
+const MainNavigation = props => {
+  const context = useContext(AuthContext)
+  console.log('main navigation context: ', context)
+  return (
+    <header className="main-navigation">
+      <div className="main-navigation__logo">
+        <h1>Drink Counter</h1>
+      </div>
+      <nav className="main-navigation__items">
+        <ul>
+          {!context.token && (
+            <li>
+              <NavLink to="/auth">Authenticate</NavLink>
+            </li>
+          )}
+          {context.token && (
+            <React.Fragment>
+              <li>
+                <NavLink to="/attendees">Attendee</NavLink>
+              </li>
 
-                  <li>
-                    <NavLink to="/datalist">Data List</NavLink>
-                  </li>
+              <li>
+                <NavLink to="/datalist">Data List</NavLink>
+              </li>
 
-                  <li>
-                    <NavLink to="/settings">Settings</NavLink>
-                  </li>
+              <li>
+                <NavLink to="/settings">Settings</NavLink>
+              </li>
 
-                  <li>
-                    <button onClick={context.logout}>Logout</button>
-                  </li>
-                </React.Fragment>
-              )}
-            </ul>
-          </nav>
-        </header>
-      )
-    }}
-  </AuthContext.Consumer>
-)
+              <li>
+                <button onClick={context.logout}>Logout</button>
+              </li>
+            </React.Fragment>
+          )}
+        </ul>
+      </nav>
+    </header>
+  )
+}
 
-export default mainNavigation
+export default MainNavigation
