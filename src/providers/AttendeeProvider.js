@@ -6,7 +6,7 @@ import { useApi } from '../hooks/useApi'
 export const AttendeeContext = createContext({})
 
 export const AttendeeProvider = ({ children }) => {
-  const [attendeeList, setAttendeeList] = useState([])
+  const [attendeeList, setAttendeeList] = useState(null)
   const [filterValue, setFilterValue] = useState('')
 
   // pair of callback and response. When callback(makeFetch) is called,

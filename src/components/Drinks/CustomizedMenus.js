@@ -47,7 +47,7 @@ const StyledMenuItem = withStyles(theme => ({
 
 const modalModeEnum = {
   DELETEDRINKLIST: 'deleteDrinkList',
-  DETETECURERENTATTENDEES: 'deleteCurrentAttendees',
+  DETETEATTENDEES: 'deleteCAttendees',
   CLOSE: 'close',
   SAVEDATA: 'saveData',
 }
@@ -100,7 +100,7 @@ const CustomizedMenus = props => {
           <ListItemText primary="Delete all the drink record" />
         </StyledMenuItem>
         <StyledMenuItem
-          onClick={() => setModalMode(modalModeEnum.DETETECURERENTATTENDEES)}
+          onClick={() => setModalMode(modalModeEnum.DETETEATTENDEES)}
         >
           <ListItemIcon>
             <DeleteIcon fontSize="small" />
@@ -128,7 +128,7 @@ const CustomizedMenus = props => {
       </Dialog>
 
       <Dialog
-        open={modalMode === modalModeEnum.DETETECURERENTATTENDEES}
+        open={modalMode === modalModeEnum.DETETEATTENDEES}
         handleClose={handleDialogClose}
         onContinue={() => {
           deleteAttendees()

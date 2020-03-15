@@ -1,7 +1,7 @@
 export const doFetch = requestBody => {
   const loginInfo = JSON.parse(localStorage.getItem('loginInfo'))
   if (!loginInfo || !loginInfo.token) {
-    throw new Error('missing loginInfo token')
+    window.location = '/auth'
   }
 
   const { token } = loginInfo
@@ -13,10 +13,18 @@ export const doFetch = requestBody => {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     },
-  }).then(res => {
+  }).then(async res => {
     if (res.status !== 200 && res.status !== 201) {
-      throw new Error('Failed fetching signed in attended')
+      const resBody = await res.json()
+      const errorMessage = resBody?.errors?.[0]?.message || 'Failed fetching'
+      if (errorMessage === 'Unauthenticated!') {
+        localStorage.removeItem('loginInfo')
+        window.location = '/auth'
+      } else {
+        throw new Error(errorMessage)
+      }
     }
+
     return res.json()
   })
 }

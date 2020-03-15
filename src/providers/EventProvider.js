@@ -6,5 +6,14 @@ import { useApi } from '../hooks/useApi'
 export const EventContext = createContext({})
 
 export const EventProvider = ({ children }) => {
-  return <EventContext.Provider></EventContext.Provider>
+  const getEventTypeList = useApi(
+    EventTypeApi.getEventTypeList,
+    res => res.data.getEventTypeList
+  )
+
+  return (
+    <EventContext.Provider value={getEventTypeList}>
+      {children}
+    </EventContext.Provider>
+  )
 }
