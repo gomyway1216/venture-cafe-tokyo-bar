@@ -86,6 +86,7 @@ const Attendees = props => {
       return
     }
     // When we move fetchCurrentDrinks to DrinkContext
+    // it is called when a person's drink changed, needs to update drink list too
     getAvailableDrinkList.makeFetch()
   }, [attendeeList])
 
