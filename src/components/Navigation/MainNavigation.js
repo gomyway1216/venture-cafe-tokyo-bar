@@ -1,12 +1,12 @@
 import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 
-import AuthContext from '../../context/auth-context'
+import { AuthContext } from '../../providers/AuthProvider'
 import './MainNavigation.css'
 
 const MainNavigation = props => {
   const context = useContext(AuthContext)
-  console.log('main navigation context: ', context)
+
   return (
     <header className="main-navigation">
       <div className="main-navigation__logo">

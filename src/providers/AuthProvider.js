@@ -1,12 +1,4 @@
 import React, { useState, createContext, useEffect } from 'react'
-
-// export default React.createContext({
-//   token: null,
-//   userId: null,
-//   login: (token, userId, tokenExpiration) => {},
-//   logout: () => {},
-// })
-
 import { useApi } from '../hooks/useApi'
 
 const defaultLoginInfo = {
@@ -15,7 +7,7 @@ const defaultLoginInfo = {
   tokenExpiration: null,
 }
 
-const AuthContext = createContext(defaultLoginInfo)
+export const AuthContext = createContext(defaultLoginInfo)
 
 export const AuthProvider = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState(
@@ -54,5 +46,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   )
 }
-
-export default AuthContext

@@ -1,33 +1,22 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import './Auth.css'
-import AuthContext from '../context/auth-context'
+import { AuthContext } from '../providers/AuthProvider'
 import moment from 'moment'
 
-class AuthPage extends React.Component {
-  constructor(props) {
-    super(props)
+const defaultInput = {
+  email: '',
+  password: '',
+}
 
-    this.state = {
-      isLogin: true,
-      email: '',
-      password: '',
-    }
-  }
+const AuthPage = () => {
+  const [input, setInput] = useState(defaultInput)
 
-  static contextType = AuthContext
+  const { login } = useContext(AuthContext)
 
-  switchModeHandler = () => {
-    this.setState(prevState => {
-      return { isLogin: !prevState.isLogin }
-    })
-  }
-
-  submitHandler = event => {
+  const submitHandler = event => {
     event.preventDefault()
-    const email = this.state.email
-    const password = this.state.password
 
-    if (email.trim().length === 0 || password.trim().length === 0) {
+    if (input.email.trim().length === 0 || input.password.trim().length === 0) {
       return
     }
 
@@ -44,29 +33,11 @@ class AuthPage extends React.Component {
           }
         `,
       variables: {
-        email: email,
-        password: password,
+        email: input.email,
+        password: input.password,
         date: moment().format(),
       },
     }
-
-    // this way of admin login should be modified.
-    // if (!this.state.isLogin) {
-    //   requestBody = {
-    //     query: `
-    //         mutation CreateAdminUser($email: String!, $password: String!) {
-    //           createAdminUser(userInput: {email: $email, password: $password}) {
-    //                 _id
-    //                 email
-    //             }
-    //         }
-    //       `,
-    //     variables: {
-    //       email: email,
-    //       password: password,
-    //     },
-    //   }
-    // }
 
     fetch(`${process.env.REACT_APP_URL}graphql`, {
       method: 'POST',
@@ -84,50 +55,47 @@ class AuthPage extends React.Component {
       .then(resData => {
         const { token, userID, tokenExpiration } = resData.data.logInAdminUser
         if (token) {
-          this.context.login(token, userID, tokenExpiration)
+          login(token, userID, tokenExpiration)
         }
       })
       .catch(err => {
         console.log(err)
+        // set error state
       })
   }
 
-  onInputChangeHandler = event => {
-    this.setState({
+  const onInputChangeHandler = event => {
+    setInput({
+      ...input,
       [event.target.id]: event.target.value,
     })
   }
 
-  render() {
-    return (
-      <form className="auth-form" onSubmit={this.submitHandler}>
-        <div className="form-control">
-          <label htmlFor="email">E-Mail</label>
-          <input
-            type="email"
-            id="email"
-            value={this.state.email}
-            onChange={this.onInputChangeHandler}
-          />
-        </div>
-        <div className="form-control">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={this.state.password}
-            onChange={this.onInputChangeHandler}
-          />
-        </div>
-        <div className="form-actions">
-          <button type="submit">Log In</button>
-          {/* <button type="button" onClick={this.switchModeHandler}>
-            Switch to {this.state.isLogin ? 'Signup' : 'Login'}
-          </button> */}
-        </div>
-      </form>
-    )
-  }
+  return (
+    <form className="auth-form" onSubmit={submitHandler}>
+      <div className="form-control">
+        <label htmlFor="email">E-Mail</label>
+        <input
+          type="email"
+          id="email"
+          value={input.email}
+          onChange={onInputChangeHandler}
+        />
+      </div>
+      <div className="form-control">
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          value={input.password}
+          onChange={onInputChangeHandler}
+        />
+      </div>
+      <div className="form-actions">
+        <button type="submit">Log In</button>
+      </div>
+    </form>
+  )
 }
 
 export default AuthPage
