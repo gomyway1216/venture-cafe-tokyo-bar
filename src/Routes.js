@@ -5,8 +5,10 @@ import AuthPage from './pages/Auth'
 import AttendeesPage from './pages/Attendees'
 import DataListPage from './pages/DataList'
 import SettingPage from './pages/Settings'
+import EventSetUp from './pages/EventSetUp'
 import { AttendeeProvider } from './providers/AttendeeProvider'
 import { DrinkProvider } from './providers/DrinkProvider'
+import { EventProvider } from './providers/EventProvider'
 
 const Routes = () => {
   const contextInfo = useContext(AuthContext)
@@ -22,21 +24,24 @@ const Routes = () => {
   }
 
   return (
-    <AttendeeProvider>
-      <DrinkProvider>
-        <main className="main-content">
-          <Switch>
-            <Redirect from="/" to="/attendees" exact />
-            <Redirect from="/auth" to="/attendees" exact />
-            <Route path="/attendees" component={AttendeesPage} />
-            <Route path="/datalist" component={DataListPage} />
-            <Route path="/settings" component={SettingPage} />
-            {/* delete this after and uncomment the above */}
-            {/* <Route path="/attendees" component={AttendeesPage} /> */}
-          </Switch>
-        </main>
-      </DrinkProvider>
-    </AttendeeProvider>
+    <EventProvider>
+      <AttendeeProvider>
+        <DrinkProvider>
+          <main className="main-content">
+            <Switch>
+              <Redirect from="/" to="/attendees" exact />
+              <Redirect from="/auth" to="/attendees" exact />
+              <Route path="/attendees" component={AttendeesPage} />
+              <Route path="/datalist" component={DataListPage} />
+              <Route path="/settings" component={SettingPage} />
+              <Route path="/event-setup" component={EventSetUp} />
+              {/* delete this after and uncomment the above */}
+              {/* <Route path="/attendees" component={AttendeesPage} /> */}
+            </Switch>
+          </main>
+        </DrinkProvider>
+      </AttendeeProvider>
+    </EventProvider>
   )
 }
 
