@@ -1,9 +1,7 @@
 import React, { useContext } from 'react'
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
-
+import { Route, Redirect, Switch } from 'react-router-dom'
 import { AuthContext } from './providers/AuthProvider'
-import AuthPage from './pages/AuthNew'
-import MainNavigation from './components/Navigation/MainNavigation'
+import AuthPage from './pages/Auth'
 import AttendeesPage from './pages/Attendees'
 import DataListPage from './pages/DataList'
 import SettingPage from './pages/Settings'
