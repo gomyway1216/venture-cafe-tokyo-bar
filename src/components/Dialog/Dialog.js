@@ -8,31 +8,31 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 
 const CustomDialog = props => {
   return (
-    <div>
-      <Dialog
-        open={props.open}
-        onClose={props.handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {'Are you sure you want to continue?'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {props.children}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={props.onContinue} color="primary" autoFocus>
-            Continue
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog
+      open={props.open}
+      onClose={props.handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        {/* {'Are you sure you want to continue?'} */}
+      </DialogTitle>
+
+      <DialogContent>
+        {props.children}
+        {/* <DialogContentText id="alert-dialog-description">
+
+          </DialogContentText> */}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.handleClose} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={props.onContinue} color="primary" autoFocus>
+          Continue
+        </Button>
+      </DialogActions>
+    </Dialog>
   )
 }
 

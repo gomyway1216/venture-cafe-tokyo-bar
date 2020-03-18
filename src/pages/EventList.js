@@ -68,7 +68,7 @@ const EventList = props => {
   const [eventInfo, setEventInfo] = useState(defaultEventInfo)
   const { getEventTypeList } = useContext(EventContext)
 
-  const { getEventList } = useContext(EventContext)
+  const { getEventList, addEvent } = useContext(EventContext)
 
   useEffect(() => {
     if (!getEventList) {
@@ -97,15 +97,21 @@ const EventList = props => {
     if (
       eventInfo.name.trim().length === 0 ||
       eventInfo.eventType.trim().length === 0 ||
-      eventInfo.date.trim().length === 0 ||
       eventInfo.location.trim().length === 0
     ) {
       return
     }
 
     const date = moment().format()
+    addEvent.makeFetch({
+      name: eventInfo.name,
+      eventTypeID: eventInfo.eventType,
+      location: eventInfo.location,
+      date: eventInfo.location,
+    })
 
-    // api call
+    setDialogOpen(false)
+    getEventList.makeFetch()
   }
 
   const onInputChangeHandler = event => {
@@ -115,7 +121,11 @@ const EventList = props => {
     })
   }
 
-  if (getEventList.isFetching || !getEventList.response) {
+  if (
+    getEventList.isFetching ||
+    !getEventList.response ||
+    addEvent.isFetching
+  ) {
     return <Spinner />
   }
 
@@ -153,7 +163,7 @@ const EventList = props => {
             onChange={onInputChangeHandler}
           >
             {getEventTypeList.response.map(eventType => (
-              <MenuItem value={eventType.name}>{eventType.name}</MenuItem>
+              <MenuItem value={eventType.id}>{eventType.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -163,7 +173,7 @@ const EventList = props => {
             labelId="demo-simple-select-label"
             id="location"
             name="location"
-            value={eventInfo.location.name}
+            value={eventInfo.location}
             onChange={onInputChangeHandler}
           >
             <MenuItem value={'Tokyo'}>Tokyo</MenuItem>

@@ -56,13 +56,15 @@ export const getEventList = () => {
   return doFetch(requestBody)
 }
 
-export const addEvent = ({ name, eventTypeID, location }) => {
+export const addEvent = ({ name, eventTypeID, location, date }) => {
   const requestBody = {
     query: `
       mutation AddEvent($name: String!, $eventTypeID: ID!, 
         $date: String!, $location: String!) {
-        addEvent(name: $name, eventTypeID: $eventTypeID, 
-            date: $date, location: $location) {
+        addEvent(addEventInput: {
+          name: $name, eventTypeID: $eventTypeID, 
+            date: $date, location: $location
+        }) {
           id: _id
           name
           eventType {
@@ -76,7 +78,7 @@ export const addEvent = ({ name, eventTypeID, location }) => {
     variables: {
       name: name,
       eventTypeID: eventTypeID,
-      date: moment().format(),
+      date: date,
       location: location,
     },
   }

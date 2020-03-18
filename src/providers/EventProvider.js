@@ -16,6 +16,8 @@ export const EventProvider = ({ children }) => {
     res => res.data.getEventList
   )
 
+  const addEvent = useApi(EventApi.addEvent, res => res.data.addEvent)
+
   const getEvent = useApi(EventApi.getEvent, res => res.data.getEvent)
 
   // useEffect(() => {
@@ -26,7 +28,9 @@ export const EventProvider = ({ children }) => {
   console.log('hello')
 
   return (
-    <EventContext.Provider value={{ getEventTypeList, getEventList, getEvent }}>
+    <EventContext.Provider
+      value={{ getEventTypeList, getEventList, getEvent, addEvent }}
+    >
       {children}
     </EventContext.Provider>
   )
