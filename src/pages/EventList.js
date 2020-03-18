@@ -1,23 +1,25 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles'
 import Spinner from '../components/Spinner/Spinner'
 import AttendeeList from '../components/Attendees/AttendeeList'
-import InputBase from '@material-ui/core/InputBase'
+import { makeStyles } from '@material-ui/core/styles'
+import {
+  InputBase,
+  Button,
+  IconButton,
+  Paper,
+  Select,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  TextField,
+} from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
-import Paper from '@material-ui/core/Paper'
-import IconButton from '@material-ui/core/IconButton'
 import { EventContext } from '../providers/EventProvider'
 import AvailableDrinkList from '../components/Drinks/AvailableDrinkList'
 import styles from './eventList.module.css'
-import Button from '@material-ui/core/Button'
 import Dialog from '../components/Dialog/Dialog'
-import Select from '@material-ui/core/Select'
 import moment from 'moment'
-import FormControl from '@material-ui/core/FormControl'
-import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core/MenuItem'
-import TextField from '@material-ui/core/TextField'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -145,6 +147,7 @@ const EventList = props => {
         open={dialogOpen}
         handleClose={() => setDialogOpen(false)}
         onContinue={createEvent}
+        title="Creating New Event"
       >
         <TextField
           id="name"

@@ -1,17 +1,14 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Spinner from '../components/Spinner/Spinner'
-import AttendeeList from '../components/Attendees/AttendeeList'
-import InputBase from '@material-ui/core/InputBase'
-import SearchIcon from '@material-ui/icons/Search'
-import Paper from '@material-ui/core/Paper'
-import IconButton from '@material-ui/core/IconButton'
-import styles from './attendees.module.css'
-import QrReader from 'react-qr-reader'
 import { AttendeeContext } from '../providers/AttendeeProvider'
 import { DrinkContext } from '../providers/DrinkProvider'
 import { EventContext } from '../providers/EventProvider'
-
+import Spinner from '../components/Spinner/Spinner'
+import AttendeeList from '../components/Attendees/AttendeeList'
+import { makeStyles } from '@material-ui/core/styles'
+import { InputBase, Paper, IconButton } from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
+import styles from './attendees.module.css'
+import QrReader from 'react-qr-reader'
 import AvailableDrinkList from '../components/Drinks/AvailableDrinkList'
 
 const useStyles = makeStyles(theme => ({
@@ -65,8 +62,6 @@ const filterAttendeeList = (attendees, filterValue) => {
 
 const Attendees = props => {
   const classes = useStyles()
-
-  // work on it later
   const { getEvent } = useContext(EventContext)
 
   const {
@@ -165,10 +160,6 @@ const Attendees = props => {
           )}
         </div>
       </div>
-
-      {/* <div className={styles.availableDrinks}>
-        <AvailableDrinks />
-      </div> */}
 
       <div className={styles.rightContainer}>
         <div className={styles.drinkList}>

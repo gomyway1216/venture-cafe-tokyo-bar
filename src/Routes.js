@@ -32,12 +32,11 @@ const Routes = () => {
           <main className="main-content">
             <Switch>
               <Redirect from="/" to="/events" exact />
-              <Redirect from="/auth" to="/attendees" exact />
+              <Redirect from="/auth" to="/events" exact />
               <Route path="/events" component={EventList} exact />
               <Route path="/events/:eventID" component={EventAttendeeList} />
-              <Route path="/attendees" component={AttendeesPage} />
               <Route path="/datalist" component={DataListPage} />
-              <Route path="/settings" component={SettingPage} />
+              <Route path="/:eventID/settings" component={SettingPage} />
               <Route path="/event-setup" component={EventSetUp} />
               {/* delete this after and uncomment the above */}
               {/* <Route path="/attendees" component={AttendeesPage} /> */}
