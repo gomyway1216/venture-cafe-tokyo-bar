@@ -9,24 +9,14 @@ import {
   Divider,
 } from '@material-ui/core'
 import InboxIcon from '@material-ui/icons/Inbox'
-import DraftsIcon from '@material-ui/icons/Drafts'
 import Spinner from '../components/Spinner/Spinner'
 import styles from './settings.module.css'
-
-const useStyles = makeStyles(theme => ({
-  // root: {
-  //   width: '100%',
-  //   maxWidth: 360,
-  //   backgroundColor: theme.palette.background.paper,
-  // },
-}))
 
 function ListItemLink(props) {
   return <ListItem button component="a" {...props} />
 }
 
 export const Settings = () => {
-  const classes = useStyles()
   const { getRegisteredDrinkList, getAvailableDrinkList } = useContext(
     DrinkContext
   )

@@ -4,7 +4,6 @@ import {
   DialogTitle,
   Dialog,
   DialogActions,
-  DialogContent,
   DialogContentText,
 } from '@material-ui/core'
 
@@ -16,7 +15,7 @@ const CustomDialog = props => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">Error!</DialogTitle>
       {/* <DialogContent>{props.children}</DialogContent> */}
       <DialogContentText id="alert-dialog-slide-description">
         {props.message}

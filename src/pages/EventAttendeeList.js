@@ -135,7 +135,7 @@ const Attendees = props => {
         <ErrorDialog
           open={errorDialogOpen}
           message={error}
-          onClose={() => setErrorDialogOpen(false)}
+          handleClose={() => setErrorDialogOpen(false)}
         />
       </div>
     )
