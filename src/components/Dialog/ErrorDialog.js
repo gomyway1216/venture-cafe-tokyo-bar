@@ -17,13 +17,13 @@ const CustomDialog = props => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
-      <DialogContent>{props.children}</DialogContent>
+      {/* <DialogContent>{props.children}</DialogContent> */}
+      <DialogContentText id="alert-dialog-slide-description">
+        {props.message}
+      </DialogContentText>
       <DialogActions>
         <Button onClick={props.handleClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={props.onContinue} color="primary" autoFocus>
-          Continue
+          Got it!
         </Button>
       </DialogActions>
     </Dialog>

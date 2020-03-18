@@ -2,10 +2,8 @@ import React, { useContext } from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
 import { AuthContext } from './providers/AuthProvider'
 import AuthPage from './pages/Auth'
-import AttendeesPage from './pages/Attendees'
 import DataListPage from './pages/DataList'
 import SettingPage from './pages/Settings'
-import EventSetUp from './pages/EventSetUp'
 import EventList from './pages/EventList'
 import EventAttendeeList from './pages/EventAttendeeList'
 import { AttendeeProvider } from './providers/AttendeeProvider'
@@ -36,10 +34,8 @@ const Routes = () => {
               <Route path="/events" component={EventList} exact />
               <Route path="/events/:eventID" component={EventAttendeeList} />
               <Route path="/datalist" component={DataListPage} />
-              <Route path="/:eventID/settings" component={SettingPage} />
-              <Route path="/event-setup" component={EventSetUp} />
-              {/* delete this after and uncomment the above */}
-              {/* <Route path="/attendees" component={AttendeesPage} /> */}
+              <Route path="/settings/:eventID" component={SettingPage} />
+              {/* <Route path="/settings" component={SettingPage} /> */}
             </Switch>
           </main>
         </DrinkProvider>
