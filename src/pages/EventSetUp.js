@@ -8,6 +8,7 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import moment from 'moment'
+import styles from './eventSetUp.module.css'
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -83,11 +84,11 @@ const EventSetUp = props => {
   // }
 
   if (!getEventTypeList.response) {
-    return
+    return <div>Loading</div>
   }
 
   return (
-    <div>
+    <div className={styles.main}>
       <FormControl className={classes.formControl}>
         <InputLabel id="demo-simple-select-label">Event Type</InputLabel>
         <Select

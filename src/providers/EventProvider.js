@@ -11,15 +11,22 @@ export const EventProvider = ({ children }) => {
     res => res.data.getEventTypeList
   )
 
-  useEffect(() => {
-    console.log('this use effect is called')
-    getEventTypeList.makeFetch()
-  }, [])
+  const getEventList = useApi(
+    EventApi.getEventList,
+    res => res.data.getEventList
+  )
+
+  const getEvent = useApi(EventApi.getEvent, res => res.data.getEvent)
+
+  // useEffect(() => {
+  //   console.log('this use effect is called')
+  //   getEventTypeList.makeFetch()
+  // }, [])
 
   console.log('hello')
 
   return (
-    <EventContext.Provider value={{ getEventTypeList }}>
+    <EventContext.Provider value={{ getEventTypeList, getEventList, getEvent }}>
       {children}
     </EventContext.Provider>
   )

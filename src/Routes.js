@@ -6,6 +6,8 @@ import AttendeesPage from './pages/Attendees'
 import DataListPage from './pages/DataList'
 import SettingPage from './pages/Settings'
 import EventSetUp from './pages/EventSetUp'
+import EventList from './pages/EventList'
+import EventAttendeeList from './pages/EventAttendeeList'
 import { AttendeeProvider } from './providers/AttendeeProvider'
 import { DrinkProvider } from './providers/DrinkProvider'
 import { EventProvider } from './providers/EventProvider'
@@ -29,8 +31,10 @@ const Routes = () => {
         <DrinkProvider>
           <main className="main-content">
             <Switch>
-              <Redirect from="/" to="/attendees" exact />
+              <Redirect from="/" to="/events" exact />
               <Redirect from="/auth" to="/attendees" exact />
+              <Route path="/events" component={EventList} exact />
+              <Route path="/events/:eventID" component={EventAttendeeList} />
               <Route path="/attendees" component={AttendeesPage} />
               <Route path="/datalist" component={DataListPage} />
               <Route path="/settings" component={SettingPage} />

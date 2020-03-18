@@ -43,9 +43,12 @@ export const AttendeeProvider = ({ children }) => {
       const attendeeExists = attendeeList.some(
         element => element.userID === userID
       )
+
+      // need to gain the eventID from localStorage
+      const eventID = 'it is temporary eventID'
       // check if the current user exist in the frontend, otherwise do api call
       if (!attendeeExists) {
-        await checkInUser.makeFetch(userID)
+        await checkInUser.makeFetch({ userID, eventID })
         await getAttendeeList.makeFetch()
       }
       setFilterValue(userID)
@@ -68,16 +71,6 @@ export const AttendeeProvider = ({ children }) => {
     // fetchCurrentDrinks()
   }, [updateAttendeeDrinkList.response])
 
-  // this is called once
-  // so when the drink count of each person gets updated, this useEffect fires and
-  // update
-  useEffect(() => {
-    // it is inefficient that fetchAttendees is called many times, even updating just single person
-    getAttendeeList.makeFetch()
-    // this might have to be called.
-    // fetchCurrentDrinks()
-  }, [])
-
   return (
     <AttendeeContext.Provider
       value={{
@@ -85,7 +78,6 @@ export const AttendeeProvider = ({ children }) => {
         filterValue,
         setFilterValue,
         handleScan,
-
         getAttendeeList,
         updateAttendeeDrinkList,
         deleteAttendees,
