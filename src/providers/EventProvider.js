@@ -20,13 +20,6 @@ export const EventProvider = ({ children }) => {
 
   const getEvent = useApi(EventApi.getEvent, res => res.data.getEvent)
 
-  // useEffect(() => {
-  //   console.log('this use effect is called')
-  //   getEventTypeList.makeFetch()
-  // }, [])
-
-  console.log('hello')
-
   return (
     <EventContext.Provider
       value={{ getEventTypeList, getEventList, getEvent, addEvent }}

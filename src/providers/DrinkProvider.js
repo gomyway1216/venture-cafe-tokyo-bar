@@ -30,7 +30,8 @@ export const DrinkProvider = ({ children }) => {
 
   // get registered drink list
   const getRegisteredDrinkList = useApi(
-    RegisteredDrinkApi.getRegisteredDrinkList
+    RegisteredDrinkApi.getRegisteredDrinkList,
+    res => res.data.getRegisteredDrinkList
   )
 
   const addDrinkHistoryList = useApi(DrinkHistoryApi.addDrinkHistoryList)

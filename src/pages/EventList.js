@@ -95,7 +95,6 @@ const EventList = props => {
   }
 
   const createEvent = () => {
-    console.log('eventInfo', eventInfo)
     if (
       eventInfo.name.trim().length === 0 ||
       eventInfo.eventType.trim().length === 0 ||
@@ -138,8 +137,6 @@ const EventList = props => {
       </div>
     )
   }
-
-  console.log('this is event list')
 
   return (
     <div className={styles.main}>

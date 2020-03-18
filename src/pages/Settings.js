@@ -1,81 +1,73 @@
-import React, { useContext } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import ListSubheader from '@material-ui/core/ListSubheader'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
-import Collapse from '@material-ui/core/Collapse'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import DraftsIcon from '@material-ui/icons/Drafts'
-import SendIcon from '@material-ui/icons/Send'
-import ExpandLess from '@material-ui/icons/ExpandLess'
-import ExpandMore from '@material-ui/icons/ExpandMore'
-import StarBorder from '@material-ui/icons/StarBorder'
+import React, { useContext, useEffect } from 'react'
 import { DrinkContext } from '../providers/DrinkProvider'
+import { makeStyles } from '@material-ui/core/styles'
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+} from '@material-ui/core'
+import InboxIcon from '@material-ui/icons/Inbox'
+import DraftsIcon from '@material-ui/icons/Drafts'
 import Spinner from '../components/Spinner/Spinner'
+import styles from './settings.module.css'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%',
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-  },
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
+  // root: {
+  //   width: '100%',
+  //   maxWidth: 360,
+  //   backgroundColor: theme.palette.background.paper,
+  // },
 }))
+
+function ListItemLink(props) {
+  return <ListItem button component="a" {...props} />
+}
 
 export const Settings = () => {
   const classes = useStyles()
-  const [open, setOpen] = React.useState(true)
+  const { getRegisteredDrinkList, getAvailableDrinkList } = useContext(
+    DrinkContext
+  )
 
-  const { isFetchingDrinkTypes, drinkTypes } = useContext(DrinkContext)
-
-  const handleClick = () => {
-    setOpen(!open)
-  }
-
-  if (isFetchingDrinkTypes) {
+  if (getRegisteredDrinkList.isLoading || !getRegisteredDrinkList.response) {
     return <Spinner />
   }
 
+  console.log('getRegisteredDrinkList', getRegisteredDrinkList)
+
   return (
-    <List
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
-        </ListSubheader>
-      }
-      className={classes.root}
-    >
-      {!isFetchingDrinkTypes ||
-        drinkTypes.map(drinkType => (
-          <>
-            <ListItem button onClick={handleClick}>
+    <div className={styles.root}>
+      <div classes={styles.registeredDrinkList}>
+        <h2>Registered Drink List</h2>
+        <List component="nav" aria-label="main mailbox folders">
+          {getRegisteredDrinkList.response.map(drink => (
+            <ListItem button>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary={drinkType.name} />
-              {open ? <ExpandLess /> : <ExpandMore />}
+              <ListItemText primary={drink.name} />
             </ListItem>
-            {drinkType.createdDrinks.map(drink => (
-              <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItem button className={classes.nested}>
-                    <ListItemIcon>
-                      <StarBorder />
-                    </ListItemIcon>
-                    <ListItemText primary={drink.name} />
-                  </ListItem>
-                </List>
-              </Collapse>
-            ))}
-          </>
-        ))}
-    </List>
+          ))}
+        </List>
+        <Divider />
+      </div>
+      <div classes={styles.registeredDrinkList}>
+        <h2>Available Drink List</h2>
+        <List component="nav" aria-label="main mailbox folders">
+          {getRegisteredDrinkList.response.map(drink => (
+            <ListItem button>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary={drink.name} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+      </div>
+    </div>
   )
 }
 

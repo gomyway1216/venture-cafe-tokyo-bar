@@ -10,6 +10,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import styles from './attendees.module.css'
 import QrReader from 'react-qr-reader'
 import AvailableDrinkList from '../components/Drinks/AvailableDrinkList'
+import ErrorDialog from '../components/Dialog/ErrorDialog'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -63,6 +64,7 @@ const filterAttendeeList = (attendees, filterValue) => {
 const Attendees = props => {
   const classes = useStyles()
   const { getEvent } = useContext(EventContext)
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false)
 
   const {
     attendeeList,
@@ -116,14 +118,28 @@ const Attendees = props => {
     return <Spinner />
   }
 
+  //   const error =
+  //     getEvent.error || getAttendeeList.error || getAvailableDrinkList.error
+  //   console.log('error: ', error)
+  //   if (error) {
+  //     return <div className={styles.attendeesContainer}>{error}</div>
+  //   }
+
   const error =
     getEvent.error || getAttendeeList.error || getAvailableDrinkList.error
   console.log('error: ', error)
   if (error) {
-    return <div className={styles.attendeesContainer}>{error}</div>
+    setErrorDialogOpen(true)
+    return (
+      <div className={styles.attendeesContainer}>
+        <ErrorDialog
+          open={errorDialogOpen}
+          message={error}
+          onClose={() => setErrorDialogOpen(false)}
+        />
+      </div>
+    )
   }
-
-  console.log('getEvent.response', getEvent.response)
 
   return (
     <div className={styles.attendeesContainer}>
