@@ -3,13 +3,35 @@
 VCT_bar_Screenshot.png
 
 ## About The Project
-This is a project cooperating with Venture Cafe Tokyo. This application keeps track of drink informaiton with users. I am currently working on refactoring and creating visualization tool for drink history. Also, the UI would be updated soon. Once these updates on dev branch is finalized, it would be merged to master (production).
+This is a project I am building for Venture Cafe. This application consists of 3 parts. 
+
+Backend: 
+https://github.com/gomyway1216/venture-cafe-backend
+
+Frontend for user signup:
+https://github.com/gomyway1216/venture-cafe-tokyo-signup
+
+Frontend for dashboard at the bar:
+this repository.
+
+Backend is responsible for interacting with MongoDB and FrontEnd to handle GraphQL API calls. All the CRUD operations are implemented. 
+
+Frontend for user signup is responsible for creating new users. A new user goes to a link and fills in name and email. Then, the backend would produce a QR code, which is displayed in signup. Then, the user would save it on the phone.
+
+Frontend for dashboard at the bar is in charge of displaying the drink information and handles interaction between users and backend CRUD APIs. First, an admin user has to log in with the email and password. The backend would return token and login to the dashboard, which is valid for a limited time. (This would be updated to keep the token valid while opening the application.)
+
+Then, the admin would select the event. If the event does not exist, he/she will create one. The event likely needs to be built at the beginning.
+
+After selecting an event, it redirects to the dashboard where the attendee list is displayed with the count of drinks on the left side and the available drink list for the day on the right side. (The UI might be updated.)
+
+The admin would scan the QR code that the user has on their phone. If it is the first time, the user would be checked into the Attendee list. If not, it would just find from the table. 
+
+![VCT_bar_Screenshot](https://user-images.githubusercontent.com/32227575/75651666-ae398180-5c1e-11ea-8479-e8ca9cb93120.png)
 
 ## Getting Started
 To run this project, access keys to backend server is required. Currently the keys are hidden because it is using confidential data. This project mainly utilizes latest React Hooks instead of using class component.
 This app runs on Netlify.
 
-![VCT_bar_Screenshot](https://user-images.githubusercontent.com/32227575/75651666-ae398180-5c1e-11ea-8479-e8ca9cb93120.png)
 
 ### Prerequisites
 Node, Access Keys to server
@@ -51,5 +73,5 @@ It is removing the "current" keyword because it is confusing. Instead, there are
 <br />
 
 ## Task
-Working on renaming and restructuring.
+CSS styling.
 
