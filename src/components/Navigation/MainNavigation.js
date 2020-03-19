@@ -14,9 +14,6 @@ const MainNavigation = props => {
     logout()
   }
 
-  // const { eventID } = props.match.params
-  console.log('props.match', props.match)
-
   return (
     <header className="main-navigation">
       <div className="main-navigation__logo">

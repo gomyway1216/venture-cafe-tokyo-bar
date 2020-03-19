@@ -60,7 +60,6 @@ const AuthPage = () => {
       })
       .catch(err => {
         console.log(err)
-        // set error state
       })
   }
 

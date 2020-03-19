@@ -39,8 +39,6 @@ export const Settings = props => {
     )
   }, [])
 
-  // [getRegisteredDrinkList, getAvailableDrinkList] gives infinite loop
-
   if (
     getRegisteredDrinkList.isLoading ||
     !getRegisteredDrinkList.response ||
@@ -51,6 +49,7 @@ export const Settings = props => {
     return <Spinner />
   }
 
+  // This is printed unlimitedly.
   console.log('compositeDrinkList', compositeDrinkList)
 
   return (
@@ -102,7 +101,6 @@ const checkSelectedDrink = (registeredDrinkList, availableDrinkList) => {
       included: included,
     })
   }
-  console.log('result', drinkCompositeList)
   return drinkCompositeList
 }
 

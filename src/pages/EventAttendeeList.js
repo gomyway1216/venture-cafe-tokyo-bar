@@ -118,6 +118,15 @@ const Attendees = props => {
     getDrinkTypeList.isFetching ||
     getRegisteredDrinkList.isFetching
 
+  const error =
+    getEvent.error || getAttendeeList.error || getAvailableDrinkList.error
+
+  useEffect(() => {
+    if (error) {
+      setErrorDialogOpen(true)
+    }
+  }, [error])
+
   if (getAttendeeList.isFetching || getAvailableDrinkList.isFetching) {
     return <Spinner />
   }
@@ -129,24 +138,26 @@ const Attendees = props => {
   //     return <div className={styles.attendeesContainer}>{error}</div>
   //   }
 
-  const error =
-    getEvent.error || getAttendeeList.error || getAvailableDrinkList.error
-  console.log('error: ', error)
-  if (error) {
-    setErrorDialogOpen(true)
-    return (
-      <div className={styles.attendeesContainer}>
-        <ErrorDialog
-          open={errorDialogOpen}
-          message={error}
-          handleClose={() => setErrorDialogOpen(false)}
-        />
-      </div>
-    )
-  }
+  //   if (error) {
+  //     setErrorDialogOpen(true)
+  //     return (
+  //       <div className={styles.attendeesContainer}>
+  //         <ErrorDialog
+  //           open={errorDialogOpen}
+  //           message={error}
+  //           handleClose={() => setErrorDialogOpen(false)}
+  //         />
+  //       </div>
+  //     )
+  //   }
 
   return (
     <div className={styles.attendeesContainer}>
+      <ErrorDialog
+        open={errorDialogOpen}
+        message={error}
+        handleClose={() => setErrorDialogOpen(false)}
+      />
       <div className={styles.leftContainer}>
         {getEvent.response && <EventInfo event={getEvent.response} />}
         <Paper component="form" className={classes.searchField}>
