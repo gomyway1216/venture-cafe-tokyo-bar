@@ -1,7 +1,9 @@
 # Venture Cafe Drink System Front End Code for bar checkin
 
 ## About The Project
-This is a project I am building for Venture Cafe. This application consists of 3 parts. 
+This is a project I am building for Venture Cafe. 
+This application is expected to be used at multiple locations in the world. 
+This application consists of 3 parts. 
 
 Backend: 
 https://github.com/gomyway1216/venture-cafe-backend
@@ -47,27 +49,28 @@ $ npm start
 This app runs on [localhost:3000](http://localhost:3000/).
 
 
-## Language and libraries
+## Languages and libraries
 JavaScript, React, GraphQL
 
 ## Logistics
-This pull request updates all the old API calls and transfers them to the new ones. In addition, it changes the names of some components to match the ones in the backend.
+### Main Database Schema
+##### It explains the main schema stored in the database. Schemas for types are not explained here. 
+"Event": The event that the Dashboard is used. 
 <br />
-The naming convention is the following:
 <br />
-Getting multiple documents -> adding List in the end
+"Registered Drink": The drink that registered to the database that can be used for any of the events. The admins can add new drinks, but it is not recommended to delete ones, because some locations need to use it. 
 <br />
-Each API call name starts with action ex) getAvailableDrinkList
 <br />
-It is removing the "current" keyword because it is confusing. Instead, there are"Registered Drink": All the drinks that are registered so far.
+"Available Drink": The drinks available for a specific event. So, before the event starts, the organizer would pick the drinks from the Registered Drink list. 
 <br />
-"Available Drink": The drinks available for a specific event. So, before the event starts, the organizer would pic the drinks from the Registered Drink list. This feature would be implemented in future commits.
 <br />
 "User": User includes everyone who has registered, including admin. Admin would have an admin flag and can access Dashboard.
 <br />
-"Attendee": Attendee is users who attend to a specific event. Once the event is done, they are removed to prevent saving unnecessary personal information. 
 <br />
-"DrinkHistroy": Saves the history of drink consumed. Each row is associated with event and date, so it is easier to query specific types of data such as "drinks consumed around 7 PM from the event happening in Los Angels." 
+"Attendee": Attendee is a User who attends to a specific event. So the Attendee is associated with an event, which means there could be multiple Attendees with the same User account if the person is attending the different events concurrently. Once the event is done, they are removed to prevent saving unnecessary personal information. 
+<br />
+<br />
+"DrinkHistroy": This saves the history of drink consumed. Each row is associated with event and date, so it is easier to query specific types of data such as "drinks consumed around 7 PM from the event happening in Los Angels." 
 <br />
 
 ## Task
