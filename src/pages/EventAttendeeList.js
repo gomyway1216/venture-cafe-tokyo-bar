@@ -89,8 +89,6 @@ const Attendees = props => {
 
   const { eventID } = props.match.params
 
-  useEffect(() => {}, [])
-
   useEffect(() => {
     getEvent.makeFetch(eventID)
   }, [])
