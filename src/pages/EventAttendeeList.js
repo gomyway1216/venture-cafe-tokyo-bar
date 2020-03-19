@@ -83,7 +83,13 @@ const Attendees = props => {
     getRegisteredDrinkList,
   } = useContext(DrinkContext)
 
+  //   const {
+
+  //   }
+
   const { eventID } = props.match.params
+
+  useEffect(() => {}, [])
 
   useEffect(() => {
     getEvent.makeFetch(eventID)

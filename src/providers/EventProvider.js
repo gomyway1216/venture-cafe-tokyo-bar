@@ -6,6 +6,7 @@ import { useApi } from '../hooks/useApi'
 export const EventContext = createContext({})
 
 export const EventProvider = ({ children }) => {
+  const [eventID, setEventID] = useState('')
   const getEventTypeList = useApi(
     EventTypeApi.getEventTypeList,
     res => res.data.getEventTypeList
@@ -22,7 +23,14 @@ export const EventProvider = ({ children }) => {
 
   return (
     <EventContext.Provider
-      value={{ getEventTypeList, getEventList, getEvent, addEvent }}
+      value={{
+        getEventTypeList,
+        getEventList,
+        getEvent,
+        addEvent,
+        eventID,
+        setEventID,
+      }}
     >
       {children}
     </EventContext.Provider>

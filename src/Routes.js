@@ -8,7 +8,6 @@ import EventList from './pages/EventList'
 import EventAttendeeList from './pages/EventAttendeeList'
 import { AttendeeProvider } from './providers/AttendeeProvider'
 import { DrinkProvider } from './providers/DrinkProvider'
-import { EventProvider } from './providers/EventProvider'
 
 const Routes = () => {
   const contextInfo = useContext(AuthContext)
@@ -24,23 +23,20 @@ const Routes = () => {
   }
 
   return (
-    <EventProvider>
-      <AttendeeProvider>
-        <DrinkProvider>
-          <main className="main-content">
-            <Switch>
-              <Redirect from="/" to="/events" exact />
-              <Redirect from="/auth" to="/events" exact />
-              <Route path="/events" component={EventList} exact />
-              <Route path="/events/:eventID" component={EventAttendeeList} />
-              <Route path="/datalist" component={DataListPage} />
-              <Route path="/settings/:eventID" component={SettingPage} />
-              {/* <Route path="/settings" component={SettingPage} /> */}
-            </Switch>
-          </main>
-        </DrinkProvider>
-      </AttendeeProvider>
-    </EventProvider>
+    <AttendeeProvider>
+      <DrinkProvider>
+        <main className="main-content">
+          <Switch>
+            <Redirect from="/" to="/events" exact />
+            <Redirect from="/auth" to="/events" exact />
+            <Route path="/events" component={EventList} exact />
+            <Route path="/:eventID/events" component={EventAttendeeList} />
+            <Route path="/:eventID/datalist" component={DataListPage} />
+            <Route path="/:eventID/settings" component={SettingPage} />
+          </Switch>
+        </main>
+      </DrinkProvider>
+    </AttendeeProvider>
   )
 }
 

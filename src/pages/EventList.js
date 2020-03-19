@@ -68,7 +68,7 @@ const EventList = props => {
   const classes = useStyles()
   const [dialogOpen, setDialogOpen] = useState(false)
   const [eventInfo, setEventInfo] = useState(defaultEventInfo)
-  const { getEventTypeList } = useContext(EventContext)
+  const { getEventTypeList, setEventID } = useContext(EventContext)
 
   const { getEventList, addEvent } = useContext(EventContext)
 
@@ -184,7 +184,9 @@ const EventList = props => {
       </Dialog>
       <div className={styles.links}>
         {eventList.map(event => (
-          <Link to={`/events/${event.id}`}>{event.name}</Link>
+          <Link to={`/${event.id}/events`} onClick={() => setEventID(event.id)}>
+            {event.name}
+          </Link>
         ))}
       </div>
       <Button variant="contained" color="primary" onClick={onClickHandler}>

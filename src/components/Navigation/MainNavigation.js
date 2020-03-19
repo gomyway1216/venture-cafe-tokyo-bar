@@ -2,10 +2,20 @@ import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { AuthContext } from '../../providers/AuthProvider'
+import { EventContext } from '../../providers/EventProvider'
 import './MainNavigation.css'
 
 const MainNavigation = props => {
-  const context = useContext(AuthContext)
+  const { token, logout } = useContext(AuthContext)
+  const { eventID, setEventID } = useContext(EventContext)
+
+  const logOutHandler = () => {
+    setEventID('')
+    logout()
+  }
+
+  // const { eventID } = props.match.params
+  console.log('props.match', props.match)
 
   return (
     <header className="main-navigation">
@@ -14,33 +24,44 @@ const MainNavigation = props => {
       </div>
       <nav className="main-navigation__items">
         <ul>
-          {!context.token && (
+          {!token && (
             <li>
               <NavLink to="/auth">Authenticate</NavLink>
             </li>
           )}
-          {context.token && (
-            <React.Fragment>
+          {token && (
+            <>
               <li>
                 <NavLink to="/events">Events</NavLink>
               </li>
 
+              <NavLinks eventID={eventID} />
               <li>
-                <NavLink to="/datalist">Data List</NavLink>
+                <button onClick={logOutHandler}>Logout</button>
               </li>
-
-              <li>
-                <NavLink to="/settings">Settings</NavLink>
-              </li>
-
-              <li>
-                <button onClick={context.logout}>Logout</button>
-              </li>
-            </React.Fragment>
+            </>
           )}
         </ul>
       </nav>
     </header>
+  )
+}
+
+const NavLinks = props => {
+  if (!props.eventID || props.eventID.length === 0) {
+    return <> </>
+  }
+
+  return (
+    <>
+      <li>
+        <NavLink to={`/${props.eventID}/datalist`}>Data List</NavLink>
+      </li>
+
+      <li>
+        <NavLink to={`/${props.eventID}/settings`}>Settings</NavLink>
+      </li>
+    </>
   )
 }
 
