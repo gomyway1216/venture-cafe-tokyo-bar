@@ -1,7 +1,5 @@
 # Venture Cafe Drink System Front End Code for bar checkin
 
-VCT_bar_Screenshot.png
-
 ## About The Project
 This is a project I am building for Venture Cafe. This application consists of 3 parts. 
 
