@@ -16,7 +16,6 @@ export const existEvent = id => {
 }
 
 export const getEvent = id => {
-  throw new Error('could not get event')
   const requestBody = {
     query: `
       query GetEvent($id: ID!) {

@@ -64,7 +64,6 @@ const filterAttendeeList = (attendees, filterValue) => {
 const Attendees = props => {
   const classes = useStyles()
   const { getEvent } = useContext(EventContext)
-  const [errorDialogOpen, setErrorDialogOpen] = useState(false)
 
   const {
     attendeeList,
@@ -110,25 +109,13 @@ const Attendees = props => {
   const error =
     getEvent.error || getAttendeeList.error || getAvailableDrinkList.error
 
-  useEffect(() => {
-    if (error) {
-      setErrorDialogOpen(true)
-    }
-  }, [error])
-
   if (getAttendeeList.isFetching || getAvailableDrinkList.isFetching) {
     return <Spinner />
   }
 
-  console.log('error: ', error)
-  console.log('!!error: ', !!error)
   return (
     <div className={styles.attendeesContainer}>
-      <ErrorDialog
-        open={!!error}
-        message={error}
-        // handleClose={() => setErrorDialogOpen(false)}
-      />
+      <ErrorDialog open={!!error} message={error} />
       <div className={styles.leftContainer}>
         {getEvent.response && <EventInfo event={getEvent.response} />}
         <Paper component="form" className={classes.searchField}>

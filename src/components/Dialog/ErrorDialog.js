@@ -17,11 +17,6 @@ const CustomDialog = props => {
     setIsOpen(true)
   }, [props.message])
 
-  console.log('CustomDialog: isOpen: ', isOpen)
-  // if (!isOpen) {
-  //   return null
-  // }
-
   return (
     <Dialog
       open={isOpen}

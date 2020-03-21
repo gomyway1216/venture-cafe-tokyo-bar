@@ -16,7 +16,6 @@ import RegisteredDrinkSelect from '../components/Settings/RegisteredDrinkSelect'
 import AvailableDrinkSelect from '../components/Settings/AvailableDrinkSelect'
 
 export const Settings = props => {
-  console.log('props.match.params', props.match.params)
   return (
     <div className={styles.root}>
       <RegisteredDrinkSelect />
