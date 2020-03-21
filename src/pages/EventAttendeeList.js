@@ -106,8 +106,12 @@ const Attendees = props => {
     getDrinkTypeList.isFetching ||
     getRegisteredDrinkList.isFetching
 
-  const error =
+  let error =
     getEvent.error || getAttendeeList.error || getAvailableDrinkList.error
+
+  const clearError = () => {
+    error = null
+  }
 
   if (getAttendeeList.isFetching || getAvailableDrinkList.isFetching) {
     return <Spinner />
@@ -115,7 +119,7 @@ const Attendees = props => {
 
   return (
     <div className={styles.attendeesContainer}>
-      <ErrorDialog open={!!error} message={error} />
+      <ErrorDialog open={!!error} message={error} clearError={clearError} />
       <div className={styles.leftContainer}>
         {getEvent.response && <EventInfo event={getEvent.response} />}
         <Paper component="form" className={classes.searchField}>

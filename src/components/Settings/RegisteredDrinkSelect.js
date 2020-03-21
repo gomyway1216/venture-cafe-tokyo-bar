@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles, StylesProvider } from '@material-ui/core/styles'
 import styles from './registereddrink-select.module.css'
+import ErrorDialog from '../../components/Dialog/ErrorDialog'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -76,15 +77,30 @@ const RegisteredDrinkList = () => {
     })
   }
 
-  const resisterDrink = () => {
-    addRegisteredDrink.makeFetch({
+  const resisterDrink = async () => {
+    const response = await addRegisteredDrink.makeFetch({
       name: drinkInfo.name,
       drinkTypeID: drinkInfo.drinkType,
     })
+
+    if (!response.error) {
+      setDrinkInfo(defaultDrinkInfo)
+      getRegisteredDrinkList.makeFetch()
+    }
+  }
+
+  let error =
+    getRegisteredDrinkList.error ||
+    getDrinkTypeList.error ||
+    addRegisteredDrink.error
+
+  const clearError = () => {
+    error = null
   }
 
   return (
     <div className={styles.root}>
+      <ErrorDialog open={!!error} message={error} clearError={clearError} />
       <div>
         <h2>Drink list in dictionary</h2>
         <Paper style={{ maxHeight: 200, overflow: 'auto' }}>

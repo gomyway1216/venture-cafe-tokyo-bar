@@ -10,6 +10,11 @@ import {
 const CustomDialog = props => {
   const [isOpen, setIsOpen] = useState(false)
 
+  const onClose = () => {
+    props.clearError()
+    setIsOpen(false)
+  }
+
   useEffect(() => {
     if (!props.message) {
       return
@@ -20,7 +25,7 @@ const CustomDialog = props => {
   return (
     <Dialog
       open={isOpen}
-      onClose={() => setIsOpen(false)}
+      onClose={onClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >

@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
 } from '@material-ui/core'
 
 const CustomDialog = props => {
