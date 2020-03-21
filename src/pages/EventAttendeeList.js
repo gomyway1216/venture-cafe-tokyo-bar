@@ -83,10 +83,6 @@ const Attendees = props => {
     getRegisteredDrinkList,
   } = useContext(DrinkContext)
 
-  //   const {
-
-  //   }
-
   const { eventID } = props.match.params
 
   useEffect(() => {
@@ -130,26 +126,6 @@ const Attendees = props => {
   if (getAttendeeList.isFetching || getAvailableDrinkList.isFetching) {
     return <Spinner />
   }
-
-  //   const error =
-  //     getEvent.error || getAttendeeList.error || getAvailableDrinkList.error
-  //   console.log('error: ', error)
-  //   if (error) {
-  //     return <div className={styles.attendeesContainer}>{error}</div>
-  //   }
-
-  //   if (error) {
-  //     setErrorDialogOpen(true)
-  //     return (
-  //       <div className={styles.attendeesContainer}>
-  //         <ErrorDialog
-  //           open={errorDialogOpen}
-  //           message={error}
-  //           handleClose={() => setErrorDialogOpen(false)}
-  //         />
-  //       </div>
-  //     )
-  //   }
 
   return (
     <div className={styles.attendeesContainer}>
