@@ -77,7 +77,7 @@ export const getAttendeeList = eventID => {
 export const checkInUser = ({ id, eventID }) => {
   const requestBody = {
     query: `
-        mutation CheckInUser($id: ID!, $date: String!, $eventID: $String!) {
+        mutation CheckInUser($id: ID!, $date: String!, $eventID: ID!) {
           checkInUser(checkInUserInput: {
             id: $id, date: $date, eventID: $eventID
           }) {
@@ -184,13 +184,16 @@ export const deleteAttendee = id => {
   return doFetch(requestBody)
 }
 
-export const deleteAttendees = () => {
+export const deleteAttendees = eventID => {
   const requestBody = {
     query: `
-      mutation {
-        deleteAttendees
+      mutation DeleteAttendees($eventID: ID!){
+        deleteAttendees(eventID: $eventID)
       }
     `,
+    variables: {
+      eventID: eventID,
+    },
   }
   return doFetch(requestBody)
 }

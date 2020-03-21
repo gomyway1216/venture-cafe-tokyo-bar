@@ -94,7 +94,7 @@ const EventList = props => {
     setDialogOpen(true)
   }
 
-  const createEvent = () => {
+  const createEvent = async () => {
     if (
       eventInfo.name.trim().length === 0 ||
       eventInfo.eventType.trim().length === 0 ||
@@ -104,15 +104,18 @@ const EventList = props => {
     }
 
     const date = moment().format()
-    addEvent.makeFetch({
+    const response = await addEvent.makeFetch({
       name: eventInfo.name,
       eventTypeID: eventInfo.eventType,
       location: eventInfo.location,
       date: eventInfo.location,
     })
 
-    setDialogOpen(false)
-    getEventList.makeFetch()
+    if (!response.error) {
+      setEventInfo(defaultEventInfo)
+      setDialogOpen(false)
+      getEventList.makeFetch()
+    }
   }
 
   const onInputChangeHandler = event => {
@@ -184,7 +187,10 @@ const EventList = props => {
       </Dialog>
       <div className={styles.links}>
         {eventList.map(event => (
-          <Link to={`/${event.id}/events`} onClick={() => setEventID(event.id)}>
+          <Link
+            to={`/events/${event.id}/attendees`}
+            onClick={() => setEventID(event.id)}
+          >
             {event.name}
           </Link>
         ))}

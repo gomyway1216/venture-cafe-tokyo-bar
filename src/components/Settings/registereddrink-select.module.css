@@ -3,3 +3,9 @@
   flex-direction: row;
   justify-content: space-around;
 }
+
+.resisterNewDrink {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}

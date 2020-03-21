@@ -36,6 +36,11 @@ export const DrinkProvider = ({ children }) => {
 
   const addDrinkHistoryList = useApi(DrinkHistoryApi.addDrinkHistoryList)
 
+  const addRegisteredDrink = useApi(
+    RegisteredDrinkApi.addRegisteredDrink,
+    res => res.data.addRegisteredDrink
+  )
+
   useEffect(() => {
     if (!deleteAvailableDrinks.response) {
       return
@@ -58,6 +63,7 @@ export const DrinkProvider = ({ children }) => {
         getDrinkTypeList,
         getRegisteredDrinkList,
         addDrinkHistoryList,
+        addRegisteredDrink,
       }}
     >
       {children}

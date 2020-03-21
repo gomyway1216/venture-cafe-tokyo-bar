@@ -16,10 +16,16 @@ export const useApi = (apiCall, mapResponse = response => response) => {
       const mappedResponse = mapResponse(res)
       setResponse(mappedResponse)
       setIsFetching(false)
+      return {
+        response: mappedResponse,
+      }
     } catch (err) {
       setIsFetching(false)
       const errorMessage = err?.message || err || 'failed fetching'
       setError(errorMessage)
+      return {
+        error: errorMessage,
+      }
     }
   }
 

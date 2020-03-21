@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { DrinkContext } from '../../providers/DrinkProvider'
 import Spinner from '../Spinner/Spinner'
 import {
@@ -13,6 +13,7 @@ import {
   Select,
   MenuItem,
   TextField,
+  Paper,
 } from '@material-ui/core'
 import { makeStyles, StylesProvider } from '@material-ui/core/styles'
 import styles from './registereddrink-select.module.css'
@@ -53,7 +54,12 @@ const defaultDrinkInfo = {
 const RegisteredDrinkList = () => {
   const classes = useStyles()
   const [drinkInfo, setDrinkInfo] = useState(defaultDrinkInfo)
-  const { getRegisteredDrinkList, getDrinkTypeList } = useContext(DrinkContext)
+  const {
+    getRegisteredDrinkList,
+    getDrinkTypeList,
+    addRegisteredDrink,
+  } = useContext(DrinkContext)
+
   if (
     getRegisteredDrinkList.isFetching ||
     !getRegisteredDrinkList.response ||
@@ -70,20 +76,29 @@ const RegisteredDrinkList = () => {
     })
   }
 
+  const resisterDrink = () => {
+    addRegisteredDrink.makeFetch({
+      name: drinkInfo.name,
+      drinkTypeID: drinkInfo.drinkType,
+    })
+  }
+
   return (
     <div className={styles.root}>
       <div>
         <h2>Drink list in dictionary</h2>
-        <List component="nav" aria-label="main mailbox folders">
-          {getRegisteredDrinkList.response.map(drink => (
-            <ListItem button>
-              <ListItemText primary={drink.name} />
-            </ListItem>
-          ))}
-        </List>
+        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+          <List component="nav" aria-label="main mailbox folders">
+            {getRegisteredDrinkList.response.map(drink => (
+              <ListItem button>
+                <ListItemText primary={drink.name} />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
       </div>
 
-      <div>
+      <div className={styles.resisterNewDrink}>
         <h2>Register New Drink</h2>
         <FormControl className={classes.formControl}>
           <InputLabel id="demo-simple-select-label">Drink Type</InputLabel>
@@ -106,7 +121,7 @@ const RegisteredDrinkList = () => {
           onChange={onInputChangeHandler}
           value={drinkInfo.name}
         />
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" onClick={resisterDrink}>
           Register!
         </Button>
       </div>

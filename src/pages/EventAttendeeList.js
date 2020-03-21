@@ -86,19 +86,12 @@ const Attendees = props => {
   const { eventID } = props.match.params
 
   useEffect(() => {
-    getEvent.makeFetch(eventID)
-  }, [])
-
-  useEffect(() => {
-    if (!attendeeList) {
-      getAttendeeList.makeFetch(eventID)
-      return
-    }
-
     // When we move fetchCurrentDrinks to DrinkContext
     // it is called when a person's drink changed, needs to update drink list too
+    getEvent.makeFetch(eventID)
     getAvailableDrinkList.makeFetch(eventID)
-  }, [attendeeList])
+    getAttendeeList.makeFetch(eventID)
+  }, [eventID])
 
   const filteredAttendees = useMemo(
     () => filterAttendeeList(attendeeList, filterValue),
@@ -127,12 +120,14 @@ const Attendees = props => {
     return <Spinner />
   }
 
+  console.log('error: ', error)
+  console.log('!!error: ', !!error)
   return (
     <div className={styles.attendeesContainer}>
       <ErrorDialog
-        open={errorDialogOpen}
+        open={!!error}
         message={error}
-        handleClose={() => setErrorDialogOpen(false)}
+        // handleClose={() => setErrorDialogOpen(false)}
       />
       <div className={styles.leftContainer}>
         {getEvent.response && <EventInfo event={getEvent.response} />}
@@ -176,7 +171,7 @@ const Attendees = props => {
         <QrReader
           delay={300}
           onError={err => console.log(err)}
-          onScan={handleScan}
+          onScan={userID => handleScan(userID, eventID)}
           style={{ width: '100%' }}
           className={styles.qRReaderComponent}
         />

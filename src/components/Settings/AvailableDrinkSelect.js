@@ -7,6 +7,7 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Paper,
 } from '@material-ui/core'
 import InboxIcon from '@material-ui/icons/Inbox'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
@@ -79,31 +80,37 @@ const AvailableDrinkSelect = props => {
     <div className={styles.root}>
       <div className={styles.registeredDrinkList}>
         <h2>Registered Drink List</h2>
-        <List component="nav" aria-label="main mailbox folders">
-          {compositeDrinkList.map(elm => (
-            <ListItem button>
-              <ListItemIcon>
-                {elm.included ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
-              </ListItemIcon>
-              <ListItemText primary={elm.drink.name} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
+        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+          <List component="nav" aria-label="main mailbox folders">
+            {compositeDrinkList.map(elm => (
+              <ListItem button>
+                <ListItemIcon>
+                  {elm.included ? (
+                    <CheckBoxIcon />
+                  ) : (
+                    <CheckBoxOutlineBlankIcon />
+                  )}
+                </ListItemIcon>
+                <ListItemText primary={elm.drink.name} />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
       </div>
       <div className={styles.registeredDrinkList}>
         <h2>Available Drink List</h2>
-        <List component="nav" aria-label="main mailbox folders">
-          {getAvailableDrinkList.response.map(drink => (
-            <ListItem button>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary={drink.name} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
+        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+          <List component="nav" aria-label="main mailbox folders">
+            {getAvailableDrinkList.response.map(drink => (
+              <ListItem button>
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary={drink.name} />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
       </div>
     </div>
   )

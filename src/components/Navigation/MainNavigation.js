@@ -1,18 +1,22 @@
 import React, { useContext } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useRouteMatch } from 'react-router-dom'
 
 import { AuthContext } from '../../providers/AuthProvider'
 import { EventContext } from '../../providers/EventProvider'
+
 import './MainNavigation.css'
 
 const MainNavigation = props => {
   const { token, logout } = useContext(AuthContext)
-  const { eventID, setEventID } = useContext(EventContext)
+  // const { eventID, setEventID } = useContext(EventContext)
 
   const logOutHandler = () => {
-    setEventID('')
+    // setEventID('')
     logout()
   }
+
+  const eventIDMatch = useRouteMatch('/events/:eventID/')
+  const eventID = eventIDMatch?.params?.eventID
 
   return (
     <header className="main-navigation">
@@ -28,11 +32,7 @@ const MainNavigation = props => {
           )}
           {token && (
             <>
-              <li>
-                <NavLink to="/events">Events</NavLink>
-              </li>
-
-              <NavLinks eventID={eventID} />
+              {eventID && <EventNavLinks eventID={eventID} />}
               <li>
                 <button onClick={logOutHandler}>Logout</button>
               </li>
@@ -44,19 +44,18 @@ const MainNavigation = props => {
   )
 }
 
-const NavLinks = props => {
-  if (!props.eventID || props.eventID.length === 0) {
-    return <> </>
-  }
-
+const EventNavLinks = props => {
   return (
     <>
       <li>
-        <NavLink to={`/${props.eventID}/datalist`}>Data List</NavLink>
+        <NavLink to="/events">Events</NavLink>
+      </li>
+      <li>
+        <NavLink to={`/events/${props.eventID}/datalist`}>Data List</NavLink>
       </li>
 
       <li>
-        <NavLink to={`/${props.eventID}/settings`}>Settings</NavLink>
+        <NavLink to={`/events/${props.eventID}/settings`}>Settings</NavLink>
       </li>
     </>
   )

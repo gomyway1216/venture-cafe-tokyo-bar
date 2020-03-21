@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Button,
   DialogTitle,
@@ -8,10 +8,24 @@ import {
 } from '@material-ui/core'
 
 const CustomDialog = props => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    if (!props.message) {
+      return
+    }
+    setIsOpen(true)
+  }, [props.message])
+
+  console.log('CustomDialog: isOpen: ', isOpen)
+  // if (!isOpen) {
+  //   return null
+  // }
+
   return (
     <Dialog
-      open={props.open}
-      onClose={props.handleClose}
+      open={isOpen}
+      onClose={() => setIsOpen(false)}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -21,7 +35,7 @@ const CustomDialog = props => {
         {props.message}
       </DialogContentText>
       <DialogActions>
-        <Button onClick={props.handleClose} color="primary">
+        <Button onClick={() => setIsOpen(false)} color="primary">
           Got it!
         </Button>
       </DialogActions>

@@ -30,9 +30,12 @@ const Routes = () => {
             <Redirect from="/" to="/events" exact />
             <Redirect from="/auth" to="/events" exact />
             <Route path="/events" component={EventList} exact />
-            <Route path="/:eventID/events" component={EventAttendeeList} />
-            <Route path="/:eventID/datalist" component={DataListPage} />
-            <Route path="/:eventID/settings" component={SettingPage} />
+            <Route
+              path="/events/:eventID/attendees"
+              component={EventAttendeeList}
+            />
+            <Route path="/events/:eventID/datalist" component={DataListPage} />
+            <Route path="/events/:eventID/settings" component={SettingPage} />
           </Switch>
         </main>
       </DrinkProvider>

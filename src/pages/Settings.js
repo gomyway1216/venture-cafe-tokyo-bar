@@ -20,6 +20,7 @@ export const Settings = props => {
   return (
     <div className={styles.root}>
       <RegisteredDrinkSelect />
+      <Divider />
       <AvailableDrinkSelect eventID={props.match.params.eventID} />
     </div>
   )
