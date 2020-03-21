@@ -15,6 +15,7 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import Spinner from '../Spinner/Spinner'
 import styles from './availabledrink-select.module.css'
 import { makeStyles } from '@material-ui/core/styles'
+import DrinkSelectItem from './DrinkSelectItem'
 
 // const useStyles = makeStyles(theme => ({
 //   root: {
@@ -31,16 +32,6 @@ const AvailableDrinkSelect = props => {
   )
 
   const [compositeDrinkList, setCompositeDrinkList] = useState(null)
-
-  // this doesn't load somehow
-  // const { eventID } = useContext(EventContext)
-  // useEffect(() => {
-  //   if (eventID) {
-  //     return
-  //   }
-
-  //   getAvailableDrinkList.makeFetch(eventID)
-  // }, [])
 
   useEffect(() => {
     console.log('useEffect getAvailableDrinkList')
@@ -83,16 +74,17 @@ const AvailableDrinkSelect = props => {
         <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
           <List component="nav" aria-label="main mailbox folders">
             {compositeDrinkList.map(elm => (
-              <ListItem button>
-                <ListItemIcon>
-                  {elm.included ? (
-                    <CheckBoxIcon />
-                  ) : (
-                    <CheckBoxOutlineBlankIcon />
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={elm.drink.name} />
-              </ListItem>
+              <DrinkSelectItem selected={elm.included} drink={elm.drink} />
+              // <ListItem button>
+              //   <ListItemIcon>
+              //     {elm.included ? (
+              //       <CheckBoxIcon />
+              //     ) : (
+              //       <CheckBoxOutlineBlankIcon />
+              //     )}
+              //   </ListItemIcon>
+              //   <ListItemText primary={elm.drink.name} />
+              // </ListItem>
             ))}
           </List>
         </Paper>
