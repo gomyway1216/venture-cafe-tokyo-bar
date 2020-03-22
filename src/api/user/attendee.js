@@ -24,6 +24,10 @@ export const getAttendee = id => {
           userID
           firstName
           lastName
+          event {
+            id: _id
+            name
+          }
           drinkList {
             id: _id
             name
@@ -38,22 +42,28 @@ export const getAttendee = id => {
   return doFetch(requestBody)
 }
 
-export const getAttendeeList = () => {
+export const getAttendeeList = eventID => {
   const requestBody = {
     query: `
-      query {
-        getAttendeeList {
+      query GetAttendeeList($eventID: ID!){
+        getAttendeeList(eventID: $eventID) {
             id: _id
             userID
             firstName
             lastName
-            drinkList {
+            event {
               id: _id
               name
+            }
+            drinkList {
+              id: _id
             }
         }
       }
     `,
+    variables: {
+      eventID: eventID,
+    },
   }
   return doFetch(requestBody)
 }
@@ -64,17 +74,21 @@ export const getAttendeeList = () => {
  * @param {string} id userID included in the QR code.
  * @return {Attendee} returns updated Attendee object
  */
-export const checkInUser = id => {
+export const checkInUser = ({ id, eventID }) => {
   const requestBody = {
     query: `
-        mutation CheckInUser($id: ID!, $date: String!) {
+        mutation CheckInUser($id: ID!, $date: String!, $eventID: ID!) {
           checkInUser(checkInUserInput: {
-            id: $id, date: $date
+            id: $id, date: $date, eventID: $eventID
           }) {
             id: _id
             userID
             firstName
             lastName
+            event {
+              id: _id
+              name
+            }
             drinkList {
               id: _id
               name
@@ -85,6 +99,7 @@ export const checkInUser = id => {
     variables: {
       id: id,
       date: moment().format(),
+      eventID: eventID,
     },
   }
   return doFetch(requestBody)
@@ -99,6 +114,10 @@ export const resetAttendeeDrinkList = id => {
           userID
           firstName
           lastName
+          event {
+            id: _id
+            name
+          }
           drinkList {
             id: _id
             name
@@ -131,6 +150,10 @@ export const updateAttendeeDrinkList = ({ id, availableDrinkID }) => {
             userID
             firstName
             lastName
+            event {
+              id: _id
+              name
+            }
             drinkList {
               id: _id
               name
@@ -161,13 +184,16 @@ export const deleteAttendee = id => {
   return doFetch(requestBody)
 }
 
-export const deleteAttendees = () => {
+export const deleteAttendees = eventID => {
   const requestBody = {
     query: `
-      mutation {
-        deleteAttendees
+      mutation DeleteAttendees($eventID: ID!){
+        deleteAttendees(eventID: $eventID)
       }
     `,
+    variables: {
+      eventID: eventID,
+    },
   }
   return doFetch(requestBody)
 }

@@ -3,6 +3,10 @@ import * as UserApi from '../api/user/user'
 import * as AttendeeApi from '../api/user/attendee'
 
 import { useApi } from '../hooks/useApi'
+import {
+  addRegisteredDrink,
+  getRegisteredDrinkList,
+} from '../api/drink/registeredDrink'
 export const AttendeeContext = createContext({})
 
 export const AttendeeProvider = ({ children }) => {
@@ -38,15 +42,19 @@ export const AttendeeProvider = ({ children }) => {
     setAttendeeList(updatedAttendeeList)
   }
 
-  const handleScan = async userID => {
+  const handleScan = async (userID, eventID) => {
     if (userID) {
       const attendeeExists = attendeeList.some(
         element => element.userID === userID
       )
+
       // check if the current user exist in the frontend, otherwise do api call
       if (!attendeeExists) {
-        await checkInUser.makeFetch(userID)
-        await getAttendeeList.makeFetch()
+        await checkInUser.makeFetch({
+          id: userID,
+          eventID,
+        })
+        await getAttendeeList.makeFetch(eventID)
       }
       setFilterValue(userID)
     }
@@ -68,15 +76,14 @@ export const AttendeeProvider = ({ children }) => {
     // fetchCurrentDrinks()
   }, [updateAttendeeDrinkList.response])
 
-  // this is called once
-  // so when the drink count of each person gets updated, this useEffect fires and
-  // update
+  // when a new registered drink is added in the setting page
   useEffect(() => {
-    // it is inefficient that fetchAttendees is called many times, even updating just single person
-    getAttendeeList.makeFetch()
-    // this might have to be called.
-    // fetchCurrentDrinks()
-  }, [])
+    if (!addRegisteredDrink.response) {
+      return
+    }
+
+    getRegisteredDrinkList.makeFetch()
+  }, [addRegisteredDrink.response])
 
   return (
     <AttendeeContext.Provider
@@ -85,7 +92,6 @@ export const AttendeeProvider = ({ children }) => {
         filterValue,
         setFilterValue,
         handleScan,
-
         getAttendeeList,
         updateAttendeeDrinkList,
         deleteAttendees,

@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { doFetch } from './doFetch'
+import { doFetch } from '../doFetch'
 
 export const existEventType = id => {
   const requestBody = {
@@ -42,9 +42,6 @@ export const getEventTypeList = () => {
         }
       }
       `,
-    variables: {
-      id: id,
-    },
   }
   return doFetch(requestBody)
 }
@@ -59,9 +56,6 @@ export const addEventType = name => {
         }
       }
       `,
-    variables: {
-      name: name,
-    },
   }
   return doFetch(requestBody)
 }

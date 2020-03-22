@@ -23,6 +23,10 @@ export const getAvailableDrink = id => {
           id: _id
           drinkID
           name
+          event {
+            id: _id
+            name
+          }
           drinkType {
             name
           }
@@ -37,14 +41,18 @@ export const getAvailableDrink = id => {
   return doFetch(requestBody)
 }
 
-export const getAvailableDrinkList = () => {
+export const getAvailableDrinkList = eventID => {
   const requestBody = {
     query: `
-      query {
-        getAvailableDrinkList {
+      query GetAvailableDrinkList($eventID: ID!){
+        getAvailableDrinkList(eventID: $eventID) {
           id: _id
           drinkID
           name
+          event {
+            id: _id
+            name
+          }
           drinkType {
             name
           }
@@ -52,18 +60,28 @@ export const getAvailableDrinkList = () => {
         }
       }
       `,
+    variables: {
+      eventID: eventID,
+    },
   }
   return doFetch(requestBody)
 }
 
-export const addAvailableDrink = id => {
+export const addAvailableDrink = ({ id, eventID }) => {
   const requestBody = {
     query: `
-      mutation AddAvailableDrink($id: ID!) {
-        addAvailableDrink(id: $id) {
+      mutation AddAvailableDrink($id: ID!, $eventID: ID!) {
+        addAvailableDrink(addAvailableDrinkInput: {
+          id: $id
+          eventID: $eventID
+        }) {
           id: _id
           drinkID
           name
+          event {
+            id: _id
+            name
+          }
           drinkType {
             name
           }
@@ -73,6 +91,7 @@ export const addAvailableDrink = id => {
       `,
     variables: {
       id: id,
+      eventID: eventID,
     },
   }
   return doFetch(requestBody)
@@ -86,6 +105,10 @@ export const updateAvailableDrinkCount = id => {
           id: _id
           drinkID
           name
+          event {
+            id: _id
+            name
+          }
           drinkType {
             name
           }
@@ -96,6 +119,24 @@ export const updateAvailableDrinkCount = id => {
     variables: {
       id: id,
       date: moment().format(),
+    },
+  }
+  return doFetch(requestBody)
+}
+
+export const updateAvailableDrinkList = ({ compositeDrinkList, eventID }) => {
+  const requestBody = {
+    query: `
+      mutation UpdateAvailableDrinkList($compositeDrinkList: [CompositeDrink!]!, $eventID: ID!) {
+        updateAvailableDrinkList(updateAvailableDrinkListInput: {
+          compositeDrinkList: $compositeDrinkList,
+          eventID: $eventID
+        })
+      }
+    `,
+    variables: {
+      compositeDrinkList: compositeDrinkList,
+      eventID: eventID,
     },
   }
   return doFetch(requestBody)
@@ -115,13 +156,16 @@ export const deleteAvailableDrink = id => {
   return doFetch(requestBody)
 }
 
-export const deleteAvailableDrinks = () => {
+export const deleteAvailableDrinks = eventID => {
   const requestBody = {
     query: `
-      mutation DeleteAvailableDrinks {
-        deleteAvailableDrinks
+      mutation DeleteAvailableDrinks($eventID: ID!) {
+        deleteAvailableDrinks(eventID: $eventID)
       }
     `,
+    variables: {
+      eventID: eventID,
+    },
   }
   return doFetch(requestBody)
 }

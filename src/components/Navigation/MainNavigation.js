@@ -1,11 +1,22 @@
 import React, { useContext } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useRouteMatch } from 'react-router-dom'
 
 import { AuthContext } from '../../providers/AuthProvider'
+import { EventContext } from '../../providers/EventProvider'
+
 import './MainNavigation.css'
 
 const MainNavigation = props => {
-  const context = useContext(AuthContext)
+  const { token, logout } = useContext(AuthContext)
+  // const { eventID, setEventID } = useContext(EventContext)
+
+  const logOutHandler = () => {
+    // setEventID('')
+    logout()
+  }
+
+  const eventIDMatch = useRouteMatch('/events/:eventID/')
+  const eventID = eventIDMatch?.params?.eventID
 
   return (
     <header className="main-navigation">
@@ -14,33 +25,43 @@ const MainNavigation = props => {
       </div>
       <nav className="main-navigation__items">
         <ul>
-          {!context.token && (
+          {!token && (
             <li>
               <NavLink to="/auth">Authenticate</NavLink>
             </li>
           )}
-          {context.token && (
-            <React.Fragment>
+          {token && (
+            <>
+              {eventID && <EventNavLinks eventID={eventID} />}
               <li>
-                <NavLink to="/attendees">Attendee</NavLink>
+                <button onClick={logOutHandler}>Logout</button>
               </li>
-
-              <li>
-                <NavLink to="/datalist">Data List</NavLink>
-              </li>
-
-              <li>
-                <NavLink to="/settings">Settings</NavLink>
-              </li>
-
-              <li>
-                <button onClick={context.logout}>Logout</button>
-              </li>
-            </React.Fragment>
+            </>
           )}
         </ul>
       </nav>
     </header>
+  )
+}
+
+const EventNavLinks = props => {
+  return (
+    <>
+      <li>
+        <NavLink to="/events" isActive={() => false}>
+          Events
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to={`/events/${props.eventID}/attendees`}>Attendees</NavLink>
+      </li>
+      <li>
+        <NavLink to={`/events/${props.eventID}/datalist`}>Data List</NavLink>
+      </li>
+      <li>
+        <NavLink to={`/events/${props.eventID}/settings`}>Settings</NavLink>
+      </li>
+    </>
   )
 }
 

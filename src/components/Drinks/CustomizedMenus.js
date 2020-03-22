@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import { useParams } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -53,6 +54,7 @@ const modalModeEnum = {
 }
 
 const CustomizedMenus = props => {
+  const { eventID } = useParams()
   const auth = useContext(AuthContext)
   const { getAttendeeList, deleteAttendees } = useContext(AttendeeContext)
   const { deleteAvailableDrinks, addDrinkHistoryList } = useContext(
@@ -119,7 +121,7 @@ const CustomizedMenus = props => {
         open={modalMode === modalModeEnum.DELETEDRINKLIST}
         handleClose={handleDialogClose}
         onContinue={() => {
-          deleteAvailableDrinks.makeFetch()
+          deleteAvailableDrinks.makeFetch(eventID)
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
@@ -131,7 +133,7 @@ const CustomizedMenus = props => {
         open={modalMode === modalModeEnum.DETETEATTENDEES}
         handleClose={handleDialogClose}
         onContinue={() => {
-          deleteAttendees()
+          deleteAttendees.makeFetch(eventID)
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
@@ -144,9 +146,9 @@ const CustomizedMenus = props => {
         handleClose={handleDialogClose}
         onContinue={() => {
           // the api would clear the current drink list, when the data is saved
-          addDrinkHistoryList()
+          addDrinkHistoryList.makeFetch(eventID)
           // clear the current attendees table
-          deleteAttendees()
+          deleteAttendees.makeFetch(eventID)
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}

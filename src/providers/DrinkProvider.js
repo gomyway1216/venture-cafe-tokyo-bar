@@ -30,11 +30,22 @@ export const DrinkProvider = ({ children }) => {
 
   // get registered drink list
   const getRegisteredDrinkList = useApi(
-    RegisteredDrinkApi.getRegisteredDrinkList
+    RegisteredDrinkApi.getRegisteredDrinkList,
+    res => res.data.getRegisteredDrinkList
   )
 
   const addDrinkHistoryList = useApi(DrinkHistoryApi.addDrinkHistoryList)
 
+  const addRegisteredDrink = useApi(
+    RegisteredDrinkApi.addRegisteredDrink,
+    res => res.data.addRegisteredDrink
+  )
+
+  const updateAvailableDrinkList = useApi(
+    AvailableDrinkApi.updateAvailableDrinkList
+  )
+
+  // this is not correct
   useEffect(() => {
     if (!deleteAvailableDrinks.response) {
       return
@@ -57,6 +68,8 @@ export const DrinkProvider = ({ children }) => {
         getDrinkTypeList,
         getRegisteredDrinkList,
         addDrinkHistoryList,
+        addRegisteredDrink,
+        updateAvailableDrinkList,
       }}
     >
       {children}

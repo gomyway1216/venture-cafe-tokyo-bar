@@ -9,6 +9,8 @@ const defaultLoginInfo = {
 
 export const AuthContext = createContext(defaultLoginInfo)
 
+// log in info also should be stored because the child components
+// don't listen to the changes in the localStorage
 export const AuthProvider = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState(
     JSON.parse(localStorage.getItem('loginInfo')) || defaultLoginInfo

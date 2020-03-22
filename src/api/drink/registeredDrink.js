@@ -56,7 +56,9 @@ export const addRegisteredDrink = ({ name, drinkTypeID }) => {
   const requestBody = {
     query: `
       mutation AddRegisteredDrink($name: String!, $drinkTypeID: String!) {
-        addRegisteredDrink(name: $name, drinkTypeID: $drinkTypeID) {
+        addRegisteredDrink(addRegisteredDrinkInput: {
+          name: $name, drinkTypeID: $drinkTypeID
+        }) {
           id: _id
           name
           drinkType {
