@@ -1,5 +1,4 @@
-import React, { useState, createContext, useEffect } from 'react'
-import { useApi } from '../hooks/useApi'
+import React, { useState, createContext } from 'react'
 
 const defaultLoginInfo = {
   token: null,
@@ -9,8 +8,6 @@ const defaultLoginInfo = {
 
 export const AuthContext = createContext(defaultLoginInfo)
 
-// log in info also should be stored because the child components
-// don't listen to the changes in the localStorage
 export const AuthProvider = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState(
     JSON.parse(localStorage.getItem('loginInfo')) || defaultLoginInfo

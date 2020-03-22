@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { AttendeeContext } from '../providers/AttendeeProvider'
 import { DrinkContext } from '../providers/DrinkProvider'
 import { EventContext } from '../providers/EventProvider'

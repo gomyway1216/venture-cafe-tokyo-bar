@@ -1,12 +1,10 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import { DrinkContext } from '../../providers/DrinkProvider'
 import Spinner from '../Spinner/Spinner'
 import {
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
-  Divider,
   Button,
   FormControl,
   InputLabel,
@@ -15,7 +13,7 @@ import {
   TextField,
   Paper,
 } from '@material-ui/core'
-import { makeStyles, StylesProvider } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import styles from './registereddrink-select.module.css'
 import ErrorDialog from '../../components/Dialog/ErrorDialog'
 
@@ -100,46 +98,50 @@ const RegisteredDrinkList = () => {
 
   return (
     <div className={styles.root}>
-      <ErrorDialog open={!!error} message={error} clearError={clearError} />
-      <div>
-        <h2>Drink list in dictionary</h2>
-        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-          <List component="nav" aria-label="main mailbox folders">
-            {getRegisteredDrinkList.response.map(drink => (
-              <ListItem button>
-                <ListItemText primary={drink.name} />
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      </div>
+      <div className={styles.title}>Edit drink dictionary</div>
+      <div className={styles.main}>
+        <ErrorDialog open={!!error} message={error} clearError={clearError} />
+        <div>
+          <h2>Drink Dictionary</h2>
+          <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+            <List component="nav" aria-label="main mailbox folders">
+              {getRegisteredDrinkList.response.map(drink => (
+                <ListItem key={drink.id}>
+                  <ListItemText primary={drink.name} />
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+        </div>
 
-      <div className={styles.resisterNewDrink}>
-        <h2>Register New Drink</h2>
-        <FormControl className={classes.formControl}>
-          <InputLabel id="demo-simple-select-label">Drink Type</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="drinkType"
-            name="drinkType"
-            value={drinkInfo.drinkType}
+        <div className={styles.resisterNewDrink}>
+          <h2>Register New Drink</h2>
+          <FormControl className={classes.formControl}>
+            <InputLabel id="demo-simple-select-label">Drink Type</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="drinkType"
+              name="drinkType"
+              value={drinkInfo.drinkType}
+              onChange={onInputChangeHandler}
+            >
+              {getDrinkTypeList.response.map(drinkType => (
+                <MenuItem key={drinkType.id} value={drinkType.id}>
+                  {drinkType.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            name="name"
+            label="Name"
             onChange={onInputChangeHandler}
-          >
-            {getDrinkTypeList.response.map(drinkType => (
-              <MenuItem value={drinkType.id}>{drinkType.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <TextField
-          id="name"
-          name="name"
-          label="Name"
-          onChange={onInputChangeHandler}
-          value={drinkInfo.name}
-        />
-        <Button variant="contained" color="primary" onClick={resisterDrink}>
-          Register!
-        </Button>
+            value={drinkInfo.name}
+          />
+          <Button variant="contained" color="primary" onClick={resisterDrink}>
+            Register!
+          </Button>
+        </div>
       </div>
     </div>
   )

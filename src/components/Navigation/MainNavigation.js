@@ -1,17 +1,12 @@
 import React, { useContext } from 'react'
 import { NavLink, useRouteMatch } from 'react-router-dom'
-
 import { AuthContext } from '../../providers/AuthProvider'
-import { EventContext } from '../../providers/EventProvider'
-
 import './MainNavigation.css'
 
 const MainNavigation = props => {
   const { token, logout } = useContext(AuthContext)
-  // const { eventID, setEventID } = useContext(EventContext)
 
   const logOutHandler = () => {
-    // setEventID('')
     logout()
   }
 

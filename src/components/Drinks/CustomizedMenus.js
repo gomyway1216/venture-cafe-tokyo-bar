@@ -10,7 +10,6 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import styles from './customized-menu.module.css'
 import DeleteIcon from '@material-ui/icons/Delete'
 import SaveIcon from '@material-ui/icons/Save'
-import { AuthContext } from '../../providers/AuthProvider'
 import Dialog from '../Dialog/Dialog'
 import { AttendeeContext } from '../../providers/AttendeeProvider'
 import { DrinkContext } from '../../providers/DrinkProvider'
@@ -55,8 +54,7 @@ const modalModeEnum = {
 
 const CustomizedMenus = props => {
   const { eventID } = useParams()
-  const auth = useContext(AuthContext)
-  const { getAttendeeList, deleteAttendees } = useContext(AttendeeContext)
+  const { deleteAttendees } = useContext(AttendeeContext)
   const { deleteAvailableDrinks, addDrinkHistoryList } = useContext(
     DrinkContext
   )

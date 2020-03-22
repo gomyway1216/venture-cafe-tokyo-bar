@@ -48,20 +48,22 @@ const AvailableDrinkList = props => {
         <CustomizedMenus setFilterValueEmpty={props.setFilterValueEmpty} />
       </div>
       <table>
-        <tr>
-          <th>Drink Name</th>
-          <th>Count</th>
-        </tr>
-        <tr>
-          <th>Total Drinks</th>
-          <th>{totalDrinkCount}</th>
-        </tr>
-        {sortedDrinkList.map(drink => (
+        <tbody>
           <tr>
-            <td>{drink.name}</td>
-            <td>{drink.consumedDateList.length}</td>
+            <th>Drink Name</th>
+            <th>Count</th>
           </tr>
-        ))}
+          <tr>
+            <th>Total Drinks</th>
+            <th>{totalDrinkCount}</th>
+          </tr>
+          {sortedDrinkList.map(drink => (
+            <tr key={drink.id}>
+              <td>{drink.name}</td>
+              <td>{drink.consumedDateList.length}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   )

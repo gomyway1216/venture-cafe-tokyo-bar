@@ -1,5 +1,22 @@
 .root {
   display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: xx-large;
+  font-weight: bold;
+  text-align: center;
+}
+
+.main {
+  display: flex;
   flex-direction: row;
+  justify-content: space-around;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
   justify-content: space-around;
 }

@@ -1,12 +1,9 @@
-import React, { useContext, useEffect, useState, useMemo } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Spinner from '../components/Spinner/Spinner'
-import AttendeeList from '../components/Attendees/AttendeeList'
 import { makeStyles } from '@material-ui/core/styles'
 import {
-  InputBase,
   Button,
-  IconButton,
   Paper,
   Select,
   FormControl,
@@ -15,16 +12,10 @@ import {
   TextField,
   List,
   ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
 } from '@material-ui/core'
-import SearchIcon from '@material-ui/icons/Search'
 import { EventContext } from '../providers/EventProvider'
-import AvailableDrinkList from '../components/Drinks/AvailableDrinkList'
 import styles from './eventList.module.css'
 import Dialog from '../components/Dialog/Dialog'
-import moment from 'moment'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -108,7 +99,6 @@ const EventList = props => {
       return
     }
 
-    const date = moment().format()
     const response = await addEvent.makeFetch({
       name: eventInfo.name,
       eventTypeID: eventInfo.eventType,
@@ -171,12 +161,14 @@ const EventList = props => {
             onChange={onInputChangeHandler}
           >
             {getEventTypeList.response.map(eventType => (
-              <MenuItem value={eventType.id}>{eventType.name}</MenuItem>
+              <MenuItem key={eventType.id} value={eventType.id}>
+                {eventType.name}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel id="demo-simple-select-label">Event Type</InputLabel>
+          <InputLabel id="demo-simple-select-label">Location</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="location"
@@ -194,7 +186,7 @@ const EventList = props => {
         <Paper style={{ maxHeight: 500, overflow: 'auto' }}>
           <List component="nav" aria-label="main mailbox folders">
             {eventList.map(event => (
-              <ListItem button>
+              <ListItem key={event.id}>
                 <Link
                   to={`/events/${event.id}/attendees`}
                   onClick={() => setEventID(event.id)}

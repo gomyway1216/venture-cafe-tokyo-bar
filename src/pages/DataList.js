@@ -1,12 +1,10 @@
-import React, { useContext } from 'react'
-import { AuthContext } from '../providers/AuthProvider'
+import React from 'react'
 import styles from './dataList.module.css'
 
 // component to display data. This component is not completed yet.
 const DataListPage = () => {
-  const auth = useContext(AuthContext)
   return (
-    <div>
+    <div className={styles.root}>
       <h1>Displaying data</h1>
       {/* {data &&
         data.map(drinkList => {

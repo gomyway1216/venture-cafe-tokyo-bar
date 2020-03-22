@@ -1,21 +1,11 @@
-import React, { useState } from 'react'
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  Paper,
-  Checkbox,
-} from '@material-ui/core'
+import React from 'react'
+import { ListItem, ListItemText, Checkbox } from '@material-ui/core'
 
 const DrinkSelectItem = props => {
-  // const [selected, setSelected] = useState(props.selected)
   return (
-    <ListItem button>
+    <ListItem onClick={props.onChange} button>
       <Checkbox
         checked={props.selected}
-        onChange={props.onChange}
         color="primary"
         inputProps={{ 'aria-label': 'secondary checkbox' }}
       />
