@@ -1,5 +1,4 @@
-import React, { useContext } from 'react'
-import { AuthContext } from '../providers/AuthProvider'
+import React from 'react'
 import styles from './dataList.module.css'
 
 // component to display data. This component is not completed yet.

@@ -16,7 +16,6 @@ import {
 import { EventContext } from '../providers/EventProvider'
 import styles from './eventList.module.css'
 import Dialog from '../components/Dialog/Dialog'
-import moment from 'moment'
 
 const useStyles = makeStyles(theme => ({
   root: {
