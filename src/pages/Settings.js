@@ -7,9 +7,9 @@ import AvailableDrinkSelect from '../components/Settings/AvailableDrinkSelect'
 export const Settings = props => {
   return (
     <div className={styles.root}>
-      <RegisteredDrinkSelect />
-      <Divider />
       <AvailableDrinkSelect eventID={props.match.params.eventID} />
+      <Divider />
+      <RegisteredDrinkSelect />
     </div>
   )
 }

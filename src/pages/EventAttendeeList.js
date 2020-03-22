@@ -92,6 +92,10 @@ const Attendees = props => {
     getAttendeeList.makeFetch(eventID)
   }, [eventID])
 
+  useEffect(() => {
+    getAvailableDrinkList.makeFetch(eventID)
+  }, [updateAttendeeDrinkList])
+
   const filteredAttendees = useMemo(
     () => filterAttendeeList(attendeeList, filterValue),
     [attendeeList, filterValue]

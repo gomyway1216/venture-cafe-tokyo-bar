@@ -17,6 +17,7 @@ import Spinner from '../Spinner/Spinner'
 import styles from './availabledrink-select.module.css'
 import { makeStyles } from '@material-ui/core/styles'
 import DrinkSelectItem from './DrinkSelectItem'
+import { getRegisteredDrink } from '../../api/drink/registeredDrink'
 
 // const useStyles = makeStyles(theme => ({
 //   root: {
@@ -28,9 +29,11 @@ import DrinkSelectItem from './DrinkSelectItem'
 
 const AvailableDrinkSelect = props => {
   // const classes = useStyles()
-  const { getRegisteredDrinkList, getAvailableDrinkList } = useContext(
-    DrinkContext
-  )
+  const {
+    getRegisteredDrinkList,
+    getAvailableDrinkList,
+    updateAvailableDrinkList,
+  } = useContext(DrinkContext)
 
   const [compositeDrinkList, setCompositeDrinkList] = useState(null)
 
@@ -44,7 +47,6 @@ const AvailableDrinkSelect = props => {
   }
 
   useEffect(() => {
-    console.log('useEffect getAvailableDrinkList')
     getRegisteredDrinkList.makeFetch()
     getAvailableDrinkList.makeFetch(props.eventID)
   }, [])
@@ -67,9 +69,27 @@ const AvailableDrinkSelect = props => {
     )
   }, [getRegisteredDrinkList.isFetching, getAvailableDrinkList.isFetching])
 
+  // for updating drink list.
+  useEffect(() => {
+    if (!updateAvailableDrinkList.response) {
+      return
+    }
+    getRegisteredDrinkList.makeFetch()
+    getAvailableDrinkList.makeFetch(props.eventID)
+  }, [updateAvailableDrinkList.response])
+
   const onSelectSubmit = () => {
-    // compositeDrinkList
-    console.log('do something')
+    const reducedDrinkList = compositeDrinkList.map(compositeDrink => {
+      return {
+        drinkID: compositeDrink.drink.id,
+        included: compositeDrink.included,
+      }
+    })
+
+    updateAvailableDrinkList.makeFetch({
+      compositeDrinkList: reducedDrinkList,
+      eventID: props.eventID,
+    })
   }
 
   if (
@@ -77,12 +97,11 @@ const AvailableDrinkSelect = props => {
     !getRegisteredDrinkList.response ||
     getAvailableDrinkList.isFetching ||
     !getAvailableDrinkList.response ||
-    !compositeDrinkList
+    !compositeDrinkList ||
+    updateAvailableDrinkList.isFetching
   ) {
     return <Spinner />
   }
-
-  console.log('compositeDrinkList: ', compositeDrinkList)
 
   return (
     <div className={styles.root}>

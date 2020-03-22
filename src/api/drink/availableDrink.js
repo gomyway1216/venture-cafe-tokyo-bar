@@ -124,6 +124,24 @@ export const updateAvailableDrinkCount = id => {
   return doFetch(requestBody)
 }
 
+export const updateAvailableDrinkList = ({ compositeDrinkList, eventID }) => {
+  const requestBody = {
+    query: `
+      mutation UpdateAvailableDrinkList($compositeDrinkList: [CompositeDrink!]!, $eventID: ID!) {
+        updateAvailableDrinkList(updateAvailableDrinkListInput: {
+          compositeDrinkList: $compositeDrinkList,
+          eventID: $eventID
+        })
+      }
+    `,
+    variables: {
+      compositeDrinkList: compositeDrinkList,
+      eventID: eventID,
+    },
+  }
+  return doFetch(requestBody)
+}
+
 export const deleteAvailableDrink = id => {
   const requestBody = {
     query: `
