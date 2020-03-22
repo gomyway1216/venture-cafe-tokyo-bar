@@ -7,7 +7,6 @@ const MainNavigation = props => {
   const { token, logout } = useContext(AuthContext)
 
   const logOutHandler = () => {
-    // setEventID('')
     logout()
   }
 

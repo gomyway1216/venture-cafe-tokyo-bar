@@ -67,8 +67,6 @@ export const AttendeeProvider = ({ children }) => {
       return
     }
     updateDrinkListForSingleAttendee(updateAttendeeDrinkList.response)
-    // when individual attendee's drink gets updated, this updates the current drink list
-    // fetchCurrentDrinks()
   }, [updateAttendeeDrinkList.response])
 
   // when a new registered drink is added in the setting page
