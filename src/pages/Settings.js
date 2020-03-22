@@ -3,15 +3,7 @@ import styles from './settings.module.css'
 import RegisteredDrinkSelect from '../components/Settings/RegisteredDrinkSelect'
 import AvailableDrinkSelect from '../components/Settings/AvailableDrinkSelect'
 import DrinkTypeSelect from '../components/Settings/DrinkTypeSelect'
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  Paper,
-  Button,
-} from '@material-ui/core'
+import { Divider, Button } from '@material-ui/core'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 

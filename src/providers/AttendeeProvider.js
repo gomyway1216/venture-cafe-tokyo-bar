@@ -1,7 +1,5 @@
 import React, { useState, createContext, useEffect } from 'react'
-import * as UserApi from '../api/user/user'
 import * as AttendeeApi from '../api/user/attendee'
-
 import { useApi } from '../hooks/useApi'
 import {
   addRegisteredDrink,
@@ -12,9 +10,6 @@ export const AttendeeContext = createContext({})
 export const AttendeeProvider = ({ children }) => {
   const [attendeeList, setAttendeeList] = useState(null)
   const [filterValue, setFilterValue] = useState('')
-
-  // pair of callback and response. When callback(makeFetch) is called,
-  // useApi custom hook will return the new response and appropriate useEffect fires
 
   const getAttendeeList = useApi(
     AttendeeApi.getAttendeeList,

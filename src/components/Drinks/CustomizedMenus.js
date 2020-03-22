@@ -55,8 +55,7 @@ const modalModeEnum = {
 
 const CustomizedMenus = props => {
   const { eventID } = useParams()
-  const auth = useContext(AuthContext)
-  const { getAttendeeList, deleteAttendees } = useContext(AttendeeContext)
+  const { deleteAttendees } = useContext(AttendeeContext)
   const { deleteAvailableDrinks, addDrinkHistoryList } = useContext(
     DrinkContext
   )

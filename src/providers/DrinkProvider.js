@@ -1,4 +1,4 @@
-import React, { useState, createContext, useEffect } from 'react'
+import React, { createContext, useEffect } from 'react'
 import * as AvailableDrinkApi from '../api/drink/availableDrink'
 import * as DrinkTypeApi from '../api/drink/drinkType'
 import * as RegisteredDrinkApi from '../api/drink/registeredDrink'
@@ -9,8 +9,6 @@ import { useApi } from '../hooks/useApi'
 export const DrinkContext = createContext({})
 
 export const DrinkProvider = ({ children }) => {
-  // const [availableDrinkList, setAvailableDrinkList] = useState([])
-
   // get available drink list
   const getAvailableDrinkList = useApi(
     AvailableDrinkApi.getAvailableDrinkList,

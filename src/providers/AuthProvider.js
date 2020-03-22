@@ -1,5 +1,4 @@
-import React, { useState, createContext, useEffect } from 'react'
-import { useApi } from '../hooks/useApi'
+import React, { useState, createContext } from 'react'
 
 const defaultLoginInfo = {
   token: null,

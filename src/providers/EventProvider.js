@@ -1,4 +1,4 @@
-import React, { useState, createContext, useEffect } from 'react'
+import React, { useState, createContext } from 'react'
 import * as EventApi from '../api/event/event'
 import * as EventTypeApi from '../api/event/eventType'
 import { useApi } from '../hooks/useApi'

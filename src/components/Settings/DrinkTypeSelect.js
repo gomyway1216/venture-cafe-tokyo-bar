@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import { DrinkContext } from '../../providers/DrinkProvider'
 import Spinner from '../Spinner/Spinner'
 import {
@@ -64,7 +64,6 @@ const RegisteredDrinkList = () => {
         <div className={styles.resisterNewDrink}>
           <h2>Register New Drink Type</h2>
           <TextField
-            id="name"
             name="name"
             label="Name"
             onChange={onInputChangeHandler}
