@@ -109,20 +109,15 @@ const AvailableDrinkSelect = props => {
 }
 
 const checkSelectedDrink = (registeredDrinkList, availableDrinkList) => {
-  let drinkCompositeList = []
-  for (let i = 0; i < registeredDrinkList.length; i++) {
-    let included = false
-    for (let j = 0; j < availableDrinkList.length; j++) {
-      if (availableDrinkList[j].drinkID === registeredDrinkList[i].id) {
-        included = true
-        break
-      }
+  const drinkCompositeList = registeredDrinkList.map(registeredDrink => {
+    const included = availableDrinkList.some(
+      availableDrink => availableDrink.drinkID === registeredDrink.id
+    )
+    return {
+      drink: registeredDrink,
+      included,
     }
-    drinkCompositeList.push({
-      drink: registeredDrinkList[i],
-      included: included,
-    })
-  }
+  })
   return drinkCompositeList
 }
 

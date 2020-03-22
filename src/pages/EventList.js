@@ -13,6 +13,11 @@ import {
   InputLabel,
   MenuItem,
   TextField,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import { EventContext } from '../providers/EventProvider'
@@ -186,14 +191,20 @@ const EventList = props => {
         </FormControl>
       </Dialog>
       <div className={styles.links}>
-        {eventList.map(event => (
-          <Link
-            to={`/events/${event.id}/attendees`}
-            onClick={() => setEventID(event.id)}
-          >
-            {event.name}
-          </Link>
-        ))}
+        <Paper style={{ maxHeight: 500, overflow: 'auto' }}>
+          <List component="nav" aria-label="main mailbox folders">
+            {eventList.map(event => (
+              <ListItem button>
+                <Link
+                  to={`/events/${event.id}/attendees`}
+                  onClick={() => setEventID(event.id)}
+                >
+                  {event.name}
+                </Link>
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
       </div>
       <Button variant="contained" color="primary" onClick={onClickHandler}>
         Create an Event

@@ -138,13 +138,16 @@ export const deleteAvailableDrink = id => {
   return doFetch(requestBody)
 }
 
-export const deleteAvailableDrinks = () => {
+export const deleteAvailableDrinks = eventID => {
   const requestBody = {
     query: `
-      mutation DeleteAvailableDrinks {
-        deleteAvailableDrinks
+      mutation DeleteAvailableDrinks($eventID: ID!) {
+        deleteAvailableDrinks(eventID: $eventID)
       }
     `,
+    variables: {
+      eventID: eventID,
+    },
   }
   return doFetch(requestBody)
 }
