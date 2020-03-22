@@ -176,7 +176,7 @@ const EventList = props => {
           </Select>
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel id="demo-simple-select-label">Event Type</InputLabel>
+          <InputLabel id="demo-simple-select-label">Location</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="location"

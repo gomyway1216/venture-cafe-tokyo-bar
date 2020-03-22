@@ -105,48 +105,44 @@ const AvailableDrinkSelect = props => {
 
   return (
     <div className={styles.root}>
-      <div className={styles.registeredDrinkList}>
-        <h2>Registered Drink List</h2>
-        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-          <List component="nav" aria-label="main mailbox folders">
-            {compositeDrinkList.map(elm => (
-              <DrinkSelectItem
-                onChange={() => onDrinkSelect(elm)}
-                selected={elm.included}
-                drink={elm.drink}
-              />
-              // <ListItem button>
-              //   <ListItemIcon>
-              //     {elm.included ? (
-              //       <CheckBoxIcon />
-              //     ) : (
-              //       <CheckBoxOutlineBlankIcon />
-              //     )}
-              //   </ListItemIcon>
-              //   <ListItemText primary={elm.drink.name} />
-              // </ListItem>
-            ))}
-          </List>
-        </Paper>
+      <div className={styles.title}>Select drinks for event</div>
+      <div className={styles.main}>
+        <div className={styles.registeredDrinkList}>
+          <h2>Drink Dictionary</h2>
+          <Paper style={{ maxHeight: 500, overflow: 'auto' }}>
+            <List component="nav" aria-label="main mailbox folders">
+              {compositeDrinkList.map(elm => (
+                <DrinkSelectItem
+                  onChange={() => onDrinkSelect(elm)}
+                  selected={elm.included}
+                  drink={elm.drink}
+                />
+              ))}
+            </List>
+          </Paper>
+        </div>
+        <div className={styles.registeredDrinkList}>
+          <h2>Drink for Event</h2>
+          <Paper style={{ maxHeight: 500, overflow: 'auto' }}>
+            <List component="nav" aria-label="main mailbox folders">
+              {getAvailableDrinkList.response.map(drink => (
+                <ListItem button>
+                  <ListItemText primary={drink.name} />
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+          <div className={styles.buttons}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onSelectSubmit}
+            >
+              Select
+            </Button>
+          </div>
+        </div>
       </div>
-      <div className={styles.registeredDrinkList}>
-        <h2>Available Drink List</h2>
-        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-          <List component="nav" aria-label="main mailbox folders">
-            {getAvailableDrinkList.response.map(drink => (
-              <ListItem button>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary={drink.name} />
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      </div>
-      <Button variant="contained" color="primary" onClick={onSelectSubmit}>
-        Select
-      </Button>
     </div>
   )
 }
