@@ -48,7 +48,9 @@ const EventNavLinks = props => {
   return (
     <>
       <li>
-        <NavLink to="/events">Events</NavLink>
+        <NavLink to="/events" isActive={() => false}>
+          Events
+        </NavLink>
       </li>
       <li>
         <NavLink to={`/events/${props.eventID}/datalist`}>Data List</NavLink>

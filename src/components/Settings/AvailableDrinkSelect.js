@@ -8,6 +8,7 @@ import {
   ListItemText,
   Divider,
   Paper,
+  Button,
 } from '@material-ui/core'
 import InboxIcon from '@material-ui/icons/Inbox'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
@@ -33,6 +34,15 @@ const AvailableDrinkSelect = props => {
 
   const [compositeDrinkList, setCompositeDrinkList] = useState(null)
 
+  const onDrinkSelect = elem => {
+    const updatedCompositeDrinkList = compositeDrinkList.map(compositeDrink =>
+      compositeDrink.drink.id === elem.drink.id
+        ? { ...compositeDrink, included: !compositeDrink.included }
+        : compositeDrink
+    )
+    setCompositeDrinkList(updatedCompositeDrinkList)
+  }
+
   useEffect(() => {
     console.log('useEffect getAvailableDrinkList')
     getRegisteredDrinkList.makeFetch()
@@ -50,12 +60,17 @@ const AvailableDrinkSelect = props => {
     }
 
     setCompositeDrinkList(
-      checkSelectedDrink(
+      checkSelectedDrinkList(
         getRegisteredDrinkList.response,
         getAvailableDrinkList.response
       )
     )
   }, [getRegisteredDrinkList.isFetching, getAvailableDrinkList.isFetching])
+
+  const onSelectSubmit = () => {
+    // compositeDrinkList
+    console.log('do something')
+  }
 
   if (
     getRegisteredDrinkList.isFetching ||
@@ -67,6 +82,8 @@ const AvailableDrinkSelect = props => {
     return <Spinner />
   }
 
+  console.log('compositeDrinkList: ', compositeDrinkList)
+
   return (
     <div className={styles.root}>
       <div className={styles.registeredDrinkList}>
@@ -74,7 +91,11 @@ const AvailableDrinkSelect = props => {
         <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
           <List component="nav" aria-label="main mailbox folders">
             {compositeDrinkList.map(elm => (
-              <DrinkSelectItem selected={elm.included} drink={elm.drink} />
+              <DrinkSelectItem
+                onChange={() => onDrinkSelect(elm)}
+                selected={elm.included}
+                drink={elm.drink}
+              />
               // <ListItem button>
               //   <ListItemIcon>
               //     {elm.included ? (
@@ -104,11 +125,14 @@ const AvailableDrinkSelect = props => {
           </List>
         </Paper>
       </div>
+      <Button variant="contained" color="primary" onClick={onSelectSubmit}>
+        Select
+      </Button>
     </div>
   )
 }
 
-const checkSelectedDrink = (registeredDrinkList, availableDrinkList) => {
+const checkSelectedDrinkList = (registeredDrinkList, availableDrinkList) => {
   const drinkCompositeList = registeredDrinkList.map(registeredDrink => {
     const included = availableDrinkList.some(
       availableDrink => availableDrink.drinkID === registeredDrink.id

@@ -10,12 +10,12 @@ import {
 } from '@material-ui/core'
 
 const DrinkSelectItem = props => {
-  const [selected, setSelected] = useState(props.selected)
+  // const [selected, setSelected] = useState(props.selected)
   return (
     <ListItem button>
       <Checkbox
-        checked={selected}
-        onChange={() => setSelected(!selected)}
+        checked={props.selected}
+        onChange={props.onChange}
         color="primary"
         inputProps={{ 'aria-label': 'secondary checkbox' }}
       />
