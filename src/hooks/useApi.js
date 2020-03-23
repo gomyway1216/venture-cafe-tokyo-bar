@@ -11,6 +11,7 @@ export const useApi = (apiCall, mapResponse = response => response) => {
 
   const makeFetch = async (...args) => {
     try {
+      setError(null)
       setIsFetching(true)
       const res = await apiCall(...args)
       const mappedResponse = mapResponse(res)

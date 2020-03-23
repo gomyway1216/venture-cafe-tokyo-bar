@@ -16,6 +16,7 @@ import {
 import { EventContext } from '../providers/EventProvider'
 import styles from './eventList.module.css'
 import Dialog from '../components/Dialog/Dialog'
+import ErrorDialog from '../components/Dialog/ErrorDialog'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -65,7 +66,6 @@ const EventList = props => {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [eventInfo, setEventInfo] = useState(defaultEventInfo)
   const { getEventTypeList, setEventID } = useContext(EventContext)
-
   const { getEventList, addEvent } = useContext(EventContext)
 
   useEffect(() => {
@@ -120,6 +120,8 @@ const EventList = props => {
     })
   }
 
+  const error = getEventTypeList.error || getEventList.error
+
   if (
     getEventList.isFetching ||
     !getEventList.response ||
@@ -138,6 +140,7 @@ const EventList = props => {
 
   return (
     <div className={styles.main}>
+      <ErrorDialog open={!!error} message={error} />
       <Dialog
         open={dialogOpen}
         handleClose={() => setDialogOpen(false)}

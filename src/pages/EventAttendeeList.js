@@ -5,12 +5,19 @@ import { EventContext } from '../providers/EventProvider'
 import Spinner from '../components/Spinner/Spinner'
 import AttendeeList from '../components/Attendees/AttendeeList'
 import { makeStyles } from '@material-ui/core/styles'
-import { InputBase, Paper, IconButton } from '@material-ui/core'
+import {
+  InputBase,
+  Paper,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+} from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
-import styles from './attendees.module.css'
 import QrReader from 'react-qr-reader'
 import AvailableDrinkList from '../components/Drinks/AvailableDrinkList'
 import ErrorDialog from '../components/Dialog/ErrorDialog'
+import styles from './event-attendee-list.module.css'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -72,12 +79,10 @@ const Attendees = props => {
     handleScan,
     getAttendeeList,
     updateAttendeeDrinkList,
-    deleteAttendees,
   } = useContext(AttendeeContext)
 
   const {
     getAvailableDrinkList,
-    deleteAvailableDrinks,
     getDrinkTypeList,
     getRegisteredDrinkList,
   } = useContext(DrinkContext)
@@ -104,18 +109,12 @@ const Attendees = props => {
   const isLoading =
     getAttendeeList.isFetching ||
     updateAttendeeDrinkList.isFetching ||
-    deleteAttendees.isFetching ||
     getAvailableDrinkList.isFetching ||
-    deleteAvailableDrinks.isFetching ||
     getDrinkTypeList.isFetching ||
     getRegisteredDrinkList.isFetching
 
-  let error =
+  const error =
     getEvent.error || getAttendeeList.error || getAvailableDrinkList.error
-
-  const clearError = () => {
-    error = null
-  }
 
   if (getAttendeeList.isFetching || getAvailableDrinkList.isFetching) {
     return <Spinner />
@@ -123,9 +122,8 @@ const Attendees = props => {
 
   return (
     <div className={styles.attendeesContainer}>
-      <ErrorDialog open={!!error} message={error} clearError={clearError} />
+      <ErrorDialog open={!!error} message={error} />
       <div className={styles.leftContainer}>
-        {getEvent.response && <EventInfo event={getEvent.response} />}
         <Paper component="form" className={classes.searchField}>
           <InputBase
             className={classes.input}
@@ -170,16 +168,23 @@ const Attendees = props => {
           style={{ width: '100%' }}
           className={styles.qRReaderComponent}
         />
+        {getEvent.response && <EventInfo event={getEvent.response} />}
       </div>
     </div>
   )
 }
 
 const EventInfo = props => (
-  <div>
-    <div>eventId: {props.event.id}</div>
-    <div>name: {props.event.name}</div>
-    <div>eventType: {props.event.eventType.name}</div>
+  <div className={styles.EventInfo}>
+    <div className={styles.subtitle}>Event Info</div>
+    <List component="nav" aria-label="main mailbox folders">
+      <ListItem dense>
+        <ListItemText primary={'Event Name: ' + props.event.name} />
+      </ListItem>
+      <ListItem dense>
+        <ListItemText primary={'Event Type: ' + props.event.eventType.name} />
+      </ListItem>
+    </List>
   </div>
 )
 

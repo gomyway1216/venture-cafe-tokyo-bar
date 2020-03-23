@@ -48,14 +48,10 @@ export const DrinkProvider = ({ children }) => {
     res => res.data.addDrinkType
   )
 
-  // this is not correct
-  useEffect(() => {
-    if (!deleteAvailableDrinks.response) {
-      return
-    }
-
-    getAvailableDrinkList.makeFetch()
-  }, [deleteAvailableDrinks.response])
+  const getDrinkHistoryList = useApi(
+    DrinkHistoryApi.getDrinkHistoryList,
+    res => res.data.getDrinkHistoryList
+  )
 
   // fetch the data when rendering
   useEffect(() => {
@@ -63,17 +59,26 @@ export const DrinkProvider = ({ children }) => {
     getDrinkTypeList.makeFetch()
   }, [])
 
+  const deleteAvailableDrinkListForEvent = async eventID => {
+    const res = await deleteAvailableDrinks.makeFetch(eventID)
+
+    if (!res.error) {
+      getAvailableDrinkList.makeFetch(eventID)
+    }
+  }
+
   return (
     <DrinkContext.Provider
       value={{
         getAvailableDrinkList,
-        deleteAvailableDrinks,
         getDrinkTypeList,
         getRegisteredDrinkList,
         addDrinkHistoryList,
         addRegisteredDrink,
         updateAvailableDrinkList,
         addDrinkType,
+        deleteAvailableDrinkListForEvent,
+        getDrinkHistoryList,
       }}
     >
       {children}

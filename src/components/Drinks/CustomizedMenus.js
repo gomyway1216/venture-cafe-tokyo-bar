@@ -54,8 +54,8 @@ const modalModeEnum = {
 
 const CustomizedMenus = props => {
   const { eventID } = useParams()
-  const { deleteAttendees } = useContext(AttendeeContext)
-  const { deleteAvailableDrinks, addDrinkHistoryList } = useContext(
+  const { deleteAttendeeListForEvent } = useContext(AttendeeContext)
+  const { addDrinkHistoryList, deleteAvailableDrinkListForEvent } = useContext(
     DrinkContext
   )
   const [modalMode, setModalMode] = useState(modalModeEnum.CLOSE)
@@ -119,39 +119,43 @@ const CustomizedMenus = props => {
         open={modalMode === modalModeEnum.DELETEDRINKLIST}
         handleClose={handleDialogClose}
         onContinue={() => {
-          deleteAvailableDrinks.makeFetch(eventID)
+          deleteAvailableDrinkListForEvent(eventID)
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
+        title="Deleting Drink List"
       >
-        This operation removes all the drink list for today!
+        This operation removes all the drink list for this event!
       </Dialog>
 
       <Dialog
         open={modalMode === modalModeEnum.DETETEATTENDEES}
         handleClose={handleDialogClose}
         onContinue={() => {
-          deleteAttendees.makeFetch(eventID)
+          deleteAttendeeListForEvent(eventID)
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
+        title="Deleting Attendee List"
       >
-        This operation removes all the signed in users for today!
+        This operation removes all the signed in users for this event!
       </Dialog>
 
       <Dialog
         open={modalMode === modalModeEnum.SAVEDATA}
         handleClose={handleDialogClose}
-        onContinue={() => {
+        onContinue={async () => {
+          await addDrinkHistoryList.makeFetch(eventID)
           // the api would clear the current drink list, when the data is saved
-          addDrinkHistoryList.makeFetch(eventID)
+          deleteAvailableDrinkListForEvent(eventID)
           // clear the current attendees table
-          deleteAttendees.makeFetch(eventID)
+          deleteAttendeeListForEvent(eventID)
           props.setFilterValueEmpty()
           setModalMode(modalModeEnum.CLOSE)
         }}
+        title="Saving Records for Event"
       >
-        This operation saves all the data for today!
+        This operation saves all the data for this event!
       </Dialog>
     </div>
   )

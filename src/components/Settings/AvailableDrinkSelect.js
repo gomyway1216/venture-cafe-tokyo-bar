@@ -4,6 +4,7 @@ import { List, ListItem, ListItemText, Paper, Button } from '@material-ui/core'
 import Spinner from '../Spinner/Spinner'
 import styles from './availabledrink-select.module.css'
 import DrinkSelectItem from './DrinkSelectItem'
+import ErrorDialog from '../../components/Dialog/ErrorDialog'
 
 const AvailableDrinkSelect = props => {
   const {
@@ -69,6 +70,11 @@ const AvailableDrinkSelect = props => {
     })
   }
 
+  const error =
+    getRegisteredDrinkList.error ||
+    getAvailableDrinkList.error ||
+    updateAvailableDrinkList.error
+
   if (
     getRegisteredDrinkList.isFetching ||
     !getRegisteredDrinkList.response ||
@@ -82,6 +88,7 @@ const AvailableDrinkSelect = props => {
 
   return (
     <div className={styles.root}>
+      <ErrorDialog open={!!error} message={error} />
       <div className={styles.title}>Select drinks for event</div>
       <div className={styles.main}>
         <div className={styles.registeredDrinkList}>
