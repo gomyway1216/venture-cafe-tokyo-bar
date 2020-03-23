@@ -23,3 +23,9 @@
 .drinkList {
   margin-bottom: 2vh;
 }
+
+.subtitle {
+  font-size: x-large;
+  font-weight: bold;
+  text-align: center;
+}

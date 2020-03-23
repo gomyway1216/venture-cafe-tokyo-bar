@@ -87,20 +87,16 @@ const RegisteredDrinkList = () => {
     }
   }
 
-  let error =
+  const error =
     getRegisteredDrinkList.error ||
     getDrinkTypeList.error ||
     addRegisteredDrink.error
-
-  const clearError = () => {
-    error = null
-  }
 
   return (
     <div className={styles.root}>
       <div className={styles.title}>Edit drink dictionary</div>
       <div className={styles.main}>
-        <ErrorDialog open={!!error} message={error} clearError={clearError} />
+        <ErrorDialog open={!!error} message={error} />
         <div>
           <h2>Drink Dictionary</h2>
           <Paper style={{ maxHeight: 200, overflow: 'auto' }}>

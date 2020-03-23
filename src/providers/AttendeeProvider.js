@@ -78,6 +78,14 @@ export const AttendeeProvider = ({ children }) => {
     getRegisteredDrinkList.makeFetch()
   }, [addRegisteredDrink.response])
 
+  const deleteAttendeeListForEvent = async eventID => {
+    const res = await deleteAttendees.makeFetch(eventID)
+
+    if (!res.error) {
+      getAttendeeList.makeFetch(eventID)
+    }
+  }
+
   return (
     <AttendeeContext.Provider
       value={{
@@ -87,7 +95,7 @@ export const AttendeeProvider = ({ children }) => {
         handleScan,
         getAttendeeList,
         updateAttendeeDrinkList,
-        deleteAttendees,
+        deleteAttendeeListForEvent,
       }}
     >
       {children}
