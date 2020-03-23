@@ -48,6 +48,11 @@ export const DrinkProvider = ({ children }) => {
     res => res.data.addDrinkType
   )
 
+  const getDrinkHistoryList = useApi(
+    DrinkHistoryApi.getDrinkHistoryList,
+    res => res.data.getDrinkHistoryList
+  )
+
   // fetch the data when rendering
   useEffect(() => {
     getRegisteredDrinkList.makeFetch()
@@ -73,6 +78,7 @@ export const DrinkProvider = ({ children }) => {
         updateAvailableDrinkList,
         addDrinkType,
         deleteAvailableDrinkListForEvent,
+        getDrinkHistoryList,
       }}
     >
       {children}

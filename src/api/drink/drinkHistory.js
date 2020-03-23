@@ -13,3 +13,25 @@ export const addDrinkHistoryList = eventID => {
   }
   return doFetch(requestBody)
 }
+
+export const getDrinkHistoryList = () => {
+  const requestBody = {
+    query: `
+      query {
+        getDrinkHistoryList {
+          id: _id
+          date
+          registeredDrink {
+            id: _id
+            name
+          }
+          event {
+            id: _id
+            name
+          }
+        }
+      }
+    `,
+  }
+  return doFetch(requestBody)
+}
